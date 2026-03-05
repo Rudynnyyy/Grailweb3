@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>K线｜自动化选币器</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body data-page="kline">
+  <div class="kline-page">
+    <div class="kline-topbar">
+        <div class="kline-left">
+          <button id="btnBack" class="btn btn-secondary kline-back">返回</button>
+          <a id="binanceLink" class="kline-binance-link" href="#" target="_blank" rel="noopener" aria-label="打开币安" title="打开币安">
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <path fill="#f0b90b" d="M12 2.2 15.8 6 12 9.8 8.2 6 12 2.2ZM6 8.2 9.8 12 6 15.8 2.2 12 6 8.2Zm12 0 3.8 3.8-3.8 3.8-3.8-3.8 3.8-3.8ZM12 14.2 15.8 18 12 21.8 8.2 18 12 14.2Zm0-2.2 2-2-2-2-2 2 2 2Z"/>
+            </svg>
+          </a>
+        </div>
+      <div class="kline-title">
+        <div id="klineTitle" class="kline-title-main">K线</div>
+        <div id="klineSub" class="kline-title-sub"></div>
+      </div>
+      <div class="kline-actions">
+        <div class="kline-tail">
+          <select id="tailSelect" class="select kline-tail-select">
+            <option value="360" selected>360 根</option>
+            <option value="720">720 根</option>
+            <option value="1440">1440 根</option>
+            <option value="2160">2160 根</option>
+            <option value="3650">3650 根</option>
+          </select>
+          <div class="kline-tail-hint">修改后点“重新加载”生效</div>
+        </div>
+        <button id="btnIndicators" class="btn btn-secondary kline-action">指标</button>
+        <button id="btnResetView" class="btn btn-secondary kline-action">复位</button>
+        <button id="btnReload" class="btn btn-secondary kline-reload">重新加载</button>
+      </div>
+    </div>
+
+    <div id="klineAlert" class="kline-alert hidden"></div>
+    <div id="klineTooltip" class="kline-tooltip hidden"></div>
+
+    <div class="kline-panels">
+      <div class="kline-panel kline-candle-panel">
+        <div id="candleChipBar" class="kline-chipbar" data-panel="0"></div>
+        <div class="watermark watermark-kline">
+          <img class="watermark-logo" src="./grailweb3.png" alt="Grail区块链" />
+          <div class="watermark-text">Grail区块链</div>
+        </div>
+        <canvas id="candleCanvas" class="kline-canvas" height="420"></canvas>
+      </div>
+      <div id="indicatorPanel" class="kline-panel kline-indicator-panel">
+        <div id="indicatorStack" class="kline-indicator-stack"></div>
+      </div>
+    </div>
+
+    <div id="indicatorSettings" class="kline-settings hidden" role="dialog" aria-modal="true">
+      <div class="kline-settings-card">
+        <div class="kline-settings-head">
+          <div class="kline-settings-title">指标布局</div>
+          <button id="btnCloseIndicators" class="btn btn-secondary">关闭</button>
+        </div>
+        <div class="kline-settings-body">
+          <div class="kline-settings-hint">可将指标放在主图/副图，或隐藏；不同数量级的指标不要放在同一个图里。</div>
+          <div id="indicatorList" class="kline-settings-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__klineBootTs = Date.now();
+      window.__klineStarted = false;
+      function show(text) {
+        var el = document.getElementById("klineAlert");
+        if (!el) return;
+        el.classList.remove("hidden");
+        el.textContent = text;
+      }
+      window.__klineShowBootError = show;
+      setTimeout(function () {
+        if (!window.__klineStarted) {
+          show("K线脚本未启动：可能是脚本语法错误/被浏览器拦截/缓存未更新。\n请按 Ctrl+Shift+I 打开控制台查看报错，然后把报错发我。");
+        }
+      }, 1200);
+    })();
+  </script>
+  <script src="./app.js" onerror="window.__klineShowBootError && window.__klineShowBootError('加载 app.js 失败')"></script>
+  <script src="./kline.js" onerror="window.__klineShowBootError && window.__klineShowBootError('加载 kline.js 失败')"></script>
+</body>
+</html>

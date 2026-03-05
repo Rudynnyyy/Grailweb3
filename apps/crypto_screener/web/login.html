@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>登录 - 自动化选币器</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body data-page="login">
+  <div class="auth2-wrap">
+    <div class="auth2-card">
+      <div class="auth2-head">
+        <img class="auth2-logo" src="./grailweb3.png" alt="GrailWeb3" />
+        <div class="auth2-title">自动化选币器</div>
+      </div>
+
+      <div id="authMsg" class="auth2-msg hidden"></div>
+
+      <div id="loginPanel" class="auth2-panel">
+        <div class="auth2-field">
+          <div class="auth2-ic">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2H7C5.9 2 5 2.9 5 4v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2Zm-5 19c-.83 0-1.5-.67-1.5-1.5S11.17 18 12 18s1.5.67 1.5 1.5S12.83 21 12 21Zm5-4H7V5h10v12Z"/></svg>
+          </div>
+          <input id="loginPhoneOrUser" class="auth2-input" placeholder="请输入邮箱/用户名" autocomplete="username" />
+        </div>
+
+        <div class="auth2-field">
+          <div class="auth2-ic">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm6-6h-1V9a5 5 0 0 0-10 0v2H6c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7c0-1.1-.9-2-2-2Zm-3 0H9V9a3 3 0 0 1 6 0v2Z"/></svg>
+          </div>
+          <input id="loginPassword" class="auth2-input" type="password" placeholder="请输入密码" autocomplete="current-password" />
+          <button id="togglePwd" class="auth2-eye" type="button" aria-label="显示或隐藏密码">
+            <svg id="eyeIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c-5 0-9 4.5-10 7 1 2.5 5 7 10 7s9-4.5 10-7c-1-2.5-5-7-10-7Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"/></svg>
+          </button>
+        </div>
+
+        <div class="auth2-row">
+          <a id="btnForgot" class="auth2-link" href="javascript:void(0)">忘记密码？</a>
+        </div>
+
+        <button id="btnLoginPass" class="auth2-btn" type="button">登录</button>
+
+        <div class="auth2-center">
+          <button id="btnSwitchToCode" class="auth2-link-btn" type="button">验证码登录</button>
+        </div>
+
+        <div class="auth2-center auth2-bottom">
+          <span class="auth2-muted">没有账号？</span>
+          <button id="btnGoRegister" class="auth2-link-btn" type="button">立即注册</button>
+        </div>
+      </div>
+
+      <div id="codePanel" class="auth2-panel hidden">
+        <div class="auth2-field">
+          <div class="auth2-ic">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2H7C5.9 2 5 2.9 5 4v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2Zm-5 19c-.83 0-1.5-.67-1.5-1.5S11.17 18 12 18s1.5.67 1.5 1.5S12.83 21 12 21Zm5-4H7V5h10v12Z"/></svg>
+          </div>
+          <input id="loginEmail" class="auth2-input" placeholder="请输入邮箱" inputmode="email" autocomplete="email" />
+        </div>
+
+        <div class="auth2-field auth2-code-field">
+          <div class="auth2-ic">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 8H4V6h16v2Zm0 4H4v-2h16v2Zm0 4H4v-2h16v2Z"/></svg>
+          </div>
+          <input id="loginCode" class="auth2-input" placeholder="请输入验证码" inputmode="numeric" autocomplete="one-time-code" />
+          <button id="btnSendLoginCode" class="auth2-code-btn" type="button">发送</button>
+        </div>
+
+        <button id="btnLoginCode" class="auth2-btn" type="button">登录</button>
+
+        <div class="auth2-center auth2-bottom">
+          <button id="btnBackToPass" class="auth2-link-btn" type="button">密码登录</button>
+        </div>
+      </div>
+
+      <div id="registerPanel" class="auth2-panel hidden">
+        <div class="auth2-field">
+          <div class="auth2-ic">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg>
+          </div>
+          <input id="regUsername" class="auth2-input" placeholder="请输入用户名" autocomplete="username" />
+        </div>
+
+        <div class="auth2-field">
+          <div class="auth2-ic">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2H7C5.9 2 5 2.9 5 4v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2Zm-5 19c-.83 0-1.5-.67-1.5-1.5S11.17 18 12 18s1.5.67 1.5 1.5S12.83 21 12 21Zm5-4H7V5h10v12Z"/></svg>
+          </div>
+          <input id="regEmail" class="auth2-input" placeholder="请输入邮箱" inputmode="email" autocomplete="email" />
+        </div>
+
+        <div class="auth2-field">
+          <div class="auth2-ic">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm6-6h-1V9a5 5 0 0 0-10 0v2H6c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7c0-1.1-.9-2-2-2Zm-3 0H9V9a3 3 0 0 1 6 0v2Z"/></svg>
+          </div>
+          <input id="regPassword" class="auth2-input" type="password" placeholder="请输入密码" autocomplete="new-password" />
+        </div>
+
+        <div class="auth2-field">
+          <div class="auth2-ic">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm6-6h-1V9a5 5 0 0 0-10 0v2H6c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7c0-1.1-.9-2-2-2Zm-3 0H9V9a3 3 0 0 1 6 0v2Z"/></svg>
+          </div>
+          <input id="regPassword2" class="auth2-input" type="password" placeholder="请再次输入密码" autocomplete="new-password" />
+        </div>
+
+        <div class="auth2-field auth2-code-field">
+          <div class="auth2-ic">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 8H4V6h16v2Zm0 4H4v-2h16v2Zm0 4H4v-2h16v2Z"/></svg>
+          </div>
+          <input id="regCode" class="auth2-input" placeholder="请输入验证码" inputmode="numeric" autocomplete="one-time-code" />
+          <button id="btnSendRegCode" class="auth2-code-btn" type="button">发送</button>
+        </div>
+
+        <label class="auth2-check">
+          <input id="agree" type="checkbox" />
+          <span>我已阅读并同意 <a class="auth2-link" href="./user_agreement.html" target="_blank" rel="noopener noreferrer">《用户协议》</a> 和 <a class="auth2-link" href="./privacy.html" target="_blank" rel="noopener noreferrer">《隐私政策》</a></span>
+        </label>
+
+        <button id="btnRegister" class="auth2-btn" type="button">注册</button>
+
+        <div class="auth2-center auth2-bottom">
+          <span class="auth2-muted">已有账号？</span>
+          <button id="btnBackToLogin" class="auth2-link-btn" type="button">立即登录</button>
+        </div>
+      </div>
+
+      <div id="captcha-element" class="hidden"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      let captcha = null;
+      let captchaReady = false;
+      let pendingCaptchaCb = null;
+
+      function setMsg(text) {
+        const el = document.getElementById("authMsg");
+        if (!el) return;
+        if (!text) { el.classList.add("hidden"); el.textContent = ""; return; }
+        el.classList.remove("hidden");
+        el.textContent = text;
+      }
+      function qs(name) {
+        const u = new URL(location.href);
+        return u.searchParams.get(name) || "";
+      }
+      function nextAfterLogin() {
+        const n = qs("next") || "";
+        if (!n) return "/";
+        if (n === "/index.html" || n === "index.html") return "/";
+        return n;
+      }
+      function agreed() {
+        const c = document.getElementById("agree");
+        return !!(c && c.checked);
+      }
+      async function postJson(url, data) {
+        const headers = { "Content-Type": "application/json" };
+        if (data && data.__captcha_verify_param) headers["captcha-verify-param"] = String(data.__captcha_verify_param);
+        const payload = { ...(data || {}) };
+        delete payload.__captcha_verify_param;
+        const r = await fetch(url, { method: "POST", headers, body: JSON.stringify(payload) });
+        let j = null;
+        try { j = await r.json(); } catch {}
+        return { r, j };
+      }
+
+      function showPanel(which) {
+        document.getElementById("loginPanel").classList.toggle("hidden", which !== "login");
+        document.getElementById("codePanel").classList.toggle("hidden", which !== "code");
+        document.getElementById("registerPanel").classList.toggle("hidden", which !== "register");
+        setMsg("");
+      }
+
+      function doWithCaptcha(cb) {
+        if (!captchaReady || !captcha) return cb(null);
+        pendingCaptchaCb = cb;
+        try {
+          captcha.show();
+        } catch {
+          pendingCaptchaCb = null;
+          cb(null);
+        }
+      }
+
+      let cooldown = 0;
+      let cooldownTimer = null;
+      function setCooldown(sec) {
+        cooldown = Math.max(0, Number(sec || 0) | 0);
+        if (cooldownTimer) clearInterval(cooldownTimer);
+        const updateBtns = () => {
+          const texts = cooldown > 0 ? `重新发送(${cooldown})` : "发送";
+          for (const id of ["btnSendLoginCode", "btnSendRegCode"]) {
+            const b = document.getElementById(id);
+            if (!b) continue;
+            b.disabled = cooldown > 0;
+            b.textContent = texts;
+          }
+        };
+        updateBtns();
+        if (cooldown <= 0) return;
+        cooldownTimer = setInterval(() => {
+          cooldown = Math.max(0, cooldown - 1);
+          updateBtns();
+          if (cooldown <= 0 && cooldownTimer) {
+            clearInterval(cooldownTimer);
+            cooldownTimer = null;
+          }
+        }, 1000);
+      }
+
+      async function sendCode(scene, email, captchaVerifyParam) {
+        try {
+          const { r, j } = await postJson("./api/send_code", { scene, email, __captcha_verify_param: captchaVerifyParam || "" });
+          if (!r.ok) {
+            if (j && j.error === "sms_not_configured") {
+              const missing = Array.isArray(j.missing) ? j.missing.filter(Boolean) : [];
+              setMsg(missing.length ? ("短信服务未配置，缺少：" + missing.join("、")) : "短信服务未配置");
+            }
+            else if (j && j.error === "email_not_configured") {
+              const missing = Array.isArray(j.missing) ? j.missing.filter(Boolean) : [];
+              setMsg(missing.length ? ("邮箱服务未配置，缺少：" + missing.join("、")) : "邮箱服务未配置");
+            }
+            else setMsg((j && j.message) || "发送失败");
+            return;
+          }
+          setMsg("验证码已发送");
+          setCooldown(60);
+        } catch {
+          setMsg("网络错误");
+        }
+      }
+
+      showPanel("login");
+
+      document.getElementById("togglePwd").addEventListener("click", () => {
+        const el = document.getElementById("loginPassword");
+        if (!el) return;
+        const on = el.getAttribute("type") === "password";
+        el.setAttribute("type", on ? "text" : "password");
+      });
+
+      document.getElementById("btnForgot").addEventListener("click", () => {
+        setMsg("请使用验证码登录或联系管理员重置密码");
+      });
+
+      document.getElementById("btnSwitchToCode").addEventListener("click", () => showPanel("code"));
+      document.getElementById("btnBackToPass").addEventListener("click", () => showPanel("login"));
+      document.getElementById("btnGoRegister").addEventListener("click", () => showPanel("register"));
+      document.getElementById("btnBackToLogin").addEventListener("click", () => showPanel("login"));
+
+      document.getElementById("btnSendLoginCode").addEventListener("click", () => {
+        const email = (document.getElementById("loginEmail").value || "").trim();
+        if (!email) { setMsg("请输入邮箱"); return; }
+        doWithCaptcha((captchaVerifyParam) => sendCode("login", email, captchaVerifyParam));
+      });
+      document.getElementById("btnSendRegCode").addEventListener("click", () => {
+        const email = (document.getElementById("regEmail").value || "").trim();
+        if (!email) { setMsg("请输入邮箱"); return; }
+        doWithCaptcha((captchaVerifyParam) => sendCode("register", email, captchaVerifyParam));
+      });
+
+      document.getElementById("btnLoginPass").addEventListener("click", async () => {
+        const identity = (document.getElementById("loginPhoneOrUser").value || "").trim();
+        const password = document.getElementById("loginPassword").value || "";
+        if (!identity || !password) { setMsg("请输入邮箱/用户名和密码"); return; }
+        doWithCaptcha(async (captchaVerifyParam) => {
+          try {
+            const { r, j } = await postJson("./api/login", { mode: "password", identity, password, __captcha_verify_param: captchaVerifyParam || "" });
+            if (!r.ok) { setMsg((j && j.error === "bad_credentials") ? "账号或密码错误" : "登录失败"); return; }
+            location.href = nextAfterLogin();
+          } catch {
+            setMsg("网络错误");
+          }
+        });
+      });
+
+      document.getElementById("btnLoginCode").addEventListener("click", async () => {
+        const email = (document.getElementById("loginEmail").value || "").trim();
+        const code = (document.getElementById("loginCode").value || "").trim();
+        if (!email || !code) { setMsg("请输入邮箱和验证码"); return; }
+        doWithCaptcha(async (captchaVerifyParam) => {
+          try {
+            const { r, j } = await postJson("./api/login", { mode: "code", email, code, __captcha_verify_param: captchaVerifyParam || "" });
+            if (!r.ok) {
+              if (j && j.error === "user_not_found") setMsg("该邮箱未注册");
+              else setMsg("验证码错误或已过期");
+              return;
+            }
+            location.href = nextAfterLogin();
+          } catch {
+            setMsg("网络错误");
+          }
+        });
+      });
+
+      document.getElementById("btnRegister").addEventListener("click", async () => {
+        const username = (document.getElementById("regUsername").value || "").trim();
+        const email = (document.getElementById("regEmail").value || "").trim();
+        const password = document.getElementById("regPassword").value || "";
+        const password2 = document.getElementById("regPassword2").value || "";
+        const code = (document.getElementById("regCode").value || "").trim();
+        if (!agreed()) { setMsg("请先勾选同意《用户协议》和《隐私政策》"); return; }
+        if (!username || !email || !password || !password2 || !code) { setMsg("请完整填写注册信息"); return; }
+        if (password !== password2) { setMsg("两次密码不一致"); return; }
+        doWithCaptcha(async (captchaVerifyParam) => {
+          try {
+            const { r, j } = await postJson("./api/register", { username, email, password, password2, code, __captcha_verify_param: captchaVerifyParam || "" });
+            if (!r.ok) { setMsg((j && j.message) || "注册失败"); return; }
+            const lr = await postJson("./api/login", { mode: "password", identity: username, password, __captcha_verify_param: captchaVerifyParam || "" });
+            if (!lr.r.ok) { setMsg("注册成功，请手动登录"); showPanel("login"); return; }
+            location.href = nextAfterLogin();
+          } catch {
+            setMsg("网络错误");
+          }
+        });
+      });
+
+      async function loadCaptcha() {
+        try {
+          const r = await fetch("./api/public_config", { cache: "no-store" });
+          if (!r.ok) return;
+          const j = await r.json();
+          const c = (j && j.captcha) || {};
+          if (!c || !c.enabled) return;
+          window.AliyunCaptchaConfig = { region: String(c.region || "cn"), prefix: String(c.prefix || "") };
+          const sc = String(c.sceneId || "");
+          if (!sc) return;
+          const s = document.createElement("script");
+          s.type = "text/javascript";
+          s.src = "./vendor/aliyunCaptcha.js";
+          s.onerror = () => {
+            const s2 = document.createElement("script");
+            s2.type = "text/javascript";
+            s2.src = "https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js";
+            s2.onload = s.onload;
+            document.head.appendChild(s2);
+          };
+          s.onload = () => {
+            try {
+              window.initAliyunCaptcha({
+                SceneId: sc,
+                mode: "popup",
+                element: "#captcha-element",
+                button: "#btnLoginPass",
+                success: function (captchaVerifyParam) {
+                  if (pendingCaptchaCb) {
+                    const cb = pendingCaptchaCb;
+                    pendingCaptchaCb = null;
+                    cb(captchaVerifyParam);
+                  }
+                },
+                fail: function () {
+                  if (pendingCaptchaCb) {
+                    pendingCaptchaCb = null;
+                    setMsg("验证码校验失败，请重试");
+                  }
+                },
+                getInstance: function (instance) {
+                  captcha = instance;
+                  captchaReady = true;
+                },
+                server: ["captcha-esa-open.aliyuncs.com", "captcha-esa-open-b.aliyuncs.com"],
+                slideStyle: { width: 320, height: 40 },
+                language: "cn",
+              });
+            } catch {}
+          };
+          document.head.appendChild(s);
+        } catch {}
+      }
+      loadCaptcha();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+{
+  "endpoint": "http://127.0.0.1:8001/api/latest_enriched",
+  "max_workers": 256,
+  "requests_per_user": 1,
+  "stages": [
+    {
+      "users": 1000,
+      "requests_per_user": 1,
+      "total_requests": 1000,
+      "concurrency_workers": 256,
+      "elapsed_s": 37.26,
+      "qps": 26.838,
+      "success": 0,
+      "errors": 1000,
+      "error_rate": 1.0,
+      "latency_ms": {
+        "avg": 6825.28,
+        "p50": 2053.673,
+        "p95": 16561.95,
+        "p99": 17058.027,
+        "max": 17073.39
+      },
+      "codes": {
+        "-1": 1000
+      }
+    },
+    {
+      "users": 5000,
+      "requests_per_user": 1,
+      "total_requests": 5000,
+      "concurrency_workers": 256,
+      "elapsed_s": 54.909,
+      "qps": 91.06,
+      "success": 129,
+      "errors": 4871,
+      "error_rate": 0.9742,
+      "latency_ms": {
+        "avg": 2578.17,
+        "p50": 2052.111,
+        "p95": 3380.421,
+        "p99": 16551.397,
+        "max": 17082.417
+      },
+      "codes": {
+        "-1": 4871,
+        "200": 129
+      }
+    },
+    {
+      "users": 10000,
+      "requests_per_user": 1,
+      "total_requests": 10000,
+      "concurrency_workers": 256,
+      "elapsed_s": 73.625,
+      "qps": 135.823,
+      "success": 2299,
+      "errors": 7701,
+      "error_rate": 0.7701,
+      "latency_ms": {
+        "avg": 1840.196,
+        "p50": 2045.755,
+        "p95": 2130.746,
+        "p99": 4063.348,
+        "max": 7005.2
+      },
+      "codes": {
+        "200": 2299,
+        "-1": 7701
+      }
+    }
+  ]
+}

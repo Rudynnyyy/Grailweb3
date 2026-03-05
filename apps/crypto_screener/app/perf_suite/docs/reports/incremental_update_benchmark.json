@@ -1,0 +1,38 @@
+{
+  "module": "incremental_update",
+  "baseline": {
+    "name": "incremental_baseline_full_recompute",
+    "qps": 1.798,
+    "rt_ms": {
+      "avg": 556.103,
+      "p50": 538.052,
+      "p95": 666.328,
+      "p99": 699.761,
+      "max": 709.727
+    },
+    "cpu_pct": 6.232,
+    "mem_mb": 6.872,
+    "io_mb_s": 0.0,
+    "requests": 100,
+    "elapsed_s": 55.63
+  },
+  "optimized": {
+    "name": "incremental_optimized_delta_update",
+    "qps": 1593.499,
+    "rt_ms": {
+      "avg": 0.556,
+      "p50": 0.52,
+      "p95": 0.715,
+      "p99": 0.803,
+      "max": 0.828
+    },
+    "cpu_pct": 6.225,
+    "mem_mb": 2.297,
+    "io_mb_s": 0.0,
+    "requests": 100,
+    "elapsed_s": 0.063
+  },
+  "artifacts": {
+    "meta_path": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_suite\\code\\incremental_input_meta.json"
+  }
+}

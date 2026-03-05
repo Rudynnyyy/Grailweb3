@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>自动化选币器</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body data-page="main">
+  <div id="bootOverlay" class="boot-overlay" aria-hidden="false">
+    <div class="boot-card">
+      <div class="boot-text">初次运行较慢，请耐心等待</div>
+      <div class="boot-bar"><div class="boot-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <div id="progressOverlay" class="progress-overlay hidden" aria-hidden="true">
+    <div class="progress-card">
+      <div id="progressText" class="progress-text">加载中...</div>
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-row">
+          <button id="profileBtn" class="avatar-btn" type="button" aria-label="用户菜单">
+            <span id="profileAvatar" class="avatar-circle">U</span>
+          </button>
+          <img class="brand-logo-img" src="./grailweb3.png" alt="GrailWeb3" />
+          <div class="brand-title">自动化选币器</div>
+          <button id="themeToggle" class="theme-toggle" title="切换主题">
+            <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
+        </div>
+        <div id="profileMenu" class="profile-menu hidden" role="menu" aria-label="用户菜单">
+          <div class="profile-menu-item profile-menu-label">
+            <div class="profile-menu-k">登录邮箱</div>
+            <div id="profileEmail" class="profile-menu-v">-</div>
+          </div>
+          <button id="menuPlans" class="profile-menu-item" type="button">我的计划</button>
+          <button id="menuFeedback" class="profile-menu-item" type="button">反馈</button>
+          <div class="profile-menu-sep"></div>
+          <button id="menuHelp" class="profile-menu-item profile-menu-parent" type="button" aria-haspopup="true" aria-expanded="false">
+            帮助 <span class="profile-menu-chev">›</span>
+          </button>
+          <div id="helpSubmenu" class="profile-submenu hidden" role="menu" aria-label="帮助">
+            <button id="menuUpdateNotes" class="profile-menu-item" type="button">更新说明</button>
+            <button id="menuTutorial" class="profile-menu-item" type="button">教程</button>
+            <button id="menuTestFeature" class="profile-menu-item" type="button">测试功能</button>
+          </div>
+          <div class="profile-menu-sep"></div>
+          <button id="menuLogout" class="profile-menu-item danger" type="button">登出</button>
+        </div>
+        <div id="status" class="brand-sub"></div>
+        <div id="summary" class="brand-sub"></div>
+      </div>
+
+      <div class="sidebar-scroll">
+        <div class="block">
+        <div class="block-title">数据</div>
+        <label class="label">市场</label>
+        <select id="marketSelect" class="select">
+          <option value="all">全市场</option>
+          <option value="spot">现货</option>
+          <option value="swap">合约</option>
+        </select>
+        <button id="btnRefresh" class="btn">刷新</button>
+      </div>
+
+      <div class="block">
+        <div class="block-title">均线趋势</div>
+        <div class="group">
+          <div class="cond">
+            <div class="cond-top">
+              <label class="check"><input id="condCloseMa" type="checkbox" /> 条件1：close &gt; MA</label>
+              <details class="details details-inline">
+                <summary>参数</summary>
+                <div class="param-list">
+                  <div class="param-item">
+                    <span class="label-inline">MA 周期</span>
+                    <input id="maPeriodClose" class="input" type="number" min="2" step="1" value="20" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="cond">
+            <div class="cond-top">
+              <label class="check"><input id="condMa" type="checkbox" /> 条件2：MA(快) &gt; MA(慢)</label>
+              <details class="details details-inline">
+                <summary>参数</summary>
+                <div class="param-list">
+                  <div class="param-item">
+                    <span class="label-inline">快</span>
+                    <input id="maFast" class="input" type="number" min="2" step="1" value="10" />
+                  </div>
+                  <div class="param-item">
+                    <span class="label-inline">慢</span>
+                    <input id="maSlow" class="input" type="number" min="2" step="1" value="20" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="cond">
+            <div class="cond-top">
+              <label class="check"><input id="condEma" type="checkbox" /> 条件3：close &gt; EMA</label>
+              <details class="details details-inline">
+                <summary>参数</summary>
+                <div class="param-list">
+                  <div class="param-item">
+                    <span class="label-inline">EMA 周期</span>
+                    <input id="emaPeriod" class="input" type="number" min="2" step="1" value="20" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="cond">
+            <div class="cond-top">
+              <label class="check"><input id="condBollUp" type="checkbox" /> 条件4：close &gt; BOLLUP</label>
+              <details class="details details-inline">
+                <summary>参数</summary>
+                <div class="param-list">
+                  <div class="param-item">
+                    <span class="label-inline">周期</span>
+                    <input id="bollPeriod" class="input" type="number" min="2" step="1" value="20" />
+                  </div>
+                  <div class="param-item">
+                    <span class="label-inline">标准差</span>
+                    <input id="bollStd" class="input" type="number" min="0.1" step="0.1" value="2.0" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="cond">
+            <div class="cond-top">
+              <label class="check"><input id="condBollDown" type="checkbox" /> 条件5：close &lt; BOLLDOWN</label>
+              <details class="details details-inline">
+                <summary>参数</summary>
+                <div class="param-list">
+                  <div class="param-item">
+                    <span class="label-inline">周期</span>
+                    <input id="bollDownPeriod" class="input" type="number" min="2" step="1" value="20" />
+                  </div>
+                  <div class="param-item">
+                    <span class="label-inline">标准差</span>
+                    <input id="bollDownStd" class="input" type="number" min="0.1" step="0.1" value="2.0" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="cond">
+            <div class="cond-top">
+              <label class="check"><input id="condSuper" type="checkbox" /> 条件6：close &gt; SUPER</label>
+              <details class="details details-inline">
+                <summary>参数</summary>
+                <div class="param-list">
+                  <div class="param-item">
+                    <span class="label-inline">ATR 周期</span>
+                    <input id="superAtrPeriod" class="input" type="number" min="1" step="1" value="10" />
+                  </div>
+                  <div class="param-item">
+                    <span class="label-inline">乘数</span>
+                    <input id="superMult" class="input" type="number" min="0.1" step="0.1" value="3.0" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+        <div id="folder_ma_trend" class="folder-conds"></div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">动量</div>
+        <div class="group">
+          <div class="cond">
+            <div class="cond-top">
+              <label class="check"><input id="condRsi" type="checkbox" /> 条件1：RSI &gt; 阈值</label>
+              <details class="details details-inline">
+                <summary>参数</summary>
+                <div class="param-list">
+                  <div class="param-item">
+                    <span class="label-inline">RSI 周期</span>
+                    <input id="rsiPeriod" class="input" type="number" min="2" step="1" value="14" />
+                  </div>
+                  <div class="param-item">
+                    <span class="label-inline">阈值</span>
+                    <input id="rsiThreshold" class="input" type="number" min="0" max="100" step="0.1" value="80" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="cond">
+            <div class="cond-top">
+              <label class="check"><input id="condKdj" type="checkbox" /> 条件2：KDJ(K &gt; D)</label>
+              <details class="details details-inline">
+                <summary>参数</summary>
+                <div class="param-list">
+                  <div class="param-item">
+                    <span class="label-inline">N 周期</span>
+                    <input id="kdjN" class="input" type="number" min="1" step="1" value="9" />
+                  </div>
+                  <div class="param-item">
+                    <span class="label-inline">M1 周期</span>
+                    <input id="kdjM1" class="input" type="number" min="1" step="1" value="3" />
+                  </div>
+                  <div class="param-item">
+                    <span class="label-inline">M2 周期</span>
+                    <input id="kdjM2" class="input" type="number" min="1" step="1" value="3" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="cond">
+            <div class="cond-top">
+              <label class="check"><input id="condObv" type="checkbox" /> 条件3：OBV &gt; MA</label>
+              <details class="details details-inline">
+                <summary>参数</summary>
+                <div class="param-list">
+                  <div class="param-item">
+                    <span class="label-inline">MA 周期</span>
+                    <input id="obvMaPeriod" class="input" type="number" min="2" step="1" value="20" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="cond">
+            <div class="cond-top">
+              <label class="check"><input id="condStochRsi" type="checkbox" /> 条件4：StochRSI(K &gt; D)</label>
+              <details class="details details-inline">
+                <summary>参数</summary>
+                <div class="param-list">
+                  <div class="param-item">
+                    <span class="label-inline">RSI 周期</span>
+                    <input id="stochRsiP" class="input" type="number" min="2" step="1" value="14" />
+                  </div>
+                  <div class="param-item">
+                    <span class="label-inline">Stoch 周期</span>
+                    <input id="stochRsiK" class="input" type="number" min="2" step="1" value="14" />
+                  </div>
+                  <div class="param-item">
+                    <span class="label-inline">平滑 K</span>
+                    <input id="stochRsiSmK" class="input" type="number" min="1" step="1" value="3" />
+                  </div>
+                  <div class="param-item">
+                    <span class="label-inline">平滑 D</span>
+                    <input id="stochRsiSmD" class="input" type="number" min="1" step="1" value="3" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+        <div id="folder_momentum" class="folder-conds"></div>
+        <div id="counts" class="counts"></div>
+      </div>
+
+      <div id="customFolders" class="group"></div>
+
+      <div class="block">
+        <div class="block-title">排序</div>
+        <select id="sortKey" class="select"></select>
+        <select id="sortOrder" class="select">
+          <option value="desc">降序</option>
+          <option value="asc">升序</option>
+        </select>
+      </div>
+
+      <div class="block">
+        <div class="block-title-row">
+          <div class="block-title">自定义因子（表达式）</div>
+          <button id="exprHelp" class="help-btn" type="button" aria-label="帮助">?</button>
+        </div>
+
+        <button id="exprToggle" class="btn btn-secondary">添加因子</button>
+
+        <div id="exprEditor" class="group hidden">
+        <label class="label">文件夹</label>
+        <input id="exprFolder" class="input" type="text" list="folderOptions" value="自建文件夹" placeholder="自建文件夹" />
+        <datalist id="folderOptions"></datalist>
+
+        <label class="label">因子名</label>
+        <input id="exprName" class="input" type="text" value="VolumeBias" />
+
+        <label class="label">表达式</label>
+        <textarea id="exprText" class="textarea" rows="3">volume/volume.ma(n1)</textarea>
+
+        <div id="exprParams" class="param-list"></div>
+
+        <label class="check"><input id="exprEnable" type="checkbox" /> 启用阈值</label>
+
+        <div id="exprThresholdRow" class="cond-row hidden">
+          <span class="label-inline">阈值</span>
+          <select id="exprCmp" class="select">
+            <option value=">=">&gt;=</option>
+            <option value=">">&gt;</option>
+            <option value="<=">&lt;=</option>
+            <option value="<">&lt;</option>
+          </select>
+          <input id="exprThreshold" class="input" type="number" step="0.0001" value="0" />
+        </div>
+
+        <label class="check"><input id="exprShow" type="checkbox" checked /> 显示列</label>
+        <button id="exprAdd" class="btn btn-secondary">添加/更新</button>
+        </div>
+
+        <div id="exprList" class="plugin-list"></div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">显示列配置</div>
+        <div id="columnSelector" class="column-selector">
+          <!-- 动态生成列勾选框 -->
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-social">
+        <a class="social-link" href="https://x.com/GrailWeb3" target="_blank" rel="noopener noreferrer" aria-label="X">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.8-6.2L6.6 22H2l7.4-8.5L1 2h6.4l4.3 5.6L18.9 2Zm-1.1 18h1.7L6.1 3.9H4.3l13.5 16.1Z" />
+          </svg>
+        </a>
+        <a class="social-link" href="https://www.binance.com/zh-CN/square/profile/ruiqingmore" target="_blank" rel="noopener noreferrer" aria-label="币安广场">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2.2 15.8 6 12 9.8 8.2 6 12 2.2Zm6 6L21.8 12 18 15.8 14.2 12 18 8.2ZM6 8.2 9.8 12 6 15.8 2.2 12 6 8.2Zm6 6 3.8 3.8L12 21.8 8.2 18 12 14.2Zm0-3.2L9.2 8.2 12 5.4l2.8 2.8L12 11Z" />
+          </svg>
+        </a>
+        <a class="social-link" href="https://mp.weixin.qq.com/" target="_blank" rel="noopener noreferrer" aria-label="公众号">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9.3 4.5c-4 0-7.3 2.7-7.3 6 0 1.9 1.1 3.6 3 4.8l-.7 2.6 2.6-1.4c.8.2 1.6.3 2.4.3.2 0 .5 0 .7-.02-.4-.8-.6-1.7-.6-2.6 0-3.4 3.2-6.2 7.2-6.2.4 0 .7 0 1 .05C16.3 5.9 13 4.5 9.3 4.5Zm-2.1 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm4 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z" />
+            <path d="M22 14.1c0-3-2.9-5.4-6.5-5.4s-6.5 2.4-6.5 5.4 2.9 5.4 6.5 5.4c.7 0 1.4-.1 2.1-.3l2.3 1.2-.6-2.2c1.7-1 2.7-2.6 2.7-4.1Zm-7.8-1.1a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8Zm3.5 0a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8Z" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <div id="helpModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div id="helpTitle" class="modal-title">表达式语法</div>
+        <button id="helpClose" class="help-close" type="button">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="help-line">必须写 OHLCV 前缀：open/high/low/close/volume/quotevolume，不写默认 close。</div>
+        <div class="help-line">方法写法：close.ma(n1)、close.sma(n2)、close.ema(n3)、close.shift(n4)</div>
+        <div class="help-line">成交额过滤示例：quotevolume > 1000000（支持自动转为阈值模式）</div>
+        <div class="help-line">组合： (close+open).ma(n1) > (close+open).sma(n2)</div>
+        <div class="help-line">统计：x.mean(n)、x.std(n)、x.corr(y,n)（注意这些是 rolling 窗口统计）</div>
+        <div class="help-line">abs：abs(x)</div>
+        <div class="help-line">比较符：&gt;、&gt;=、&lt;、&lt;=、==、!=（返回 1/0）</div>
+        <div class="help-line">说明：不支持直接执行 Python 代码；复杂逻辑建议用 factor_plugins 写 Python 因子。</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="plansModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="plansTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div id="plansTitle" class="modal-title">我的计划</div>
+        <button id="plansClose" class="help-close" type="button">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="help-line">测试账号</div>
+        <div class="help-line">测试账号</div>
+        <div class="help-line">测试账号</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="updateModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="updateTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div id="updateTitle" class="modal-title">更新说明</div>
+        <button id="updateClose" class="help-close" type="button">×</button>
+      </div>
+      <div class="modal-body">
+        <pre id="updateNotes" class="md-pre">加载中...</pre>
+      </div>
+    </div>
+  </div>
+
+  <div id="tutorialModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div id="tutorialTitle" class="modal-title">教程</div>
+        <button id="tutorialClose" class="help-close" type="button">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="help-line">-</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="wecomModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="wecomTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div id="wecomTitle" class="modal-title">测试功能</div>
+        <button id="wecomClose" class="help-close" type="button">×</button>
+      </div>
+      <div class="modal-body">
+        <label class="label">企业微信机器人 Webhook URL</label>
+        <input id="wecomWebhook" class="input" placeholder="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=..." />
+
+        <label class="check"><input id="wecomEnabled" type="checkbox" /> 每小时自动推送</label>
+        <label class="label">每次最多推送条数</label>
+        <input id="wecomTopN" class="input" type="number" min="1" step="1" value="20" />
+
+        <div class="row-actions">
+          <button id="wecomImport" class="btn btn-secondary" type="button">从当前筛选导入</button>
+          <button id="wecomSave" class="btn btn-secondary" type="button">保存配置</button>
+          <button id="wecomSendNow" class="btn" type="button">立即发送</button>
+        </div>
+
+        <div class="help-line">
+          <div class="label-inline">当前选择摘要</div>
+          <div id="wecomSummary" style="margin-top: 6px;">-</div>
+        </div>
+        <div class="help-line">
+          <div class="label-inline">发送结果</div>
+          <div id="wecomResult" style="margin-top: 6px;">-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="feedbackModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div id="feedbackTitle" class="modal-title">反馈</div>
+        <button id="feedbackClose" class="help-close" type="button">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="help-line">将发送到 grailweb3@163.com</div>
+        <label class="label">反馈内容</label>
+        <textarea id="feedbackText" class="input" rows="6" placeholder="请描述问题/建议（可附复现步骤）"></textarea>
+        <div class="row-actions">
+          <button id="feedbackSend" class="btn" type="button">发送</button>
+        </div>
+        <div class="help-line">
+          <div class="label-inline">状态</div>
+          <div id="feedbackResult" style="margin-top: 6px;">-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <main class="content">
+      <div class="watermark">
+        <img class="watermark-logo" src="./grailweb3.png" alt="Grail区块链" />
+        <div class="watermark-text">Grail区块链</div>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead id="thead"></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

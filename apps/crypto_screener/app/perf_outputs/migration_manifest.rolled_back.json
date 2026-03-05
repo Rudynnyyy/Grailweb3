@@ -1,0 +1,2694 @@
+{
+  "files": [
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\0GUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\0GUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000000BOBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000000BOBUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000000MOGUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000000MOGUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000BONKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000BONKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000CATUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000CATUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000CHEEMSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000CHEEMSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000FLOKIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000FLOKIUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000LUNCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000LUNCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000PEPEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000PEPEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000RATSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000RATSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000SATSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000SATSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000SHIBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000SHIBUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000WHYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000WHYUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1000XECUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1000XECUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1INCHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1INCHUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\1MBABYDOGEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\1MBABYDOGEUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\2ZUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\2ZUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\4USDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\4USDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\A2ZUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\A2ZUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AAVEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AAVEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ACEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ACEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ACHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ACHUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ACTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ACTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ACUUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ACUUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ACXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ACXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ADAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ADAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AERGOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AERGOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AEROUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AEROUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AEVOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AEVOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AGLDUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AGLDUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AGTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AGTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AIAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AIAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AINUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AINUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AIOTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AIOTUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AIOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AIOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AIXBTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AIXBTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AKEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AKEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AKTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AKTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ALCHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ALCHUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ALGOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ALGOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ALICEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ALICEUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ALLOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ALLOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ALLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ALLUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ALPINEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ALPINEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ALTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ALTUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ANIMEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ANIMEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ANKRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ANKRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\APEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\APEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\API3USDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\API3USDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\APRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\APRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\APTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\APTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ARBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ARBUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ARCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ARCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ARIAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ARIAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ARKMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ARKMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ARKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ARKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ARPAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ARPAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ARUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ARUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ASRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ASRUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ASTERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ASTERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ASTRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ASTRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ATAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ATAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ATHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ATHUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ATOMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ATOMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ATUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ATUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AUCTIONUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AUCTIONUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AVAAIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AVAAIUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AVAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AVAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AVAXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AVAXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AVNTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AVNTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AWEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AWEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AXLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AXLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AXSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AXSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\AZTECUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\AZTECUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\B2USDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\B2USDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\B3USDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\B3USDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BABYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BABYUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BANANAS31USDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BANANAS31USDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BANANAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BANANAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BANDUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BANDUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BANKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BANKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BANUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BANUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BARDUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BARDUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BASUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BASUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BATUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BATUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BBUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BCHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BCHUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BDXNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BDXNUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BEAMXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BEAMXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BEATUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BEATUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BELUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BELUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BERAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BERAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BICOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BICOUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BIGTIMEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BIGTIMEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BIOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BIOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BIRBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BIRBUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BLESSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BLESSUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BLUAIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BLUAIUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BLURUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BLURUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BMTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BMTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BNBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BNBUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BNTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BNTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BOBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BOBUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BOMEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BOMEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BRETTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BRETTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BREVUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BREVUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BROCCOLI714USDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BROCCOLI714USDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BROCCOLIF3BUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BROCCOLIF3BUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BSVUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BSVUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BTCDOMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BTCDOMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BTCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BTCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BTRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BTRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BULLAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BULLAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\BUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\BUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\C98USDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\C98USDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CAKEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CAKEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CARVUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CARVUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CATIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CATIUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CELOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CELOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CELRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CELRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CETUSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CETUSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CFXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CFXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CGPTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CGPTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CHILLGUYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CHILLGUYUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CHRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CHRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CHZUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CHZUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CKBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CKBUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CLANKERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CLANKERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CLOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CLOUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\COAIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\COAIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\COLLECTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\COLLECTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\COMPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\COMPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\COOKIEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\COOKIEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\COSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\COSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\COTIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\COTIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\COWUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\COWUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CROSSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CROSSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CRVUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CRVUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CTKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CTKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CTSIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CTSIUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CVCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CVCUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CVXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CVXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CYBERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CYBERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\CYSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\CYSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DAMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DAMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DASHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DASHUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DEEPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DEEPUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DEGENUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DEGENUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DEGOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DEGOUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DENTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DENTUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DEXEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DEXEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DIAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DIAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DODOXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DODOXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DOGEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DOGEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DOGSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DOGSUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DOLOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DOLOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DOODUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DOODUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DOTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DOTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DRIFTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DRIFTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DUSKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DUSKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DYDXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DYDXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\DYMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\DYMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\EDENUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\EDENUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\EDUUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\EDUUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\EGLDUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\EGLDUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\EIGENUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\EIGENUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ELSAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ELSAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ENAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ENAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ENJUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ENJUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ENSOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ENSOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ENSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ENSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\EPICUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\EPICUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ERAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ERAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ESPORTSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ESPORTSUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ESPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ESPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ETCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ETCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ETHFIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ETHFIUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ETHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ETHUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ETHWUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ETHWUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\EULUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\EULUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\EVAAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\EVAAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FARTCOINUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FARTCOINUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FETUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FETUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FFUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FFUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FHEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FHEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FIDAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FIDAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FIGHTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FIGHTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FILUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FILUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FIOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FIOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FLOCKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FLOCKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FLOWUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FLOWUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FLUIDUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FLUIDUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FLUXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FLUXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FOGOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FOGOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FOLKSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FOLKSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FORMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FORMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FORTHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FORTHUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FRAXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FRAXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FUNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FUNUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\FUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\FUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GALAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GALAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GASUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GASUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GIGGLEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GIGGLEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GLMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GLMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GMTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GMTUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GMXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GMXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GOATUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GOATUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GPSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GPSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GRASSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GRASSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GRIFFAINUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GRIFFAINUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GRTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GRTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GTCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GTCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GUAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GUAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GUNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GUNUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\GWEIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\GWEIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HAEDALUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HAEDALUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HANAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HANAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HBARUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HBARUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HEIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HEIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HEMIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HEMIUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HFTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HFTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HIGHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HIGHUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HIPPOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HIPPOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HIVEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HIVEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HMSTRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HMSTRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HOLOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HOLOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HOMEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HOMEUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HOOKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HOOKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HOTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HOTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HUMAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HUMAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HYPERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HYPERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\HYPEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\HYPEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ICNTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ICNTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ICPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ICPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ICXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ICXUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\IDOLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\IDOLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\IDUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\IDUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ILVUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ILVUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\IMXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\IMXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\INITUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\INITUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\INJUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\INJUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\INUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\INUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\INXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\INXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\IOSTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\IOSTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\IOTAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\IOTAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\IOTXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\IOTXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\IOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\IOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\IPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\IPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\IRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\IRUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\IRYSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\IRYSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\JASMYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\JASMYUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\JCTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\JCTUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\JELLYJELLYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\JELLYJELLYUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\JOEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\JOEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\JSTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\JSTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\JTOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\JTOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KAIAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KAIAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KAITOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KAITOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KASUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KASUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KAVAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KAVAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KERNELUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KERNELUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KGENUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KGENUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KITEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KITEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KMNOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KMNOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KNCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KNCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KOMAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KOMAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\KSMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\KSMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LABUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LABUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LAYERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LAYERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LDOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LDOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LIGHTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LIGHTUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LINEAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LINEAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LINKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LINKUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LISTAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LISTAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LITUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LITUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LPTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LPTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LQTYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LQTYUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LRCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LRCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LSKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LSKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LTCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LTCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LUMIAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LUMIAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LUNA2USDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LUNA2USDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\LYNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\LYNUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MAGICUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MAGICUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MAGMAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MAGMAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MANAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MANAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MANTAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MANTAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MASKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MASKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MAVIAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MAVIAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MAVUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MAVUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MBOXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MBOXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MEGAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MEGAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MELANIAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MELANIAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MEMEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MEMEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MERLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MERLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\METISUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\METISUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\METUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\METUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MEUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MEWUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MEWUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MINAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MINAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MIRAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MIRAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MITOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MITOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MLNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MLNUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MMTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MMTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MOCAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MOCAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MONUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MONUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MOODENGUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MOODENGUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MORPHOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MORPHOUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MOVEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MOVEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MOVRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MOVRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MTLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MTLUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MUBARAKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MUBARAKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\MYXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\MYXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NAORISUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NAORISUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NEARUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NEARUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NEIROUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NEIROUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NEOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NEOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NEWTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NEWTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NFPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NFPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NIGHTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NIGHTUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NILUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NILUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NMRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NMRUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NOMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NOMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NOTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NOTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NTRNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NTRNUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\NXPCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\NXPCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\OGNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\OGNUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\OGUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\OGUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\OLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\OLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ONDOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ONDOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ONEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ONEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ONGUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ONGUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ONTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ONTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ONUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ONUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\OPENUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\OPENUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\OPNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\OPNUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\OPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\OPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ORCAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ORCAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ORDERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ORDERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ORDIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ORDIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\OXTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\OXTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PARTIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PARTIUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PAXGUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PAXGUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PENDLEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PENDLEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PENGUUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PENGUUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PEOPLEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PEOPLEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PHAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PHAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PHBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PHBUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PIEVERSEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PIEVERSEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PIPPINUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PIPPINUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PIXELUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PIXELUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PLAYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PLAYUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PLUMEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PLUMEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PNUTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PNUTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\POLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\POLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\POLYXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\POLYXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\POPCATUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\POPCATUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PORTALUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PORTALUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\POWERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\POWERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\POWRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\POWRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PROMPTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PROMPTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PROMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PROMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PROVEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PROVEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PTBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PTBUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PUFFERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PUFFERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PUMPBTCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PUMPBTCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PUMPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PUMPUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PUNDIXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PUNDIXUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\PYTHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\PYTHUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\QNTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\QNTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\QTUMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\QTUMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\QUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\QUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RAREUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RAREUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RAVEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RAVEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RAYSOLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RAYSOLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RDNTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RDNTUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RECALLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RECALLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\REDUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\REDUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RENDERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RENDERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RESOLVUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RESOLVUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\REZUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\REZUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RIFUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RIFUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RIVERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RIVERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RLCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RLCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RLSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RLSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RONINUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RONINUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ROSEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ROSEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RPLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RPLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RSRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RSRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RUNEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RUNEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\RVNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\RVNUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SAFEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SAFEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SAGAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SAGAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SAHARAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SAHARAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SANDUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SANDUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SANTOSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SANTOSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SAPIENUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SAPIENUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SCRTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SCRTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SCRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SCRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SEIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SEIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SENTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SENTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SFPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SFPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SHELLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SHELLUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SIGNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SIGNUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SIRENUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SIRENUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SKLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SKLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SKRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SKRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SKYAIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SKYAIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SKYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SKYUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SLPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SLPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SNXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SNXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SOLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SOLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SOLVUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SOLVUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SOMIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SOMIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SONICUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SONICUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SOONUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SOONUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SOPHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SOPHUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SPACEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SPACEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SPELLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SPELLUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SPKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SPKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SPORTFUNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SPORTFUNUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SPXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SPXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SQDUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SQDUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SSVUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SSVUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\STABLEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\STABLEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\STBLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\STBLUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\STEEMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\STEEMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\STGUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\STGUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\STORJUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\STORJUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\STOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\STOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\STRKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\STRKUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\STXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\STXUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SUIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SUIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SUNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SUNUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SUPERUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SUPERUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SUSHIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SUSHIUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SWARMSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SWARMSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SXTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SXTUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SYNUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SYNUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\SYSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\SYSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TACUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TACUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TAGUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TAGUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TAIKOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TAIKOUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TAKEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TAKEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TAOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TAOUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\THETAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\THETAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\THEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\THEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TIAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TIAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TLMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TLMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TNSRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TNSRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TONUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TONUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TOSHIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TOSHIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TOWNSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TOWNSUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TRADOORUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TRADOORUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TRBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TRBUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TREEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TREEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TRIAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TRIAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TRUMPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TRUMPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TRUSTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TRUSTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TRUTHUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TRUTHUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TRUUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TRUUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TRXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TRXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TSTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TSTUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TURBOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TURBOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TURTLEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TURTLEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TUTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TUTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\TWTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\TWTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\UAIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\UAIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\UBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\UBUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\UMAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\UMAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\UNIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\UNIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\USELESSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\USELESSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\USTCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\USTCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\USUALUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\USUALUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\USUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\USUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VANAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VANAUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VANRYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VANRYUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VELODROMEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VELODROMEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VELVETUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VELVETUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VETUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VETUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VFYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VFYUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VICUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VICUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VINEUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VINEUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VIRTUALUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VIRTUALUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VTHOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VTHOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\VVVUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\VVVUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\WALUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\WALUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\WAXPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\WAXPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\WCTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\WCTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\WETUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\WETUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\WIFUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\WIFUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\WLDUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\WLDUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\WLFIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\WLFIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\WOOUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\WOOUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\WUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\WUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XAIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XAIUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XANUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XANUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XLMUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XLMUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XMRUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XMRUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XNYUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XNYUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XPINUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XPINUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XPLUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XPLUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XRPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XRPUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XTZUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XTZUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XVGUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XVGUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\XVSUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\XVSUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\YBUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\YBUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\YFIUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\YFIUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\YGGUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\YGGUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZAMAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZAMAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZBTUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZBTUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZECUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZECUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZENUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZENUSDT.npz",
+      "rows": 37
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZEREBROUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZEREBROUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZETAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZETAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZILUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZILUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZKCUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZKCUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZKJUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZKJUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZKPUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZKPUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZKUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZKUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZORAUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZORAUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZROUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZROUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\ZRXUSDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\ZRXUSDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\币安人生USDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\币安人生USDT.npz",
+      "rows": 9
+    },
+    {
+      "source": "D:\\量化交易\\中性1.8\\数据获取\\data\\data_center\\kline\\swap\\我踏马来了USDT.csv",
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_outputs\\swap_npz\\我踏马来了USDT.npz",
+      "rows": 9
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "module": "preprocess_table",
+  "baseline": {
+    "name": "preprocess_table_baseline_csv",
+    "qps": 6.934,
+    "rt_ms": {
+      "avg": 132.089,
+      "p50": 128.724,
+      "p95": 153.032,
+      "p99": 170.081,
+      "max": 176.137
+    },
+    "cpu_pct": 6.201,
+    "mem_mb": 14.308,
+    "io_mb_s": 49.903,
+    "requests": 120,
+    "elapsed_s": 17.307
+  },
+  "optimized": {
+    "name": "preprocess_table_optimized_npz",
+    "qps": 59.098,
+    "rt_ms": {
+      "avg": 16.61,
+      "p50": 16.138,
+      "p95": 18.635,
+      "p99": 19.318,
+      "max": 30.512
+    },
+    "cpu_pct": 6.204,
+    "mem_mb": 7.846,
+    "io_mb_s": 56.814,
+    "requests": 120,
+    "elapsed_s": 2.031
+  },
+  "artifacts": {
+    "csv_path": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_suite\\code\\table_raw.csv",
+    "npz_path": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_suite\\code\\table_preprocessed.npz"
+  }
+}

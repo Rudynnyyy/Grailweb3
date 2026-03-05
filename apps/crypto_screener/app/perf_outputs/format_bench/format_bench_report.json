@@ -1,0 +1,37 @@
+{
+  "results": [
+    {
+      "format": "binary_npz",
+      "write_s": 0.00465889999999991,
+      "read_s": 0.04099470000000016,
+      "size_bytes": 3725,
+      "rows": 9,
+      "size_vs_source": 2.590403,
+      "source_csv": "D:\\量化交易\\中性1.8\\数据获取\\data\\swap_lin\\BTC-USDT.csv",
+      "source_size_bytes": 1438,
+      "source_rows": 9
+    },
+    {
+      "format": "columnar_npy",
+      "write_s": 0.023138199999999998,
+      "read_s": 0.10552630000000018,
+      "size_bytes": 5232,
+      "rows": 9,
+      "size_vs_source": 3.638387,
+      "source_csv": "D:\\量化交易\\中性1.8\\数据获取\\data\\swap_lin\\BTC-USDT.csv",
+      "source_size_bytes": 1438,
+      "source_rows": 9
+    },
+    {
+      "format": "memmap_close_only",
+      "write_s": 0.0009323999999999444,
+      "read_s": 0.008197199999999683,
+      "size_bytes": 72,
+      "rows": 9,
+      "size_vs_source": 0.05007,
+      "source_csv": "D:\\量化交易\\中性1.8\\数据获取\\data\\swap_lin\\BTC-USDT.csv",
+      "source_size_bytes": 1438,
+      "source_rows": 9
+    }
+  ]
+}

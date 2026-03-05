@@ -1,0 +1,4864 @@
+{
+  "files": {
+    "swap:0GUSDT": {
+      "src_mtime_ns": 1772546660524246500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\0GUSDT.npz"
+    },
+    "swap:1000000BOBUSDT": {
+      "src_mtime_ns": 1772546530803952700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000000BOBUSDT.npz"
+    },
+    "swap:1000000MOGUSDT": {
+      "src_mtime_ns": 1772546507631330800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000000MOGUSDT.npz"
+    },
+    "swap:1000BONKUSDT": {
+      "src_mtime_ns": 1772546540433140000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000BONKUSDT.npz"
+    },
+    "swap:1000CATUSDT": {
+      "src_mtime_ns": 1772546689252109400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000CATUSDT.npz"
+    },
+    "swap:1000CHEEMSUSDT": {
+      "src_mtime_ns": 1772546481117152500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000CHEEMSUSDT.npz"
+    },
+    "swap:1000FLOKIUSDT": {
+      "src_mtime_ns": 1772546705973148900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000FLOKIUSDT.npz"
+    },
+    "swap:1000LUNCUSDT": {
+      "src_mtime_ns": 1772546546878695200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000LUNCUSDT.npz"
+    },
+    "swap:1000PEPEUSDT": {
+      "src_mtime_ns": 1772546506838836100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000PEPEUSDT.npz"
+    },
+    "swap:1000RATSUSDT": {
+      "src_mtime_ns": 1772546722881102300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000RATSUSDT.npz"
+    },
+    "swap:1000SATSUSDT": {
+      "src_mtime_ns": 1772546479909381000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000SATSUSDT.npz"
+    },
+    "swap:1000SHIBUSDT": {
+      "src_mtime_ns": 1772546552897266000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000SHIBUSDT.npz"
+    },
+    "swap:1000WHYUSDT": {
+      "src_mtime_ns": 1772546527572611900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000WHYUSDT.npz"
+    },
+    "swap:1000XECUSDT": {
+      "src_mtime_ns": 1772546497199460700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1000XECUSDT.npz"
+    },
+    "swap:1INCHUSDT": {
+      "src_mtime_ns": 1772546512468300900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1INCHUSDT.npz"
+    },
+    "swap:1MBABYDOGEUSDT": {
+      "src_mtime_ns": 1772546547269057800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\1MBABYDOGEUSDT.npz"
+    },
+    "swap:2ZUSDT": {
+      "src_mtime_ns": 1772546529188209400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\2ZUSDT.npz"
+    },
+    "swap:4USDT": {
+      "src_mtime_ns": 1772546671414979200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\4USDT.npz"
+    },
+    "swap:A2ZUSDT": {
+      "src_mtime_ns": 1772546733854436200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\A2ZUSDT.npz"
+    },
+    "swap:AAVEUSDT": {
+      "src_mtime_ns": 1772546466084677500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AAVEUSDT.npz"
+    },
+    "swap:ACEUSDT": {
+      "src_mtime_ns": 1772546698166259300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ACEUSDT.npz"
+    },
+    "swap:ACHUSDT": {
+      "src_mtime_ns": 1772546731046485700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ACHUSDT.npz"
+    },
+    "swap:ACTUSDT": {
+      "src_mtime_ns": 1772546675990250500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ACTUSDT.npz"
+    },
+    "swap:ACUUSDT": {
+      "src_mtime_ns": 1772546504418869200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ACUUSDT.npz"
+    },
+    "swap:ACXUSDT": {
+      "src_mtime_ns": 1772546502825093000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ACXUSDT.npz"
+    },
+    "swap:ADAUSDT": {
+      "src_mtime_ns": 1772546496796220900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ADAUSDT.npz"
+    },
+    "swap:AERGOUSDT": {
+      "src_mtime_ns": 1772546746389637300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AERGOUSDT.npz"
+    },
+    "swap:AEROUSDT": {
+      "src_mtime_ns": 1772546727375634200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AEROUSDT.npz"
+    },
+    "swap:AEVOUSDT": {
+      "src_mtime_ns": 1772546557306614600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AEVOUSDT.npz"
+    },
+    "swap:AGLDUSDT": {
+      "src_mtime_ns": 1772546714028138500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AGLDUSDT.npz"
+    },
+    "swap:AGTUSDT": {
+      "src_mtime_ns": 1772546541633698400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AGTUSDT.npz"
+    },
+    "swap:AIAUSDT": {
+      "src_mtime_ns": 1772546534795964500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AIAUSDT.npz"
+    },
+    "swap:AINUSDT": {
+      "src_mtime_ns": 1772546690058198200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AINUSDT.npz"
+    },
+    "swap:AIOTUSDT": {
+      "src_mtime_ns": 1772546728568555600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AIOTUSDT.npz"
+    },
+    "swap:AIOUSDT": {
+      "src_mtime_ns": 1772546776386558200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AIOUSDT.npz"
+    },
+    "swap:AIUSDT": {
+      "src_mtime_ns": 1772546685631408100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AIUSDT.npz"
+    },
+    "swap:AIXBTUSDT": {
+      "src_mtime_ns": 1772546674378845000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AIXBTUSDT.npz"
+    },
+    "swap:AKEUSDT": {
+      "src_mtime_ns": 1772546482314615400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AKEUSDT.npz"
+    },
+    "swap:AKTUSDT": {
+      "src_mtime_ns": 1772546529589418400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AKTUSDT.npz"
+    },
+    "swap:ALCHUSDT": {
+      "src_mtime_ns": 1772546492765349400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ALCHUSDT.npz"
+    },
+    "swap:ALGOUSDT": {
+      "src_mtime_ns": 1772546532397248800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ALGOUSDT.npz"
+    },
+    "swap:ALICEUSDT": {
+      "src_mtime_ns": 1772546495577211800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ALICEUSDT.npz"
+    },
+    "swap:ALLOUSDT": {
+      "src_mtime_ns": 1772546690869049200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ALLOUSDT.npz"
+    },
+    "swap:ALLUSDT": {
+      "src_mtime_ns": 1772546528371941200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ALLUSDT.npz"
+    },
+    "swap:ALPINEUSDT": {
+      "src_mtime_ns": 1772546764004888200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ALPINEUSDT.npz"
+    },
+    "swap:ALTUSDT": {
+      "src_mtime_ns": 1772546710008273400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ALTUSDT.npz"
+    },
+    "swap:ANIMEUSDT": {
+      "src_mtime_ns": 1772546467677682100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ANIMEUSDT.npz"
+    },
+    "swap:ANKRUSDT": {
+      "src_mtime_ns": 1772546507243036500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ANKRUSDT.npz"
+    },
+    "swap:APEUSDT": {
+      "src_mtime_ns": 1772546747202349400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\APEUSDT.npz"
+    },
+    "swap:API3USDT": {
+      "src_mtime_ns": 1772546470895554500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\API3USDT.npz"
+    },
+    "swap:APRUSDT": {
+      "src_mtime_ns": 1772546733059274500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\APRUSDT.npz"
+    },
+    "swap:APTUSDT": {
+      "src_mtime_ns": 1772546682417740600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\APTUSDT.npz"
+    },
+    "swap:ARBUSDT": {
+      "src_mtime_ns": 1772546756786671900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ARBUSDT.npz"
+    },
+    "swap:ARCUSDT": {
+      "src_mtime_ns": 1772546736279146700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ARCUSDT.npz"
+    },
+    "swap:ARIAUSDT": {
+      "src_mtime_ns": 1772546534398426500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ARIAUSDT.npz"
+    },
+    "swap:ARKMUSDT": {
+      "src_mtime_ns": 1772546722486850400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ARKMUSDT.npz"
+    },
+    "swap:ARKUSDT": {
+      "src_mtime_ns": 1772546719253380500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ARKUSDT.npz"
+    },
+    "swap:ARPAUSDT": {
+      "src_mtime_ns": 1772546703965179300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ARPAUSDT.npz"
+    },
+    "swap:ARUSDT": {
+      "src_mtime_ns": 1772546560937216300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ARUSDT.npz"
+    },
+    "swap:ASRUSDT": {
+      "src_mtime_ns": 1772546674790528100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ASRUSDT.npz"
+    },
+    "swap:ASTERUSDT": {
+      "src_mtime_ns": 1772546559321028700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ASTERUSDT.npz"
+    },
+    "swap:ASTRUSDT": {
+      "src_mtime_ns": 1772546769930825100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ASTRUSDT.npz"
+    },
+    "swap:ATAUSDT": {
+      "src_mtime_ns": 1772546687645279200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ATAUSDT.npz"
+    },
+    "swap:ATHUSDT": {
+      "src_mtime_ns": 1772546544859718100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ATHUSDT.npz"
+    },
+    "swap:ATOMUSDT": {
+      "src_mtime_ns": 1772546733457053700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ATOMUSDT.npz"
+    },
+    "swap:ATUSDT": {
+      "src_mtime_ns": 1772546482715358000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ATUSDT.npz"
+    },
+    "swap:AUCTIONUSDT": {
+      "src_mtime_ns": 1772546478138088700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AUCTIONUSDT.npz"
+    },
+    "swap:AUSDT": {
+      "src_mtime_ns": 1772546767230644600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AUSDT.npz"
+    },
+    "swap:AVAAIUSDT": {
+      "src_mtime_ns": 1772546478547943100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AVAAIUSDT.npz"
+    },
+    "swap:AVAUSDT": {
+      "src_mtime_ns": 1772546554498432900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AVAUSDT.npz"
+    },
+    "swap:AVAXUSDT": {
+      "src_mtime_ns": 1772546474120543400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AVAXUSDT.npz"
+    },
+    "swap:AVNTUSDT": {
+      "src_mtime_ns": 1772546659725929600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AVNTUSDT.npz"
+    },
+    "swap:AWEUSDT": {
+      "src_mtime_ns": 1772546694146600200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AWEUSDT.npz"
+    },
+    "swap:AXLUSDT": {
+      "src_mtime_ns": 1772546748399808300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AXLUSDT.npz"
+    },
+    "swap:AXSUSDT": {
+      "src_mtime_ns": 1772546503615552300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AXSUSDT.npz"
+    },
+    "swap:AZTECUSDT": {
+      "src_mtime_ns": 1772546727759154200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\AZTECUSDT.npz"
+    },
+    "swap:B2USDT": {
+      "src_mtime_ns": 1772546471305535900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\B2USDT.npz"
+    },
+    "swap:B3USDT": {
+      "src_mtime_ns": 1772546526765141300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\B3USDT.npz"
+    },
+    "swap:BABYUSDT": {
+      "src_mtime_ns": 1772546751606980900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BABYUSDT.npz"
+    },
+    "swap:BANANAS31USDT": {
+      "src_mtime_ns": 1772546708400146700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BANANAS31USDT.npz"
+    },
+    "swap:BANANAUSDT": {
+      "src_mtime_ns": 1772546761200675000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BANANAUSDT.npz"
+    },
+    "swap:BANDUSDT": {
+      "src_mtime_ns": 1772546484729781900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BANDUSDT.npz"
+    },
+    "swap:BANKUSDT": {
+      "src_mtime_ns": 1772546758776168400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BANKUSDT.npz"
+    },
+    "swap:BANUSDT": {
+      "src_mtime_ns": 1772546480707836800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BANUSDT.npz"
+    },
+    "swap:BARDUSDT": {
+      "src_mtime_ns": 1772546774370257000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BARDUSDT.npz"
+    },
+    "swap:BASUSDT": {
+      "src_mtime_ns": 1772546556121472600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BASUSDT.npz"
+    },
+    "swap:BATUSDT": {
+      "src_mtime_ns": 1772546686444249300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BATUSDT.npz"
+    },
+    "swap:BBUSDT": {
+      "src_mtime_ns": 1772546741568178100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BBUSDT.npz"
+    },
+    "swap:BCHUSDT": {
+      "src_mtime_ns": 1772546493969524600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BCHUSDT.npz"
+    },
+    "swap:BDXNUSDT": {
+      "src_mtime_ns": 1772546707993814900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BDXNUSDT.npz"
+    },
+    "swap:BEAMXUSDT": {
+      "src_mtime_ns": 1772546556494885300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BEAMXUSDT.npz"
+    },
+    "swap:BEATUSDT": {
+      "src_mtime_ns": 1772546473316243700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BEATUSDT.npz"
+    },
+    "swap:BELUSDT": {
+      "src_mtime_ns": 1772546521141999300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BELUSDT.npz"
+    },
+    "swap:BERAUSDT": {
+      "src_mtime_ns": 1772546693346897000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BERAUSDT.npz"
+    },
+    "swap:BICOUSDT": {
+      "src_mtime_ns": 1772546550871749100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BICOUSDT.npz"
+    },
+    "swap:BIGTIMEUSDT": {
+      "src_mtime_ns": 1772546718447010600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BIGTIMEUSDT.npz"
+    },
+    "swap:BIOUSDT": {
+      "src_mtime_ns": 1772546474940153800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BIOUSDT.npz"
+    },
+    "swap:BIRBUSDT": {
+      "src_mtime_ns": 1772546666992633800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BIRBUSDT.npz"
+    },
+    "swap:BLESSUSDT": {
+      "src_mtime_ns": 1772546472916779600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BLESSUSDT.npz"
+    },
+    "swap:BLUAIUSDT": {
+      "src_mtime_ns": 1772546711615809400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BLUAIUSDT.npz"
+    },
+    "swap:BLURUSDT": {
+      "src_mtime_ns": 1772546672230647800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BLURUSDT.npz"
+    },
+    "swap:BMTUSDT": {
+      "src_mtime_ns": 1772546729376013000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BMTUSDT.npz"
+    },
+    "swap:BNBUSDT": {
+      "src_mtime_ns": 1772546537610467600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BNBUSDT.npz"
+    },
+    "swap:BNTUSDT": {
+      "src_mtime_ns": 1772546685241679500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BNTUSDT.npz"
+    },
+    "swap:BOBUSDT": {
+      "src_mtime_ns": 1772546711219816000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BOBUSDT.npz"
+    },
+    "swap:BOMEUSDT": {
+      "src_mtime_ns": 1772546759179605000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BOMEUSDT.npz"
+    },
+    "swap:BRETTUSDT": {
+      "src_mtime_ns": 1772546709605238700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BRETTUSDT.npz"
+    },
+    "swap:BREVUSDT": {
+      "src_mtime_ns": 1772546535609892100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BREVUSDT.npz"
+    },
+    "swap:BROCCOLI714USDT": {
+      "src_mtime_ns": 1772546763205581300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BROCCOLI714USDT.npz"
+    },
+    "swap:BROCCOLIF3BUSDT": {
+      "src_mtime_ns": 1772546556904966500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BROCCOLIF3BUSDT.npz"
+    },
+    "swap:BRUSDT": {
+      "src_mtime_ns": 1772546663780573300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BRUSDT.npz"
+    },
+    "swap:BSVUSDT": {
+      "src_mtime_ns": 1772546518493425000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BSVUSDT.npz"
+    },
+    "swap:BTCDOMUSDT": {
+      "src_mtime_ns": 1772546767941720000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BTCDOMUSDT.npz"
+    },
+    "swap:BTCUSDT": {
+      "src_mtime_ns": 1772546760398780500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BTCUSDT.npz"
+    },
+    "swap:BTRUSDT": {
+      "src_mtime_ns": 1772546660969119300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BTRUSDT.npz"
+    },
+    "swap:BULLAUSDT": {
+      "src_mtime_ns": 1772546560516937700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BULLAUSDT.npz"
+    },
+    "swap:BUSDT": {
+      "src_mtime_ns": 1772546747993466400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\BUSDT.npz"
+    },
+    "swap:C98USDT": {
+      "src_mtime_ns": 1772546509646919000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\C98USDT.npz"
+    },
+    "swap:CAKEUSDT": {
+      "src_mtime_ns": 1772546762803190300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CAKEUSDT.npz"
+    },
+    "swap:CARVUSDT": {
+      "src_mtime_ns": 1772546490756300900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CARVUSDT.npz"
+    },
+    "swap:CATIUSDT": {
+      "src_mtime_ns": 1772546505224025000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CATIUSDT.npz"
+    },
+    "swap:CCUSDT": {
+      "src_mtime_ns": 1772546470100184100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CCUSDT.npz"
+    },
+    "swap:CELOUSDT": {
+      "src_mtime_ns": 1772546666595284800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CELOUSDT.npz"
+    },
+    "swap:CELRUSDT": {
+      "src_mtime_ns": 1772546534005074100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CELRUSDT.npz"
+    },
+    "swap:CETUSUSDT": {
+      "src_mtime_ns": 1772546506426504500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CETUSUSDT.npz"
+    },
+    "swap:CFXUSDT": {
+      "src_mtime_ns": 1772546680805686700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CFXUSDT.npz"
+    },
+    "swap:CGPTUSDT": {
+      "src_mtime_ns": 1772546773148177000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CGPTUSDT.npz"
+    },
+    "swap:CHILLGUYUSDT": {
+      "src_mtime_ns": 1772546770741521800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CHILLGUYUSDT.npz"
+    },
+    "swap:CHRUSDT": {
+      "src_mtime_ns": 1772546529988698700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CHRUSDT.npz"
+    },
+    "swap:CHZUSDT": {
+      "src_mtime_ns": 1772546479509846500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CHZUSDT.npz"
+    },
+    "swap:CKBUSDT": {
+      "src_mtime_ns": 1772546710805005700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CKBUSDT.npz"
+    },
+    "swap:CLANKERUSDT": {
+      "src_mtime_ns": 1772546754410901300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CLANKERUSDT.npz"
+    },
+    "swap:CLOUSDT": {
+      "src_mtime_ns": 1772546684828291700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CLOUSDT.npz"
+    },
+    "swap:COAIUSDT": {
+      "src_mtime_ns": 1772546538816215700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\COAIUSDT.npz"
+    },
+    "swap:COLLECTUSDT": {
+      "src_mtime_ns": 1772546553282310400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\COLLECTUSDT.npz"
+    },
+    "swap:COMPUSDT": {
+      "src_mtime_ns": 1772546466884277800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\COMPUSDT.npz"
+    },
+    "swap:COOKIEUSDT": {
+      "src_mtime_ns": 1772546659319723900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\COOKIEUSDT.npz"
+    },
+    "swap:COSUSDT": {
+      "src_mtime_ns": 1772546533203241800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\COSUSDT.npz"
+    },
+    "swap:COTIUSDT": {
+      "src_mtime_ns": 1772546713217764300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\COTIUSDT.npz"
+    },
+    "swap:COWUSDT": {
+      "src_mtime_ns": 1772546684434789600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\COWUSDT.npz"
+    },
+    "swap:CROSSUSDT": {
+      "src_mtime_ns": 1772546769132330600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CROSSUSDT.npz"
+    },
+    "swap:CRVUSDT": {
+      "src_mtime_ns": 1772546513275226500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CRVUSDT.npz"
+    },
+    "swap:CTKUSDT": {
+      "src_mtime_ns": 1772546550471901600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CTKUSDT.npz"
+    },
+    "swap:CTSIUSDT": {
+      "src_mtime_ns": 1772546757584226700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CTSIUSDT.npz"
+    },
+    "swap:CUSDT": {
+      "src_mtime_ns": 1772546735081573000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CUSDT.npz"
+    },
+    "swap:CVCUSDT": {
+      "src_mtime_ns": 1772546560116941100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CVCUSDT.npz"
+    },
+    "swap:CVXUSDT": {
+      "src_mtime_ns": 1772546757975020300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CVXUSDT.npz"
+    },
+    "swap:CYBERUSDT": {
+      "src_mtime_ns": 1772546489950983500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CYBERUSDT.npz"
+    },
+    "swap:CYSUSDT": {
+      "src_mtime_ns": 1772546752813067700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\CYSUSDT.npz"
+    },
+    "swap:DAMUSDT": {
+      "src_mtime_ns": 1772546755819017600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DAMUSDT.npz"
+    },
+    "swap:DASHUSDT": {
+      "src_mtime_ns": 1772546752405965600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DASHUSDT.npz"
+    },
+    "swap:DEEPUSDT": {
+      "src_mtime_ns": 1772546693749067200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DEEPUSDT.npz"
+    },
+    "swap:DEGENUSDT": {
+      "src_mtime_ns": 1772546479108153700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DEGENUSDT.npz"
+    },
+    "swap:DEGOUSDT": {
+      "src_mtime_ns": 1772546487945894400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DEGOUSDT.npz"
+    },
+    "swap:DENTUSDT": {
+      "src_mtime_ns": 1772546477736739700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DENTUSDT.npz"
+    },
+    "swap:DEXEUSDT": {
+      "src_mtime_ns": 1772546778430126000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DEXEUSDT.npz"
+    },
+    "swap:DIAUSDT": {
+      "src_mtime_ns": 1772546489551908900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DIAUSDT.npz"
+    },
+    "swap:DODOXUSDT": {
+      "src_mtime_ns": 1772546742771901800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DODOXUSDT.npz"
+    },
+    "swap:DOGEUSDT": {
+      "src_mtime_ns": 1772546691268578200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DOGEUSDT.npz"
+    },
+    "swap:DOGSUSDT": {
+      "src_mtime_ns": 1772546670212637300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DOGSUSDT.npz"
+    },
+    "swap:DOLOUSDT": {
+      "src_mtime_ns": 1772546716037871500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DOLOUSDT.npz"
+    },
+    "swap:DOODUSDT": {
+      "src_mtime_ns": 1772546759593930600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DOODUSDT.npz"
+    },
+    "swap:DOTUSDT": {
+      "src_mtime_ns": 1772546729851619600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DOTUSDT.npz"
+    },
+    "swap:DRIFTUSDT": {
+      "src_mtime_ns": 1772546732248664800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DRIFTUSDT.npz"
+    },
+    "swap:DUSDT": {
+      "src_mtime_ns": 1772546699381153600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DUSDT.npz"
+    },
+    "swap:DUSKUSDT": {
+      "src_mtime_ns": 1772546726154879000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DUSKUSDT.npz"
+    },
+    "swap:DYDXUSDT": {
+      "src_mtime_ns": 1772546503214554800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DYDXUSDT.npz"
+    },
+    "swap:DYMUSDT": {
+      "src_mtime_ns": 1772546724885231900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\DYMUSDT.npz"
+    },
+    "swap:EDENUSDT": {
+      "src_mtime_ns": 1772546491158098200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\EDENUSDT.npz"
+    },
+    "swap:EDUUSDT": {
+      "src_mtime_ns": 1772546761992143300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\EDUUSDT.npz"
+    },
+    "swap:EGLDUSDT": {
+      "src_mtime_ns": 1772546771957103000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\EGLDUSDT.npz"
+    },
+    "swap:EIGENUSDT": {
+      "src_mtime_ns": 1772546539632994000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\EIGENUSDT.npz"
+    },
+    "swap:ELSAUSDT": {
+      "src_mtime_ns": 1772546496397322500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ELSAUSDT.npz"
+    },
+    "swap:ENAUSDT": {
+      "src_mtime_ns": 1772546688846265600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ENAUSDT.npz"
+    },
+    "swap:ENJUSDT": {
+      "src_mtime_ns": 1772546506026523700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ENJUSDT.npz"
+    },
+    "swap:ENSOUSDT": {
+      "src_mtime_ns": 1772546487150182400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ENSOUSDT.npz"
+    },
+    "swap:ENSUSDT": {
+      "src_mtime_ns": 1772546720454628500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ENSUSDT.npz"
+    },
+    "swap:EPICUSDT": {
+      "src_mtime_ns": 1772546550078826200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\EPICUSDT.npz"
+    },
+    "swap:ERAUSDT": {
+      "src_mtime_ns": 1772546691667750200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ERAUSDT.npz"
+    },
+    "swap:ESPORTSUSDT": {
+      "src_mtime_ns": 1772546493567437600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ESPORTSUSDT.npz"
+    },
+    "swap:ESPUSDT": {
+      "src_mtime_ns": 1772546759991352700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ESPUSDT.npz"
+    },
+    "swap:ETCUSDT": {
+      "src_mtime_ns": 1772546514079424600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ETCUSDT.npz"
+    },
+    "swap:ETHFIUSDT": {
+      "src_mtime_ns": 1772546731443702100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ETHFIUSDT.npz"
+    },
+    "swap:ETHUSDT": {
+      "src_mtime_ns": 1772546476529775200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ETHUSDT.npz"
+    },
+    "swap:ETHWUSDT": {
+      "src_mtime_ns": 1772546715641872400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ETHWUSDT.npz"
+    },
+    "swap:EULUSDT": {
+      "src_mtime_ns": 1772546669816490000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\EULUSDT.npz"
+    },
+    "swap:EVAAUSDT": {
+      "src_mtime_ns": 1772546723686675900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\EVAAUSDT.npz"
+    },
+    "swap:FARTCOINUSDT": {
+      "src_mtime_ns": 1772546741974932500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FARTCOINUSDT.npz"
+    },
+    "swap:FETUSDT": {
+      "src_mtime_ns": 1772546696961005400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FETUSDT.npz"
+    },
+    "swap:FFUSDT": {
+      "src_mtime_ns": 1772546561323022500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FFUSDT.npz"
+    },
+    "swap:FHEUSDT": {
+      "src_mtime_ns": 1772546752006877200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FHEUSDT.npz"
+    },
+    "swap:FIDAUSDT": {
+      "src_mtime_ns": 1772546658931120200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FIDAUSDT.npz"
+    },
+    "swap:FIGHTUSDT": {
+      "src_mtime_ns": 1772546692067339500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FIGHTUSDT.npz"
+    },
+    "swap:FILUSDT": {
+      "src_mtime_ns": 1772546722077261200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FILUSDT.npz"
+    },
+    "swap:FIOUSDT": {
+      "src_mtime_ns": 1772546466470093600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FIOUSDT.npz"
+    },
+    "swap:FLOCKUSDT": {
+      "src_mtime_ns": 1772546508447121600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FLOCKUSDT.npz"
+    },
+    "swap:FLOWUSDT": {
+      "src_mtime_ns": 1772546548868626000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FLOWUSDT.npz"
+    },
+    "swap:FLUIDUSDT": {
+      "src_mtime_ns": 1772546509246021800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FLUIDUSDT.npz"
+    },
+    "swap:FLUXUSDT": {
+      "src_mtime_ns": 1772546481512656500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FLUXUSDT.npz"
+    },
+    "swap:FOGOUSDT": {
+      "src_mtime_ns": 1772546705168716800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FOGOUSDT.npz"
+    },
+    "swap:FOLKSUSDT": {
+      "src_mtime_ns": 1772546678403397300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FOLKSUSDT.npz"
+    },
+    "swap:FORMUSDT": {
+      "src_mtime_ns": 1772546542446811000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FORMUSDT.npz"
+    },
+    "swap:FORTHUSDT": {
+      "src_mtime_ns": 1772546464859026800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FORTHUSDT.npz"
+    },
+    "swap:FRAXUSDT": {
+      "src_mtime_ns": 1772546745988016100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FRAXUSDT.npz"
+    },
+    "swap:FUNUSDT": {
+      "src_mtime_ns": 1772546543636944100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FUNUSDT.npz"
+    },
+    "swap:FUSDT": {
+      "src_mtime_ns": 1772546701042408800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\FUSDT.npz"
+    },
+    "swap:GALAUSDT": {
+      "src_mtime_ns": 1772546721676087700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GALAUSDT.npz"
+    },
+    "swap:GASUSDT": {
+      "src_mtime_ns": 1772546713630900900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GASUSDT.npz"
+    },
+    "swap:GIGGLEUSDT": {
+      "src_mtime_ns": 1772546514896345200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GIGGLEUSDT.npz"
+    },
+    "swap:GLMUSDT": {
+      "src_mtime_ns": 1772546477331983600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GLMUSDT.npz"
+    },
+    "swap:GMTUSDT": {
+      "src_mtime_ns": 1772546777989908200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GMTUSDT.npz"
+    },
+    "swap:GMXUSDT": {
+      "src_mtime_ns": 1772546728966193700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GMXUSDT.npz"
+    },
+    "swap:GOATUSDT": {
+      "src_mtime_ns": 1772546739894025400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GOATUSDT.npz"
+    },
+    "swap:GPSUSDT": {
+      "src_mtime_ns": 1772546555292967600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GPSUSDT.npz"
+    },
+    "swap:GRASSUSDT": {
+      "src_mtime_ns": 1772546662570265700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GRASSUSDT.npz"
+    },
+    "swap:GRIFFAINUSDT": {
+      "src_mtime_ns": 1772546775176698700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GRIFFAINUSDT.npz"
+    },
+    "swap:GRTUSDT": {
+      "src_mtime_ns": 1772546668611547900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GRTUSDT.npz"
+    },
+    "swap:GTCUSDT": {
+      "src_mtime_ns": 1772546525564816100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GTCUSDT.npz"
+    },
+    "swap:GUAUSDT": {
+      "src_mtime_ns": 1772546559709782100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GUAUSDT.npz"
+    },
+    "swap:GUNUSDT": {
+      "src_mtime_ns": 1772546735872044200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GUNUSDT.npz"
+    },
+    "swap:GUSDT": {
+      "src_mtime_ns": 1772546660129171200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GUSDT.npz"
+    },
+    "swap:GWEIUSDT": {
+      "src_mtime_ns": 1772546508843085700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\GWEIUSDT.npz"
+    },
+    "swap:HAEDALUSDT": {
+      "src_mtime_ns": 1772546665796599600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HAEDALUSDT.npz"
+    },
+    "swap:HANAUSDT": {
+      "src_mtime_ns": 1772546725762480700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HANAUSDT.npz"
+    },
+    "swap:HBARUSDT": {
+      "src_mtime_ns": 1772546698971858000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HBARUSDT.npz"
+    },
+    "swap:HEIUSDT": {
+      "src_mtime_ns": 1772546562132609400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HEIUSDT.npz"
+    },
+    "swap:HEMIUSDT": {
+      "src_mtime_ns": 1772546664591125900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HEMIUSDT.npz"
+    },
+    "swap:HFTUSDT": {
+      "src_mtime_ns": 1772546661764116400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HFTUSDT.npz"
+    },
+    "swap:HIGHUSDT": {
+      "src_mtime_ns": 1772546740295944400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HIGHUSDT.npz"
+    },
+    "swap:HIPPOUSDT": {
+      "src_mtime_ns": 1772546745177331600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HIPPOUSDT.npz"
+    },
+    "swap:HIVEUSDT": {
+      "src_mtime_ns": 1772546517296673600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HIVEUSDT.npz"
+    },
+    "swap:HMSTRUSDT": {
+      "src_mtime_ns": 1772546511655639200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HMSTRUSDT.npz"
+    },
+    "swap:HOLOUSDT": {
+      "src_mtime_ns": 1772546493174925600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HOLOUSDT.npz"
+    },
+    "swap:HOMEUSDT": {
+      "src_mtime_ns": 1772546707197436600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HOMEUSDT.npz"
+    },
+    "swap:HOOKUSDT": {
+      "src_mtime_ns": 1772546552497431600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HOOKUSDT.npz"
+    },
+    "swap:HOTUSDT": {
+      "src_mtime_ns": 1772546681209580400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HOTUSDT.npz"
+    },
+    "swap:HUMAUSDT": {
+      "src_mtime_ns": 1772546517696382600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HUMAUSDT.npz"
+    },
+    "swap:HUSDT": {
+      "src_mtime_ns": 1772546710410608600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HUSDT.npz"
+    },
+    "swap:HYPERUSDT": {
+      "src_mtime_ns": 1772546491562534900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HYPERUSDT.npz"
+    },
+    "swap:HYPEUSDT": {
+      "src_mtime_ns": 1772546522745567300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\HYPEUSDT.npz"
+    },
+    "swap:ICNTUSDT": {
+      "src_mtime_ns": 1772546753211605300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ICNTUSDT.npz"
+    },
+    "swap:ICPUSDT": {
+      "src_mtime_ns": 1772546688439597700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ICPUSDT.npz"
+    },
+    "swap:ICXUSDT": {
+      "src_mtime_ns": 1772546486737410700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ICXUSDT.npz"
+    },
+    "swap:IDOLUSDT": {
+      "src_mtime_ns": 1772546538428446000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\IDOLUSDT.npz"
+    },
+    "swap:IDUSDT": {
+      "src_mtime_ns": 1772546544053817700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\IDUSDT.npz"
+    },
+    "swap:ILVUSDT": {
+      "src_mtime_ns": 1772546665391718700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ILVUSDT.npz"
+    },
+    "swap:IMXUSDT": {
+      "src_mtime_ns": 1772546684026777100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\IMXUSDT.npz"
+    },
+    "swap:INITUSDT": {
+      "src_mtime_ns": 1772546773951092100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\INITUSDT.npz"
+    },
+    "swap:INJUSDT": {
+      "src_mtime_ns": 1772546724483766200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\INJUSDT.npz"
+    },
+    "swap:INUSDT": {
+      "src_mtime_ns": 1772546513720769400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\INUSDT.npz"
+    },
+    "swap:INXUSDT": {
+      "src_mtime_ns": 1772546464474204200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\INXUSDT.npz"
+    },
+    "swap:IOSTUSDT": {
+      "src_mtime_ns": 1772546768729119600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\IOSTUSDT.npz"
+    },
+    "swap:IOTAUSDT": {
+      "src_mtime_ns": 1772546682815597500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\IOTAUSDT.npz"
+    },
+    "swap:IOTXUSDT": {
+      "src_mtime_ns": 1772546696561892700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\IOTXUSDT.npz"
+    },
+    "swap:IOUSDT": {
+      "src_mtime_ns": 1772546666198891500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\IOUSDT.npz"
+    },
+    "swap:IPUSDT": {
+      "src_mtime_ns": 1772546673976559500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\IPUSDT.npz"
+    },
+    "swap:IRUSDT": {
+      "src_mtime_ns": 1772546778827461000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\IRUSDT.npz"
+    },
+    "swap:IRYSUSDT": {
+      "src_mtime_ns": 1772546750399979400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\IRYSUSDT.npz"
+    },
+    "swap:JASMYUSDT": {
+      "src_mtime_ns": 1772546663379260400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\JASMYUSDT.npz"
+    },
+    "swap:JCTUSDT": {
+      "src_mtime_ns": 1772546697362317300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\JCTUSDT.npz"
+    },
+    "swap:JELLYJELLYUSDT": {
+      "src_mtime_ns": 1772546694958951600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\JELLYJELLYUSDT.npz"
+    },
+    "swap:JOEUSDT": {
+      "src_mtime_ns": 1772546777590139200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\JOEUSDT.npz"
+    },
+    "swap:JSTUSDT": {
+      "src_mtime_ns": 1772546545656453900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\JSTUSDT.npz"
+    },
+    "swap:JTOUSDT": {
+      "src_mtime_ns": 1772546761594475200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\JTOUSDT.npz"
+    },
+    "swap:KAIAUSDT": {
+      "src_mtime_ns": 1772546748795738300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KAIAUSDT.npz"
+    },
+    "swap:KAITOUSDT": {
+      "src_mtime_ns": 1772546764407352100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KAITOUSDT.npz"
+    },
+    "swap:KASUSDT": {
+      "src_mtime_ns": 1772546714435706600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KASUSDT.npz"
+    },
+    "swap:KAVAUSDT": {
+      "src_mtime_ns": 1772546542038953200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KAVAUSDT.npz"
+    },
+    "swap:KERNELUSDT": {
+      "src_mtime_ns": 1772546535209560500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KERNELUSDT.npz"
+    },
+    "swap:KGENUSDT": {
+      "src_mtime_ns": 1772546682012997200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KGENUSDT.npz"
+    },
+    "swap:KITEUSDT": {
+      "src_mtime_ns": 1772546475340035600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KITEUSDT.npz"
+    },
+    "swap:KMNOUSDT": {
+      "src_mtime_ns": 1772546705562613400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KMNOUSDT.npz"
+    },
+    "swap:KNCUSDT": {
+      "src_mtime_ns": 1772546692956495700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KNCUSDT.npz"
+    },
+    "swap:KOMAUSDT": {
+      "src_mtime_ns": 1772546677192104000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KOMAUSDT.npz"
+    },
+    "swap:KSMUSDT": {
+      "src_mtime_ns": 1772546511257144600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\KSMUSDT.npz"
+    },
+    "swap:LABUSDT": {
+      "src_mtime_ns": 1772546516102125400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LABUSDT.npz"
+    },
+    "swap:LAUSDT": {
+      "src_mtime_ns": 1772546672638281500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LAUSDT.npz"
+    },
+    "swap:LAYERUSDT": {
+      "src_mtime_ns": 1772546522347200700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LAYERUSDT.npz"
+    },
+    "swap:LDOUSDT": {
+      "src_mtime_ns": 1772546712019718100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LDOUSDT.npz"
+    },
+    "swap:LIGHTUSDT": {
+      "src_mtime_ns": 1772546515295801800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LIGHTUSDT.npz"
+    },
+    "swap:LINEAUSDT": {
+      "src_mtime_ns": 1772546483921638400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LINEAUSDT.npz"
+    },
+    "swap:LINKUSDT": {
+      "src_mtime_ns": 1772546551274646700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LINKUSDT.npz"
+    },
+    "swap:LISTAUSDT": {
+      "src_mtime_ns": 1772546510468204700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LISTAUSDT.npz"
+    },
+    "swap:LITUSDT": {
+      "src_mtime_ns": 1772546551676686400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LITUSDT.npz"
+    },
+    "swap:LPTUSDT": {
+      "src_mtime_ns": 1772546552073541900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LPTUSDT.npz"
+    },
+    "swap:LQTYUSDT": {
+      "src_mtime_ns": 1772546467306192600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LQTYUSDT.npz"
+    },
+    "swap:LRCUSDT": {
+      "src_mtime_ns": 1772546527969770300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LRCUSDT.npz"
+    },
+    "swap:LSKUSDT": {
+      "src_mtime_ns": 1772546475719749600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LSKUSDT.npz"
+    },
+    "swap:LTCUSDT": {
+      "src_mtime_ns": 1772546707596675900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LTCUSDT.npz"
+    },
+    "swap:LUMIAUSDT": {
+      "src_mtime_ns": 1772546694559613300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LUMIAUSDT.npz"
+    },
+    "swap:LUNA2USDT": {
+      "src_mtime_ns": 1772546520329163500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LUNA2USDT.npz"
+    },
+    "swap:LYNUSDT": {
+      "src_mtime_ns": 1772546499992151200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\LYNUSDT.npz"
+    },
+    "swap:MAGICUSDT": {
+      "src_mtime_ns": 1772546720875701100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MAGICUSDT.npz"
+    },
+    "swap:MAGMAUSDT": {
+      "src_mtime_ns": 1772546728169073100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MAGMAUSDT.npz"
+    },
+    "swap:MANAUSDT": {
+      "src_mtime_ns": 1772546760795806100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MANAUSDT.npz"
+    },
+    "swap:MANTAUSDT": {
+      "src_mtime_ns": 1772546696155627300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MANTAUSDT.npz"
+    },
+    "swap:MASKUSDT": {
+      "src_mtime_ns": 1772546773548164200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MASKUSDT.npz"
+    },
+    "swap:MAVIAUSDT": {
+      "src_mtime_ns": 1772546540032167700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MAVIAUSDT.npz"
+    },
+    "swap:MAVUSDT": {
+      "src_mtime_ns": 1772546712422818200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MAVUSDT.npz"
+    },
+    "swap:MBOXUSDT": {
+      "src_mtime_ns": 1772546554904812000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MBOXUSDT.npz"
+    },
+    "swap:MEGAUSDT": {
+      "src_mtime_ns": 1772546763600212000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MEGAUSDT.npz"
+    },
+    "swap:MELANIAUSDT": {
+      "src_mtime_ns": 1772546543236978700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MELANIAUSDT.npz"
+    },
+    "swap:MEMEUSDT": {
+      "src_mtime_ns": 1772546521946753800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MEMEUSDT.npz"
+    },
+    "swap:MERLUSDT": {
+      "src_mtime_ns": 1772546498401101900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MERLUSDT.npz"
+    },
+    "swap:METISUSDT": {
+      "src_mtime_ns": 1772546765211578300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\METISUSDT.npz"
+    },
+    "swap:METUSDT": {
+      "src_mtime_ns": 1772546465269495600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\METUSDT.npz"
+    },
+    "swap:MEUSDT": {
+      "src_mtime_ns": 1772546677996855700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MEUSDT.npz"
+    },
+    "swap:MEWUSDT": {
+      "src_mtime_ns": 1772546704359836300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MEWUSDT.npz"
+    },
+    "swap:MINAUSDT": {
+      "src_mtime_ns": 1772546683212450100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MINAUSDT.npz"
+    },
+    "swap:MIRAUSDT": {
+      "src_mtime_ns": 1772546499591236500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MIRAUSDT.npz"
+    },
+    "swap:MITOUSDT": {
+      "src_mtime_ns": 1772546469701971800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MITOUSDT.npz"
+    },
+    "swap:MLNUSDT": {
+      "src_mtime_ns": 1772546738288875700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MLNUSDT.npz"
+    },
+    "swap:MMTUSDT": {
+      "src_mtime_ns": 1772546497988883500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MMTUSDT.npz"
+    },
+    "swap:MOCAUSDT": {
+      "src_mtime_ns": 1772546554089160300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MOCAUSDT.npz"
+    },
+    "swap:MONUSDT": {
+      "src_mtime_ns": 1772546737078650400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MONUSDT.npz"
+    },
+    "swap:MOODENGUSDT": {
+      "src_mtime_ns": 1772546546457592700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MOODENGUSDT.npz"
+    },
+    "swap:MORPHOUSDT": {
+      "src_mtime_ns": 1772546741161206100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MORPHOUSDT.npz"
+    },
+    "swap:MOVEUSDT": {
+      "src_mtime_ns": 1772546499193956500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MOVEUSDT.npz"
+    },
+    "swap:MOVRUSDT": {
+      "src_mtime_ns": 1772546502015951900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MOVRUSDT.npz"
+    },
+    "swap:MTLUSDT": {
+      "src_mtime_ns": 1772546662977512600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MTLUSDT.npz"
+    },
+    "swap:MUBARAKUSDT": {
+      "src_mtime_ns": 1772546473714747400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MUBARAKUSDT.npz"
+    },
+    "swap:MUSDT": {
+      "src_mtime_ns": 1772546775568969100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MUSDT.npz"
+    },
+    "swap:MYXUSDT": {
+      "src_mtime_ns": 1772546695365162900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\MYXUSDT.npz"
+    },
+    "swap:NAORISUSDT": {
+      "src_mtime_ns": 1772546712824224200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NAORISUSDT.npz"
+    },
+    "swap:NEARUSDT": {
+      "src_mtime_ns": 1772546527174544600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NEARUSDT.npz"
+    },
+    "swap:NEIROUSDT": {
+      "src_mtime_ns": 1772546743973798800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NEIROUSDT.npz"
+    },
+    "swap:NEOUSDT": {
+      "src_mtime_ns": 1772546530389184800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NEOUSDT.npz"
+    },
+    "swap:NEWTUSDT": {
+      "src_mtime_ns": 1772546510056728700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NEWTUSDT.npz"
+    },
+    "swap:NFPUSDT": {
+      "src_mtime_ns": 1772546525167333800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NFPUSDT.npz"
+    },
+    "swap:NIGHTUSDT": {
+      "src_mtime_ns": 1772546519931236100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NIGHTUSDT.npz"
+    },
+    "swap:NILUSDT": {
+      "src_mtime_ns": 1772546730235942600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NILUSDT.npz"
+    },
+    "swap:NMRUSDT": {
+      "src_mtime_ns": 1772546512870250400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NMRUSDT.npz"
+    },
+    "swap:NOMUSDT": {
+      "src_mtime_ns": 1772546673028331200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NOMUSDT.npz"
+    },
+    "swap:NOTUSDT": {
+      "src_mtime_ns": 1772546726954399100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NOTUSDT.npz"
+    },
+    "swap:NTRNUSDT": {
+      "src_mtime_ns": 1772546520734398500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NTRNUSDT.npz"
+    },
+    "swap:NXPCUSDT": {
+      "src_mtime_ns": 1772546669416437900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\NXPCUSDT.npz"
+    },
+    "swap:OGNUSDT": {
+      "src_mtime_ns": 1772546485543149100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\OGNUSDT.npz"
+    },
+    "swap:OGUSDT": {
+      "src_mtime_ns": 1772546766016666900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\OGUSDT.npz"
+    },
+    "swap:OLUSDT": {
+      "src_mtime_ns": 1772546470514066400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\OLUSDT.npz"
+    },
+    "swap:ONDOUSDT": {
+      "src_mtime_ns": 1772546505617412600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ONDOUSDT.npz"
+    },
+    "swap:ONEUSDT": {
+      "src_mtime_ns": 1772546492364655300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ONEUSDT.npz"
+    },
+    "swap:ONGUSDT": {
+      "src_mtime_ns": 1772546536401120600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ONGUSDT.npz"
+    },
+    "swap:ONTUSDT": {
+      "src_mtime_ns": 1772546677595653300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ONTUSDT.npz"
+    },
+    "swap:ONUSDT": {
+      "src_mtime_ns": 1772546675589080400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ONUSDT.npz"
+    },
+    "swap:OPENUSDT": {
+      "src_mtime_ns": 1772546708799831200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\OPENUSDT.npz"
+    },
+    "swap:OPNUSDT": {
+      "src_mtime_ns": 1772546561737555100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\OPNUSDT.npz"
+    },
+    "swap:OPUSDT": {
+      "src_mtime_ns": 1772546495988754900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\OPUSDT.npz"
+    },
+    "swap:ORCAUSDT": {
+      "src_mtime_ns": 1772546678803731800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ORCAUSDT.npz"
+    },
+    "swap:ORDERUSDT": {
+      "src_mtime_ns": 1772546717238620500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ORDERUSDT.npz"
+    },
+    "swap:ORDIUSDT": {
+      "src_mtime_ns": 1772546686832174500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ORDIUSDT.npz"
+    },
+    "swap:OXTUSDT": {
+      "src_mtime_ns": 1772546504011854700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\OXTUSDT.npz"
+    },
+    "swap:PARTIUSDT": {
+      "src_mtime_ns": 1772546468078869600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PARTIUSDT.npz"
+    },
+    "swap:PAXGUSDT": {
+      "src_mtime_ns": 1772546671016949400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PAXGUSDT.npz"
+    },
+    "swap:PENDLEUSDT": {
+      "src_mtime_ns": 1772546742371866200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PENDLEUSDT.npz"
+    },
+    "swap:PENGUUSDT": {
+      "src_mtime_ns": 1772546487566277200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PENGUUSDT.npz"
+    },
+    "swap:PEOPLEUSDT": {
+      "src_mtime_ns": 1772546516895830300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PEOPLEUSDT.npz"
+    },
+    "swap:PHAUSDT": {
+      "src_mtime_ns": 1772546688037962400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PHAUSDT.npz"
+    },
+    "swap:PHBUSDT": {
+      "src_mtime_ns": 1772546532792012500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PHBUSDT.npz"
+    },
+    "swap:PIEVERSEUSDT": {
+      "src_mtime_ns": 1772546770333421800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PIEVERSEUSDT.npz"
+    },
+    "swap:PIPPINUSDT": {
+      "src_mtime_ns": 1772546700179780200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PIPPINUSDT.npz"
+    },
+    "swap:PIXELUSDT": {
+      "src_mtime_ns": 1772546485135633600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PIXELUSDT.npz"
+    },
+    "swap:PLAYUSDT": {
+      "src_mtime_ns": 1772546465667545200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PLAYUSDT.npz"
+    },
+    "swap:PLUMEUSDT": {
+      "src_mtime_ns": 1772546734663536200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PLUMEUSDT.npz"
+    },
+    "swap:PNUTUSDT": {
+      "src_mtime_ns": 1772546494368177500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PNUTUSDT.npz"
+    },
+    "swap:POLUSDT": {
+      "src_mtime_ns": 1772546468481686000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\POLUSDT.npz"
+    },
+    "swap:POLYXUSDT": {
+      "src_mtime_ns": 1772546557708494900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\POLYXUSDT.npz"
+    },
+    "swap:POPCATUSDT": {
+      "src_mtime_ns": 1772546464079077600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\POPCATUSDT.npz"
+    },
+    "swap:PORTALUSDT": {
+      "src_mtime_ns": 1772546680405132000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PORTALUSDT.npz"
+    },
+    "swap:POWERUSDT": {
+      "src_mtime_ns": 1772546719646223400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\POWERUSDT.npz"
+    },
+    "swap:POWRUSDT": {
+      "src_mtime_ns": 1772546724078976400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\POWRUSDT.npz"
+    },
+    "swap:PROMPTUSDT": {
+      "src_mtime_ns": 1772546718045704200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PROMPTUSDT.npz"
+    },
+    "swap:PROMUSDT": {
+      "src_mtime_ns": 1772546524350930100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PROMUSDT.npz"
+    },
+    "swap:PROVEUSDT": {
+      "src_mtime_ns": 1772546476927946800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PROVEUSDT.npz"
+    },
+    "swap:PTBUSDT": {
+      "src_mtime_ns": 1772546772766470400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PTBUSDT.npz"
+    },
+    "swap:PUFFERUSDT": {
+      "src_mtime_ns": 1772546679196948900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PUFFERUSDT.npz"
+    },
+    "swap:PUMPBTCUSDT": {
+      "src_mtime_ns": 1772546737884704000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PUMPBTCUSDT.npz"
+    },
+    "swap:PUMPUSDT": {
+      "src_mtime_ns": 1772546549275141900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PUMPUSDT.npz"
+    },
+    "swap:PUNDIXUSDT": {
+      "src_mtime_ns": 1772546501202499400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PUNDIXUSDT.npz"
+    },
+    "swap:PYTHUSDT": {
+      "src_mtime_ns": 1772546676799790100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\PYTHUSDT.npz"
+    },
+    "swap:QNTUSDT": {
+      "src_mtime_ns": 1772546544438001900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\QNTUSDT.npz"
+    },
+    "swap:QTUMUSDT": {
+      "src_mtime_ns": 1772546661359218600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\QTUMUSDT.npz"
+    },
+    "swap:QUSDT": {
+      "src_mtime_ns": 1772546508052515500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\QUSDT.npz"
+    },
+    "swap:RAREUSDT": {
+      "src_mtime_ns": 1772546766419863700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RAREUSDT.npz"
+    },
+    "swap:RAVEUSDT": {
+      "src_mtime_ns": 1772546518932721400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RAVEUSDT.npz"
+    },
+    "swap:RAYSOLUSDT": {
+      "src_mtime_ns": 1772546739488478800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RAYSOLUSDT.npz"
+    },
+    "swap:RDNTUSDT": {
+      "src_mtime_ns": 1772546662172708100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RDNTUSDT.npz"
+    },
+    "swap:RECALLUSDT": {
+      "src_mtime_ns": 1772546734261128400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RECALLUSDT.npz"
+    },
+    "swap:REDUSDT": {
+      "src_mtime_ns": 1772546469283555100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\REDUSDT.npz"
+    },
+    "swap:RENDERUSDT": {
+      "src_mtime_ns": 1772546737478549300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RENDERUSDT.npz"
+    },
+    "swap:RESOLVUSDT": {
+      "src_mtime_ns": 1772546528775066700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RESOLVUSDT.npz"
+    },
+    "swap:REZUSDT": {
+      "src_mtime_ns": 1772546558117635000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\REZUSDT.npz"
+    },
+    "swap:RIFUSDT": {
+      "src_mtime_ns": 1772546758378052800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RIFUSDT.npz"
+    },
+    "swap:RIVERUSDT": {
+      "src_mtime_ns": 1772546545242168400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RIVERUSDT.npz"
+    },
+    "swap:RLCUSDT": {
+      "src_mtime_ns": 1772546542840578600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RLCUSDT.npz"
+    },
+    "swap:RLSUSDT": {
+      "src_mtime_ns": 1772546718847801000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RLSUSDT.npz"
+    },
+    "swap:RONINUSDT": {
+      "src_mtime_ns": 1772546668200188800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RONINUSDT.npz"
+    },
+    "swap:ROSEUSDT": {
+      "src_mtime_ns": 1772546706781152000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ROSEUSDT.npz"
+    },
+    "swap:RPLUSDT": {
+      "src_mtime_ns": 1772546697770423300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RPLUSDT.npz"
+    },
+    "swap:RSRUSDT": {
+      "src_mtime_ns": 1772546669004880800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RSRUSDT.npz"
+    },
+    "swap:RUNEUSDT": {
+      "src_mtime_ns": 1772546671815672300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RUNEUSDT.npz"
+    },
+    "swap:RVNUSDT": {
+      "src_mtime_ns": 1772546683626181000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\RVNUSDT.npz"
+    },
+    "swap:SAFEUSDT": {
+      "src_mtime_ns": 1772546747590119000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SAFEUSDT.npz"
+    },
+    "swap:SAGAUSDT": {
+      "src_mtime_ns": 1772546698567652800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SAGAUSDT.npz"
+    },
+    "swap:SAHARAUSDT": {
+      "src_mtime_ns": 1772546716832163100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SAHARAUSDT.npz"
+    },
+    "swap:SANDUSDT": {
+      "src_mtime_ns": 1772546762404959700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SANDUSDT.npz"
+    },
+    "swap:SANTOSUSDT": {
+      "src_mtime_ns": 1772546746790114700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SANTOSUSDT.npz"
+    },
+    "swap:SAPIENUSDT": {
+      "src_mtime_ns": 1772546486339819600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SAPIENUSDT.npz"
+    },
+    "swap:SCRTUSDT": {
+      "src_mtime_ns": 1772546689647484900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SCRTUSDT.npz"
+    },
+    "swap:SCRUSDT": {
+      "src_mtime_ns": 1772546757173626000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SCRUSDT.npz"
+    },
+    "swap:SEIUSDT": {
+      "src_mtime_ns": 1772546525962724800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SEIUSDT.npz"
+    },
+    "swap:SENTUSDT": {
+      "src_mtime_ns": 1772546531588832400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SENTUSDT.npz"
+    },
+    "swap:SFPUSDT": {
+      "src_mtime_ns": 1772546769530840400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SFPUSDT.npz"
+    },
+    "swap:SHELLUSDT": {
+      "src_mtime_ns": 1772546510867960700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SHELLUSDT.npz"
+    },
+    "swap:SIGNUSDT": {
+      "src_mtime_ns": 1772546547668382900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SIGNUSDT.npz"
+    },
+    "swap:SIRENUSDT": {
+      "src_mtime_ns": 1772546774772320000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SIRENUSDT.npz"
+    },
+    "swap:SKLUSDT": {
+      "src_mtime_ns": 1772546765617081200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SKLUSDT.npz"
+    },
+    "swap:SKRUSDT": {
+      "src_mtime_ns": 1772546533595929800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SKRUSDT.npz"
+    },
+    "swap:SKYAIUSDT": {
+      "src_mtime_ns": 1772546481918893600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SKYAIUSDT.npz"
+    },
+    "swap:SKYUSDT": {
+      "src_mtime_ns": 1772546553680158000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SKYUSDT.npz"
+    },
+    "swap:SLPUSDT": {
+      "src_mtime_ns": 1772546680006575700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SLPUSDT.npz"
+    },
+    "swap:SNXUSDT": {
+      "src_mtime_ns": 1772546497588781000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SNXUSDT.npz"
+    },
+    "swap:SOLUSDT": {
+      "src_mtime_ns": 1772546749602626300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SOLUSDT.npz"
+    },
+    "swap:SOLVUSDT": {
+      "src_mtime_ns": 1772546744788012400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SOLVUSDT.npz"
+    },
+    "swap:SOMIUSDT": {
+      "src_mtime_ns": 1772546664191743300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SOMIUSDT.npz"
+    },
+    "swap:SONICUSDT": {
+      "src_mtime_ns": 1772546743171651700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SONICUSDT.npz"
+    },
+    "swap:SOONUSDT": {
+      "src_mtime_ns": 1772546471696620900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SOONUSDT.npz"
+    },
+    "swap:SOPHUSDT": {
+      "src_mtime_ns": 1772546749999180600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SOPHUSDT.npz"
+    },
+    "swap:SPACEUSDT": {
+      "src_mtime_ns": 1772546754016816500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SPACEUSDT.npz"
+    },
+    "swap:SPELLUSDT": {
+      "src_mtime_ns": 1772546700581536300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SPELLUSDT.npz"
+    },
+    "swap:SPKUSDT": {
+      "src_mtime_ns": 1772546725287518800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SPKUSDT.npz"
+    },
+    "swap:SPORTFUNUSDT": {
+      "src_mtime_ns": 1772546709214749800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SPORTFUNUSDT.npz"
+    },
+    "swap:SPXUSDT": {
+      "src_mtime_ns": 1772546749193703500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SPXUSDT.npz"
+    },
+    "swap:SQDUSDT": {
+      "src_mtime_ns": 1772546558517896200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SQDUSDT.npz"
+    },
+    "swap:SSVUSDT": {
+      "src_mtime_ns": 1772546562535792700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SSVUSDT.npz"
+    },
+    "swap:STABLEUSDT": {
+      "src_mtime_ns": 1772546771144202000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\STABLEUSDT.npz"
+    },
+    "swap:STBLUSDT": {
+      "src_mtime_ns": 1772546658521349100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\STBLUSDT.npz"
+    },
+    "swap:STEEMUSDT": {
+      "src_mtime_ns": 1772546739089384200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\STEEMUSDT.npz"
+    },
+    "swap:STGUSDT": {
+      "src_mtime_ns": 1772546531998416000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\STGUSDT.npz"
+    },
+    "swap:STORJUSDT": {
+      "src_mtime_ns": 1772546740759793500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\STORJUSDT.npz"
+    },
+    "swap:STOUSDT": {
+      "src_mtime_ns": 1772546491977095000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\STOUSDT.npz"
+    },
+    "swap:STRKUSDT": {
+      "src_mtime_ns": 1772546772346373100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\STRKUSDT.npz"
+    },
+    "swap:STXUSDT": {
+      "src_mtime_ns": 1772546723274142100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\STXUSDT.npz"
+    },
+    "swap:SUIUSDT": {
+      "src_mtime_ns": 1772546735467727100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SUIUSDT.npz"
+    },
+    "swap:SUNUSDT": {
+      "src_mtime_ns": 1772546548481442900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SUNUSDT.npz"
+    },
+    "swap:SUPERUSDT": {
+      "src_mtime_ns": 1772546483116560400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SUPERUSDT.npz"
+    },
+    "swap:SUSDT": {
+      "src_mtime_ns": 1772546495175116300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SUSDT.npz"
+    },
+    "swap:SUSHIUSDT": {
+      "src_mtime_ns": 1772546703562435100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SUSHIUSDT.npz"
+    },
+    "swap:SWARMSUSDT": {
+      "src_mtime_ns": 1772546484328900100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SWARMSUSDT.npz"
+    },
+    "swap:SXTUSDT": {
+      "src_mtime_ns": 1772546537204679600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SXTUSDT.npz"
+    },
+    "swap:SYNUSDT": {
+      "src_mtime_ns": 1772546777189601900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SYNUSDT.npz"
+    },
+    "swap:SYSUSDT": {
+      "src_mtime_ns": 1772546686036769400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\SYSUSDT.npz"
+    },
+    "swap:TACUSDT": {
+      "src_mtime_ns": 1772546472505741700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TACUSDT.npz"
+    },
+    "swap:TAGUSDT": {
+      "src_mtime_ns": 1772546721267630000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TAGUSDT.npz"
+    },
+    "swap:TAIKOUSDT": {
+      "src_mtime_ns": 1772546514495974600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TAIKOUSDT.npz"
+    },
+    "swap:TAKEUSDT": {
+      "src_mtime_ns": 1772546764807942200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TAKEUSDT.npz"
+    },
+    "swap:TAOUSDT": {
+      "src_mtime_ns": 1772546485930528900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TAOUSDT.npz"
+    },
+    "swap:TAUSDT": {
+      "src_mtime_ns": 1772546676388659100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TAUSDT.npz"
+    },
+    "swap:THETAUSDT": {
+      "src_mtime_ns": 1772546549668253500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\THETAUSDT.npz"
+    },
+    "swap:THEUSDT": {
+      "src_mtime_ns": 1772546531198644800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\THEUSDT.npz"
+    },
+    "swap:TIAUSDT": {
+      "src_mtime_ns": 1772546779231737800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TIAUSDT.npz"
+    },
+    "swap:TLMUSDT": {
+      "src_mtime_ns": 1772546498787880400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TLMUSDT.npz"
+    },
+    "swap:TNSRUSDT": {
+      "src_mtime_ns": 1772546483521085000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TNSRUSDT.npz"
+    },
+    "swap:TONUSDT": {
+      "src_mtime_ns": 1772546504814512300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TONUSDT.npz"
+    },
+    "swap:TOSHIUSDT": {
+      "src_mtime_ns": 1772546775978942300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TOSHIUSDT.npz"
+    },
+    "swap:TOWNSUSDT": {
+      "src_mtime_ns": 1772546472116266200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TOWNSUSDT.npz"
+    },
+    "swap:TRADOORUSDT": {
+      "src_mtime_ns": 1772546744373676500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TRADOORUSDT.npz"
+    },
+    "swap:TRBUSDT": {
+      "src_mtime_ns": 1772546489155910300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TRBUSDT.npz"
+    },
+    "swap:TREEUSDT": {
+      "src_mtime_ns": 1772546538016357600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TREEUSDT.npz"
+    },
+    "swap:TRIAUSDT": {
+      "src_mtime_ns": 1772546539223665300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TRIAUSDT.npz"
+    },
+    "swap:TRUMPUSDT": {
+      "src_mtime_ns": 1772546704760159200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TRUMPUSDT.npz"
+    },
+    "swap:TRUSTUSDT": {
+      "src_mtime_ns": 1772546500410718100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TRUSTUSDT.npz"
+    },
+    "swap:TRUTHUSDT": {
+      "src_mtime_ns": 1772546463673156600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TRUTHUSDT.npz"
+    },
+    "swap:TRUUSDT": {
+      "src_mtime_ns": 1772546754822919400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TRUUSDT.npz"
+    },
+    "swap:TRXUSDT": {
+      "src_mtime_ns": 1772546706374620400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TRXUSDT.npz"
+    },
+    "swap:TSTUSDT": {
+      "src_mtime_ns": 1772546715231010600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TSTUSDT.npz"
+    },
+    "swap:TURBOUSDT": {
+      "src_mtime_ns": 1772546516487619100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TURBOUSDT.npz"
+    },
+    "swap:TURTLEUSDT": {
+      "src_mtime_ns": 1772546523954142200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TURTLEUSDT.npz"
+    },
+    "swap:TUSDT": {
+      "src_mtime_ns": 1772546490360486800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TUSDT.npz"
+    },
+    "swap:TUTUSDT": {
+      "src_mtime_ns": 1772546658116464900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TUTUSDT.npz"
+    },
+    "swap:TWTUSDT": {
+      "src_mtime_ns": 1772546699774968700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\TWTUSDT.npz"
+    },
+    "swap:UAIUSDT": {
+      "src_mtime_ns": 1772546743573545900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\UAIUSDT.npz"
+    },
+    "swap:UBUSDT": {
+      "src_mtime_ns": 1772546468881641700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\UBUSDT.npz"
+    },
+    "swap:UMAUSDT": {
+      "src_mtime_ns": 1772546526363332700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\UMAUSDT.npz"
+    },
+    "swap:UNIUSDT": {
+      "src_mtime_ns": 1772546501606741800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\UNIUSDT.npz"
+    },
+    "swap:USELESSUSDT": {
+      "src_mtime_ns": 1772546540839321700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\USELESSUSDT.npz"
+    },
+    "swap:USTCUSDT": {
+      "src_mtime_ns": 1772546541232948600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\USTCUSDT.npz"
+    },
+    "swap:USUALUSDT": {
+      "src_mtime_ns": 1772546548069147300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\USUALUSDT.npz"
+    },
+    "swap:USUSDT": {
+      "src_mtime_ns": 1772546664988246600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\USUSDT.npz"
+    },
+    "swap:VANAUSDT": {
+      "src_mtime_ns": 1772546667400085600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VANAUSDT.npz"
+    },
+    "swap:VANRYUSDT": {
+      "src_mtime_ns": 1772546731843760800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VANRYUSDT.npz"
+    },
+    "swap:VELODROMEUSDT": {
+      "src_mtime_ns": 1772546751210169100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VELODROMEUSDT.npz"
+    },
+    "swap:VELVETUSDT": {
+      "src_mtime_ns": 1772546667802167800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VELVETUSDT.npz"
+    },
+    "swap:VETUSDT": {
+      "src_mtime_ns": 1772546776794498700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VETUSDT.npz"
+    },
+    "swap:VFYUSDT": {
+      "src_mtime_ns": 1772546768334792100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VFYUSDT.npz"
+    },
+    "swap:VICUSDT": {
+      "src_mtime_ns": 1772546720054771000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VICUSDT.npz"
+    },
+    "swap:VINEUSDT": {
+      "src_mtime_ns": 1772546695757280700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VINEUSDT.npz"
+    },
+    "swap:VIRTUALUSDT": {
+      "src_mtime_ns": 1772546690455218700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VIRTUALUSDT.npz"
+    },
+    "swap:VTHOUSDT": {
+      "src_mtime_ns": 1772546766819356400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VTHOUSDT.npz"
+    },
+    "swap:VVVUSDT": {
+      "src_mtime_ns": 1772546673588940400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\VVVUSDT.npz"
+    },
+    "swap:WALUSDT": {
+      "src_mtime_ns": 1772546476136531600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\WALUSDT.npz"
+    },
+    "swap:WAXPUSDT": {
+      "src_mtime_ns": 1772546681608250300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\WAXPUSDT.npz"
+    },
+    "swap:WCTUSDT": {
+      "src_mtime_ns": 1772546523553249400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\WCTUSDT.npz"
+    },
+    "swap:WETUSDT": {
+      "src_mtime_ns": 1772546519316053700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\WETUSDT.npz"
+    },
+    "swap:WIFUSDT": {
+      "src_mtime_ns": 1772546524766308400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\WIFUSDT.npz"
+    },
+    "swap:WLDUSDT": {
+      "src_mtime_ns": 1772546502424110300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\WLDUSDT.npz"
+    },
+    "swap:WLFIUSDT": {
+      "src_mtime_ns": 1772546555705412600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\WLFIUSDT.npz"
+    },
+    "swap:WOOUSDT": {
+      "src_mtime_ns": 1772546717638844200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\WOOUSDT.npz"
+    },
+    "swap:WUSDT": {
+      "src_mtime_ns": 1772546736675458100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\WUSDT.npz"
+    },
+    "swap:XAIUSDT": {
+      "src_mtime_ns": 1772546480308000400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XAIUSDT.npz"
+    },
+    "swap:XANUSDT": {
+      "src_mtime_ns": 1772546738693513400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XANUSDT.npz"
+    },
+    "swap:XLMUSDT": {
+      "src_mtime_ns": 1772546521557191600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XLMUSDT.npz"
+    },
+    "swap:XMRUSDT": {
+      "src_mtime_ns": 1772546474538066300,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XMRUSDT.npz"
+    },
+    "swap:XNYUSDT": {
+      "src_mtime_ns": 1772546494775480100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XNYUSDT.npz"
+    },
+    "swap:XPINUSDT": {
+      "src_mtime_ns": 1772546745580577400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XPINUSDT.npz"
+    },
+    "swap:XPLUSDT": {
+      "src_mtime_ns": 1772546675189439200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XPLUSDT.npz"
+    },
+    "swap:XRPUSDT": {
+      "src_mtime_ns": 1772546714832046700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XRPUSDT.npz"
+    },
+    "swap:XTZUSDT": {
+      "src_mtime_ns": 1772546536000839900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XTZUSDT.npz"
+    },
+    "swap:XVGUSDT": {
+      "src_mtime_ns": 1772546726560735100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XVGUSDT.npz"
+    },
+    "swap:XVSUSDT": {
+      "src_mtime_ns": 1772546730636927600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\XVSUSDT.npz"
+    },
+    "swap:YBUSDT": {
+      "src_mtime_ns": 1772546670617475000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\YBUSDT.npz"
+    },
+    "swap:YFIUSDT": {
+      "src_mtime_ns": 1772546515680264200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\YFIUSDT.npz"
+    },
+    "swap:YGGUSDT": {
+      "src_mtime_ns": 1772546716436054400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\YGGUSDT.npz"
+    },
+    "swap:ZAMAUSDT": {
+      "src_mtime_ns": 1772546488747958900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZAMAUSDT.npz"
+    },
+    "swap:ZBTUSDT": {
+      "src_mtime_ns": 1772546692469044800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZBTUSDT.npz"
+    },
+    "swap:ZECUSDT": {
+      "src_mtime_ns": 1772546523145337800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZECUSDT.npz"
+    },
+    "swap:ZENUSDT": {
+      "src_mtime_ns": 1772546750806020800,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZENUSDT.npz"
+    },
+    "swap:ZEREBROUSDT": {
+      "src_mtime_ns": 1772546771537977900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZEREBROUSDT.npz"
+    },
+    "swap:ZETAUSDT": {
+      "src_mtime_ns": 1772546500795669200,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZETAUSDT.npz"
+    },
+    "swap:ZILUSDT": {
+      "src_mtime_ns": 1772546536817596400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZILUSDT.npz"
+    },
+    "swap:ZKCUSDT": {
+      "src_mtime_ns": 1772546512065608700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZKCUSDT.npz"
+    },
+    "swap:ZKJUSDT": {
+      "src_mtime_ns": 1772546558921123700,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZKJUSDT.npz"
+    },
+    "swap:ZKPUSDT": {
+      "src_mtime_ns": 1772546488354468100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZKPUSDT.npz"
+    },
+    "swap:ZKUSDT": {
+      "src_mtime_ns": 1772546679600540000,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZKUSDT.npz"
+    },
+    "swap:ZORAUSDT": {
+      "src_mtime_ns": 1772546518099524900,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZORAUSDT.npz"
+    },
+    "swap:ZROUSDT": {
+      "src_mtime_ns": 1772546546054790100,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZROUSDT.npz"
+    },
+    "swap:ZRXUSDT": {
+      "src_mtime_ns": 1772546687236733500,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\ZRXUSDT.npz"
+    },
+    "swap:币安人生USDT": {
+      "src_mtime_ns": 1772546753615189600,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\币安人生USDT.npz"
+    },
+    "swap:我踏马来了USDT": {
+      "src_mtime_ns": 1772546732656940400,
+      "rows": 38,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\swap\\我踏马来了USDT.npz"
+    },
+    "spot:0GUSDT": {
+      "src_mtime_ns": 1772438641143423700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\0GUSDT.npz"
+    },
+    "spot:1000CATUSDT": {
+      "src_mtime_ns": 1772438638952583600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\1000CATUSDT.npz"
+    },
+    "spot:1000CHEEMSUSDT": {
+      "src_mtime_ns": 1772438637457747100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\1000CHEEMSUSDT.npz"
+    },
+    "spot:1000SATSUSDT": {
+      "src_mtime_ns": 1772438649483963500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\1000SATSUSDT.npz"
+    },
+    "spot:1INCHUSDT": {
+      "src_mtime_ns": 1772438643789674400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\1INCHUSDT.npz"
+    },
+    "spot:1MBABYDOGEUSDT": {
+      "src_mtime_ns": 1772438677114876200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\1MBABYDOGEUSDT.npz"
+    },
+    "spot:2ZUSDT": {
+      "src_mtime_ns": 1772438640639780900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\2ZUSDT.npz"
+    },
+    "spot:A2ZUSDT": {
+      "src_mtime_ns": 1772438656409867400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\A2ZUSDT.npz"
+    },
+    "spot:AAVEUSDT": {
+      "src_mtime_ns": 1772438656288747600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AAVEUSDT.npz"
+    },
+    "spot:ACEUSDT": {
+      "src_mtime_ns": 1772438630958401800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ACEUSDT.npz"
+    },
+    "spot:ACHUSDT": {
+      "src_mtime_ns": 1772438647776447200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ACHUSDT.npz"
+    },
+    "spot:ACMUSDT": {
+      "src_mtime_ns": 1772438637843531100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ACMUSDT.npz"
+    },
+    "spot:ACTUSDT": {
+      "src_mtime_ns": 1772438652198666000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ACTUSDT.npz"
+    },
+    "spot:ACXUSDT": {
+      "src_mtime_ns": 1772438656532632400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ACXUSDT.npz"
+    },
+    "spot:ADAUSDT": {
+      "src_mtime_ns": 1772438629699228500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ADAUSDT.npz"
+    },
+    "spot:ADXUSDT": {
+      "src_mtime_ns": 1772438675188120000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ADXUSDT.npz"
+    },
+    "spot:AEURUSDT": {
+      "src_mtime_ns": 1772438669831813200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AEURUSDT.npz"
+    },
+    "spot:AEVOUSDT": {
+      "src_mtime_ns": 1772438634516152600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AEVOUSDT.npz"
+    },
+    "spot:AGLDUSDT": {
+      "src_mtime_ns": 1772438665107744000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AGLDUSDT.npz"
+    },
+    "spot:AIUSDT": {
+      "src_mtime_ns": 1772438632842446200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AIUSDT.npz"
+    },
+    "spot:AIXBTUSDT": {
+      "src_mtime_ns": 1772438630589247000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AIXBTUSDT.npz"
+    },
+    "spot:ALCXUSDT": {
+      "src_mtime_ns": 1772438675066997100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ALCXUSDT.npz"
+    },
+    "spot:ALGOUSDT": {
+      "src_mtime_ns": 1772438647529009500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ALGOUSDT.npz"
+    },
+    "spot:ALICEUSDT": {
+      "src_mtime_ns": 1772438638207303500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ALICEUSDT.npz"
+    },
+    "spot:ALLOUSDT": {
+      "src_mtime_ns": 1772438652329528400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ALLOUSDT.npz"
+    },
+    "spot:ALPINEUSDT": {
+      "src_mtime_ns": 1772438640763966600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ALPINEUSDT.npz"
+    },
+    "spot:ALTUSDT": {
+      "src_mtime_ns": 1772438635561935100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ALTUSDT.npz"
+    },
+    "spot:AMPUSDT": {
+      "src_mtime_ns": 1772438672113840100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AMPUSDT.npz"
+    },
+    "spot:ANIMEUSDT": {
+      "src_mtime_ns": 1772438676729950100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ANIMEUSDT.npz"
+    },
+    "spot:ANKRUSDT": {
+      "src_mtime_ns": 1772438627342713300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ANKRUSDT.npz"
+    },
+    "spot:APEUSDT": {
+      "src_mtime_ns": 1772438660189832100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\APEUSDT.npz"
+    },
+    "spot:API3USDT": {
+      "src_mtime_ns": 1772438653094057400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\API3USDT.npz"
+    },
+    "spot:APTUSDT": {
+      "src_mtime_ns": 1772438649868174300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\APTUSDT.npz"
+    },
+    "spot:ARBUSDT": {
+      "src_mtime_ns": 1772438667789827100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ARBUSDT.npz"
+    },
+    "spot:ARDRUSDT": {
+      "src_mtime_ns": 1772438675308750300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ARDRUSDT.npz"
+    },
+    "spot:ARKMUSDT": {
+      "src_mtime_ns": 1772438676593227100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ARKMUSDT.npz"
+    },
+    "spot:ARKUSDT": {
+      "src_mtime_ns": 1772438626431238300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ARKUSDT.npz"
+    },
+    "spot:ARPAUSDT": {
+      "src_mtime_ns": 1772438632214011100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ARPAUSDT.npz"
+    },
+    "spot:ARUSDT": {
+      "src_mtime_ns": 1772438646158377600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ARUSDT.npz"
+    },
+    "spot:ASRUSDT": {
+      "src_mtime_ns": 1772438675428329600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ASRUSDT.npz"
+    },
+    "spot:ASTERUSDT": {
+      "src_mtime_ns": 1772438656910172500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ASTERUSDT.npz"
+    },
+    "spot:ASTRUSDT": {
+      "src_mtime_ns": 1772438652835431600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ASTRUSDT.npz"
+    },
+    "spot:ATAUSDT": {
+      "src_mtime_ns": 1772438641787688400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ATAUSDT.npz"
+    },
+    "spot:ATMUSDT": {
+      "src_mtime_ns": 1772438650916106300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ATMUSDT.npz"
+    },
+    "spot:ATOMUSDT": {
+      "src_mtime_ns": 1772438636598104400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ATOMUSDT.npz"
+    },
+    "spot:ATUSDT": {
+      "src_mtime_ns": 1772438665483967200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ATUSDT.npz"
+    },
+    "spot:AUCTIONUSDT": {
+      "src_mtime_ns": 1772438634649007700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AUCTIONUSDT.npz"
+    },
+    "spot:AUDIOUSDT": {
+      "src_mtime_ns": 1772438629820556400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AUDIOUSDT.npz"
+    },
+    "spot:AUSDT": {
+      "src_mtime_ns": 1772438666994642200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AUSDT.npz"
+    },
+    "spot:AVAUSDT": {
+      "src_mtime_ns": 1772438676861712500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AVAUSDT.npz"
+    },
+    "spot:AVAXUSDT": {
+      "src_mtime_ns": 1772438670613092300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AVAXUSDT.npz"
+    },
+    "spot:AVNTUSDT": {
+      "src_mtime_ns": 1772438632091923700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AVNTUSDT.npz"
+    },
+    "spot:AWEUSDT": {
+      "src_mtime_ns": 1772438646527228800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AWEUSDT.npz"
+    },
+    "spot:AXLUSDT": {
+      "src_mtime_ns": 1772438662828853300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AXLUSDT.npz"
+    },
+    "spot:AXSUSDT": {
+      "src_mtime_ns": 1772438633851626500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\AXSUSDT.npz"
+    },
+    "spot:BABYUSDT": {
+      "src_mtime_ns": 1772438662059981600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BABYUSDT.npz"
+    },
+    "spot:BANANAS31USDT": {
+      "src_mtime_ns": 1772438654649337100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BANANAS31USDT.npz"
+    },
+    "spot:BANANAUSDT": {
+      "src_mtime_ns": 1772438651951937400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BANANAUSDT.npz"
+    },
+    "spot:BANDUSDT": {
+      "src_mtime_ns": 1772438656051319300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BANDUSDT.npz"
+    },
+    "spot:BANKUSDT": {
+      "src_mtime_ns": 1772438627847698100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BANKUSDT.npz"
+    },
+    "spot:BARDUSDT": {
+      "src_mtime_ns": 1772438647896885200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BARDUSDT.npz"
+    },
+    "spot:BARUSDT": {
+      "src_mtime_ns": 1772438644807613900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BARUSDT.npz"
+    },
+    "spot:BATUSDT": {
+      "src_mtime_ns": 1772438655930000000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BATUSDT.npz"
+    },
+    "spot:BBUSDT": {
+      "src_mtime_ns": 1772438668309533200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BBUSDT.npz"
+    },
+    "spot:BCHUSDT": {
+      "src_mtime_ns": 1772438678017274800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BCHUSDT.npz"
+    },
+    "spot:BEAMXUSDT": {
+      "src_mtime_ns": 1772438629322913100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BEAMXUSDT.npz"
+    },
+    "spot:BELUSDT": {
+      "src_mtime_ns": 1772438643667911600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BELUSDT.npz"
+    },
+    "spot:BERAUSDT": {
+      "src_mtime_ns": 1772438630834785800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BERAUSDT.npz"
+    },
+    "spot:BFUSDUSDT": {
+      "src_mtime_ns": 1772438659800049000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BFUSDUSDT.npz"
+    },
+    "spot:BICOUSDT": {
+      "src_mtime_ns": 1772438630337819900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BICOUSDT.npz"
+    },
+    "spot:BIFIUSDT": {
+      "src_mtime_ns": 1772438645312769100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BIFIUSDT.npz"
+    },
+    "spot:BIGTIMEUSDT": {
+      "src_mtime_ns": 1772438663838386900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BIGTIMEUSDT.npz"
+    },
+    "spot:BIOUSDT": {
+      "src_mtime_ns": 1772438657274110300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BIOUSDT.npz"
+    },
+    "spot:BLURUSDT": {
+      "src_mtime_ns": 1772438628089165100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BLURUSDT.npz"
+    },
+    "spot:BMTUSDT": {
+      "src_mtime_ns": 1772438624748645000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BMTUSDT.npz"
+    },
+    "spot:BNBUSDT": {
+      "src_mtime_ns": 1772438669977953800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BNBUSDT.npz"
+    },
+    "spot:BNSOLUSDT": {
+      "src_mtime_ns": 1772438625260160700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BNSOLUSDT.npz"
+    },
+    "spot:BNTUSDT": {
+      "src_mtime_ns": 1772438624385204500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BNTUSDT.npz"
+    },
+    "spot:BOMEUSDT": {
+      "src_mtime_ns": 1772438661189993400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BOMEUSDT.npz"
+    },
+    "spot:BONKUSDT": {
+      "src_mtime_ns": 1772438665350005200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BONKUSDT.npz"
+    },
+    "spot:BREVUSDT": {
+      "src_mtime_ns": 1772438634014795800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BREVUSDT.npz"
+    },
+    "spot:BROCCOLI714USDT": {
+      "src_mtime_ns": 1772438654096591800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BROCCOLI714USDT.npz"
+    },
+    "spot:BTCUSDT": {
+      "src_mtime_ns": 1772438678397986200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BTCUSDT.npz"
+    },
+    "spot:BTTCUSDT": {
+      "src_mtime_ns": 1772438658908215400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\BTTCUSDT.npz"
+    },
+    "spot:C98USDT": {
+      "src_mtime_ns": 1772438653234261900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\C98USDT.npz"
+    },
+    "spot:CAKEUSDT": {
+      "src_mtime_ns": 1772438637576678000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CAKEUSDT.npz"
+    },
+    "spot:CATIUSDT": {
+      "src_mtime_ns": 1772438673030158400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CATIUSDT.npz"
+    },
+    "spot:CELOUSDT": {
+      "src_mtime_ns": 1772438664348893800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CELOUSDT.npz"
+    },
+    "spot:CELRUSDT": {
+      "src_mtime_ns": 1772438664854457400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CELRUSDT.npz"
+    },
+    "spot:CETUSUSDT": {
+      "src_mtime_ns": 1772438633592672100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CETUSUSDT.npz"
+    },
+    "spot:CFXUSDT": {
+      "src_mtime_ns": 1772438668443004300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CFXUSDT.npz"
+    },
+    "spot:CGPTUSDT": {
+      "src_mtime_ns": 1772438631726445900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CGPTUSDT.npz"
+    },
+    "spot:CHRUSDT": {
+      "src_mtime_ns": 1772438636338739400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CHRUSDT.npz"
+    },
+    "spot:CHZUSDT": {
+      "src_mtime_ns": 1772438663332788700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CHZUSDT.npz"
+    },
+    "spot:CITYUSDT": {
+      "src_mtime_ns": 1772438679293849400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CITYUSDT.npz"
+    },
+    "spot:CKBUSDT": {
+      "src_mtime_ns": 1772438660312015200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CKBUSDT.npz"
+    },
+    "spot:COMPUSDT": {
+      "src_mtime_ns": 1772438669712751800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\COMPUSDT.npz"
+    },
+    "spot:COOKIEUSDT": {
+      "src_mtime_ns": 1772438663714995000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\COOKIEUSDT.npz"
+    },
+    "spot:COSUSDT": {
+      "src_mtime_ns": 1772438647156939200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\COSUSDT.npz"
+    },
+    "spot:COTIUSDT": {
+      "src_mtime_ns": 1772438635946180700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\COTIUSDT.npz"
+    },
+    "spot:COWUSDT": {
+      "src_mtime_ns": 1772438631598538100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\COWUSDT.npz"
+    },
+    "spot:CRVUSDT": {
+      "src_mtime_ns": 1772438673678492500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CRVUSDT.npz"
+    },
+    "spot:CTKUSDT": {
+      "src_mtime_ns": 1772438670240281700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CTKUSDT.npz"
+    },
+    "spot:CTSIUSDT": {
+      "src_mtime_ns": 1772438666748618700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CTSIUSDT.npz"
+    },
+    "spot:CUSDT": {
+      "src_mtime_ns": 1772438677617985000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CUSDT.npz"
+    },
+    "spot:CVCUSDT": {
+      "src_mtime_ns": 1772438627719496800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CVCUSDT.npz"
+    },
+    "spot:CVXUSDT": {
+      "src_mtime_ns": 1772438670736867100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CVXUSDT.npz"
+    },
+    "spot:CYBERUSDT": {
+      "src_mtime_ns": 1772438675553277900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\CYBERUSDT.npz"
+    },
+    "spot:DASHUSDT": {
+      "src_mtime_ns": 1772438657151786400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DASHUSDT.npz"
+    },
+    "spot:DCRUSDT": {
+      "src_mtime_ns": 1772438628588078800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DCRUSDT.npz"
+    },
+    "spot:DEGOUSDT": {
+      "src_mtime_ns": 1772438645677673800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DEGOUSDT.npz"
+    },
+    "spot:DENTUSDT": {
+      "src_mtime_ns": 1772438645913801400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DENTUSDT.npz"
+    },
+    "spot:DEXEUSDT": {
+      "src_mtime_ns": 1772438644543774200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DEXEUSDT.npz"
+    },
+    "spot:DGBUSDT": {
+      "src_mtime_ns": 1772438676990167900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DGBUSDT.npz"
+    },
+    "spot:DIAUSDT": {
+      "src_mtime_ns": 1772438642436305600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DIAUSDT.npz"
+    },
+    "spot:DODOUSDT": {
+      "src_mtime_ns": 1772438677238829200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DODOUSDT.npz"
+    },
+    "spot:DOGEUSDT": {
+      "src_mtime_ns": 1772438644943505300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DOGEUSDT.npz"
+    },
+    "spot:DOGSUSDT": {
+      "src_mtime_ns": 1772438659675657000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DOGSUSDT.npz"
+    },
+    "spot:DOLOUSDT": {
+      "src_mtime_ns": 1772438628951036400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DOLOUSDT.npz"
+    },
+    "spot:DOTUSDT": {
+      "src_mtime_ns": 1772438628214754100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DOTUSDT.npz"
+    },
+    "spot:DUSDT": {
+      "src_mtime_ns": 1772438647278936300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DUSDT.npz"
+    },
+    "spot:DUSKUSDT": {
+      "src_mtime_ns": 1772438669067552700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DUSKUSDT.npz"
+    },
+    "spot:DYDXUSDT": {
+      "src_mtime_ns": 1772438642812106200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DYDXUSDT.npz"
+    },
+    "spot:DYMUSDT": {
+      "src_mtime_ns": 1772438626307438600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\DYMUSDT.npz"
+    },
+    "spot:EDENUSDT": {
+      "src_mtime_ns": 1772438635411459600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\EDENUSDT.npz"
+    },
+    "spot:EDUUSDT": {
+      "src_mtime_ns": 1772438658514539400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\EDUUSDT.npz"
+    },
+    "spot:EGLDUSDT": {
+      "src_mtime_ns": 1772438625900192800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\EGLDUSDT.npz"
+    },
+    "spot:EIGENUSDT": {
+      "src_mtime_ns": 1772438655051259300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\EIGENUSDT.npz"
+    },
+    "spot:ENAUSDT": {
+      "src_mtime_ns": 1772438662960587900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ENAUSDT.npz"
+    },
+    "spot:ENJUSDT": {
+      "src_mtime_ns": 1772438674548693500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ENJUSDT.npz"
+    },
+    "spot:ENSOUSDT": {
+      "src_mtime_ns": 1772438646773315500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ENSOUSDT.npz"
+    },
+    "spot:ENSUSDT": {
+      "src_mtime_ns": 1772438633093480900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ENSUSDT.npz"
+    },
+    "spot:EPICUSDT": {
+      "src_mtime_ns": 1772438650373626500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\EPICUSDT.npz"
+    },
+    "spot:ERAUSDT": {
+      "src_mtime_ns": 1772438637335532600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ERAUSDT.npz"
+    },
+    "spot:ESPUSDT": {
+      "src_mtime_ns": 1772438661668393100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ESPUSDT.npz"
+    },
+    "spot:ETCUSDT": {
+      "src_mtime_ns": 1772438659413531800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ETCUSDT.npz"
+    },
+    "spot:ETHFIUSDT": {
+      "src_mtime_ns": 1772438659158598800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ETHFIUSDT.npz"
+    },
+    "spot:ETHUSDT": {
+      "src_mtime_ns": 1772438660946842300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ETHUSDT.npz"
+    },
+    "spot:EULUSDT": {
+      "src_mtime_ns": 1772438631340426300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\EULUSDT.npz"
+    },
+    "spot:EURIUSDT": {
+      "src_mtime_ns": 1772438652074677700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\EURIUSDT.npz"
+    },
+    "spot:FARMUSDT": {
+      "src_mtime_ns": 1772438653848872700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FARMUSDT.npz"
+    },
+    "spot:FETUSDT": {
+      "src_mtime_ns": 1772438635289272200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FETUSDT.npz"
+    },
+    "spot:FFUSDT": {
+      "src_mtime_ns": 1772438665988344800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FFUSDT.npz"
+    },
+    "spot:FIDAUSDT": {
+      "src_mtime_ns": 1772438661313063600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FIDAUSDT.npz"
+    },
+    "spot:FILUSDT": {
+      "src_mtime_ns": 1772438630213976000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FILUSDT.npz"
+    },
+    "spot:FIOUSDT": {
+      "src_mtime_ns": 1772438648746899200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FIOUSDT.npz"
+    },
+    "spot:FLOKIUSDT": {
+      "src_mtime_ns": 1772438638828300000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FLOKIUSDT.npz"
+    },
+    "spot:FLOWUSDT": {
+      "src_mtime_ns": 1772438657031623400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FLOWUSDT.npz"
+    },
+    "spot:FLUXUSDT": {
+      "src_mtime_ns": 1772438668569141000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FLUXUSDT.npz"
+    },
+    "spot:FOGOUSDT": {
+      "src_mtime_ns": 1772438642557649100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FOGOUSDT.npz"
+    },
+    "spot:FORMUSDT": {
+      "src_mtime_ns": 1772438659289580500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FORMUSDT.npz"
+    },
+    "spot:FORTHUSDT": {
+      "src_mtime_ns": 1772438662186986400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FORTHUSDT.npz"
+    },
+    "spot:FRAXUSDT": {
+      "src_mtime_ns": 1772438678789905700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FRAXUSDT.npz"
+    },
+    "spot:FTTUSDT": {
+      "src_mtime_ns": 1772438660688318500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FTTUSDT.npz"
+    },
+    "spot:FUNUSDT": {
+      "src_mtime_ns": 1772438658656800200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FUNUSDT.npz"
+    },
+    "spot:FUSDT": {
+      "src_mtime_ns": 1772438674424698300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\FUSDT.npz"
+    },
+    "spot:GALAUSDT": {
+      "src_mtime_ns": 1772438664986460100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GALAUSDT.npz"
+    },
+    "spot:GASUSDT": {
+      "src_mtime_ns": 1772438656654856700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GASUSDT.npz"
+    },
+    "spot:GIGGLEUSDT": {
+      "src_mtime_ns": 1772438676204619100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GIGGLEUSDT.npz"
+    },
+    "spot:GLMRUSDT": {
+      "src_mtime_ns": 1772438664098698000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GLMRUSDT.npz"
+    },
+    "spot:GLMUSDT": {
+      "src_mtime_ns": 1772438667662524700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GLMUSDT.npz"
+    },
+    "spot:GMTUSDT": {
+      "src_mtime_ns": 1772438635689298300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GMTUSDT.npz"
+    },
+    "spot:GMXUSDT": {
+      "src_mtime_ns": 1772438640119299600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GMXUSDT.npz"
+    },
+    "spot:GNOUSDT": {
+      "src_mtime_ns": 1772438648137448200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GNOUSDT.npz"
+    },
+    "spot:GNSUSDT": {
+      "src_mtime_ns": 1772438665609247000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GNSUSDT.npz"
+    },
+    "spot:GPSUSDT": {
+      "src_mtime_ns": 1772438624508375500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GPSUSDT.npz"
+    },
+    "spot:GRTUSDT": {
+      "src_mtime_ns": 1772438628707591800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GRTUSDT.npz"
+    },
+    "spot:GTCUSDT": {
+      "src_mtime_ns": 1772438626957141400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GTCUSDT.npz"
+    },
+    "spot:GUNUSDT": {
+      "src_mtime_ns": 1772438651702880100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GUNUSDT.npz"
+    },
+    "spot:GUSDT": {
+      "src_mtime_ns": 1772438679048425400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\GUSDT.npz"
+    },
+    "spot:HAEDALUSDT": {
+      "src_mtime_ns": 1772438648507202200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HAEDALUSDT.npz"
+    },
+    "spot:HBARUSDT": {
+      "src_mtime_ns": 1772438638694432500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HBARUSDT.npz"
+    },
+    "spot:HEIUSDT": {
+      "src_mtime_ns": 1772438648016508000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HEIUSDT.npz"
+    },
+    "spot:HEMIUSDT": {
+      "src_mtime_ns": 1772438627967467200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HEMIUSDT.npz"
+    },
+    "spot:HFTUSDT": {
+      "src_mtime_ns": 1772438663213495000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HFTUSDT.npz"
+    },
+    "spot:HIGHUSDT": {
+      "src_mtime_ns": 1772438647398424400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HIGHUSDT.npz"
+    },
+    "spot:HIVEUSDT": {
+      "src_mtime_ns": 1772438647653450600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HIVEUSDT.npz"
+    },
+    "spot:HMSTRUSDT": {
+      "src_mtime_ns": 1772438666362227800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HMSTRUSDT.npz"
+    },
+    "spot:HOLOUSDT": {
+      "src_mtime_ns": 1772438636717684800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HOLOUSDT.npz"
+    },
+    "spot:HOMEUSDT": {
+      "src_mtime_ns": 1772438635812487800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HOMEUSDT.npz"
+    },
+    "spot:HOOKUSDT": {
+      "src_mtime_ns": 1772438674051757800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HOOKUSDT.npz"
+    },
+    "spot:HOTUSDT": {
+      "src_mtime_ns": 1772438633216587000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HOTUSDT.npz"
+    },
+    "spot:HUMAUSDT": {
+      "src_mtime_ns": 1772438652578824700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HUMAUSDT.npz"
+    },
+    "spot:HYPERUSDT": {
+      "src_mtime_ns": 1772438674174886900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\HYPERUSDT.npz"
+    },
+    "spot:ICPUSDT": {
+      "src_mtime_ns": 1772438642678536200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ICPUSDT.npz"
+    },
+    "spot:ICXUSDT": {
+      "src_mtime_ns": 1772438653975002400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ICXUSDT.npz"
+    },
+    "spot:IDEXUSDT": {
+      "src_mtime_ns": 1772438644412194100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\IDEXUSDT.npz"
+    },
+    "spot:IDUSDT": {
+      "src_mtime_ns": 1772438664224267800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\IDUSDT.npz"
+    },
+    "spot:ILVUSDT": {
+      "src_mtime_ns": 1772438663973112400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ILVUSDT.npz"
+    },
+    "spot:IMXUSDT": {
+      "src_mtime_ns": 1772438653714498500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\IMXUSDT.npz"
+    },
+    "spot:INITUSDT": {
+      "src_mtime_ns": 1772438649989603700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\INITUSDT.npz"
+    },
+    "spot:INJUSDT": {
+      "src_mtime_ns": 1772438678272308600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\INJUSDT.npz"
+    },
+    "spot:IOSTUSDT": {
+      "src_mtime_ns": 1772438628828433800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\IOSTUSDT.npz"
+    },
+    "spot:IOTAUSDT": {
+      "src_mtime_ns": 1772438657398305600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\IOTAUSDT.npz"
+    },
+    "spot:IOTXUSDT": {
+      "src_mtime_ns": 1772438634393808100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\IOTXUSDT.npz"
+    },
+    "spot:IOUSDT": {
+      "src_mtime_ns": 1772438633338684600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\IOUSDT.npz"
+    },
+    "spot:IQUSDT": {
+      "src_mtime_ns": 1772438655549460700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\IQUSDT.npz"
+    },
+    "spot:JASMYUSDT": {
+      "src_mtime_ns": 1772438649117266000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\JASMYUSDT.npz"
+    },
+    "spot:JOEUSDT": {
+      "src_mtime_ns": 1772438648871416300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\JOEUSDT.npz"
+    },
+    "spot:JSTUSDT": {
+      "src_mtime_ns": 1772438627593248200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\JSTUSDT.npz"
+    },
+    "spot:JTOUSDT": {
+      "src_mtime_ns": 1772438669453532200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\JTOUSDT.npz"
+    },
+    "spot:JUVUSDT": {
+      "src_mtime_ns": 1772438641661911500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\JUVUSDT.npz"
+    },
+    "spot:KAIAUSDT": {
+      "src_mtime_ns": 1772438646277028100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\KAIAUSDT.npz"
+    },
+    "spot:KAITOUSDT": {
+      "src_mtime_ns": 1772438677492617700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\KAITOUSDT.npz"
+    },
+    "spot:KAVAUSDT": {
+      "src_mtime_ns": 1772438647031957800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\KAVAUSDT.npz"
+    },
+    "spot:KERNELUSDT": {
+      "src_mtime_ns": 1772438658138624600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\KERNELUSDT.npz"
+    },
+    "spot:KGSTUSDT": {
+      "src_mtime_ns": 1772438673159435300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\KGSTUSDT.npz"
+    },
+    "spot:KITEUSDT": {
+      "src_mtime_ns": 1772438625129734600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\KITEUSDT.npz"
+    },
+    "spot:KMNOUSDT": {
+      "src_mtime_ns": 1772438637709687300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\KMNOUSDT.npz"
+    },
+    "spot:KNCUSDT": {
+      "src_mtime_ns": 1772438628458227900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\KNCUSDT.npz"
+    },
+    "spot:KSMUSDT": {
+      "src_mtime_ns": 1772438671529742700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\KSMUSDT.npz"
+    },
+    "spot:LAUSDT": {
+      "src_mtime_ns": 1772438625390370200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LAUSDT.npz"
+    },
+    "spot:LAYERUSDT": {
+      "src_mtime_ns": 1772438633468910100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LAYERUSDT.npz"
+    },
+    "spot:LAZIOUSDT": {
+      "src_mtime_ns": 1772438632463206300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LAZIOUSDT.npz"
+    },
+    "spot:LDOUSDT": {
+      "src_mtime_ns": 1772438636458777800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LDOUSDT.npz"
+    },
+    "spot:LINEAUSDT": {
+      "src_mtime_ns": 1772438662703862500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LINEAUSDT.npz"
+    },
+    "spot:LINKUSDT": {
+      "src_mtime_ns": 1772438661937198600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LINKUSDT.npz"
+    },
+    "spot:LISTAUSDT": {
+      "src_mtime_ns": 1772438632970181100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LISTAUSDT.npz"
+    },
+    "spot:LPTUSDT": {
+      "src_mtime_ns": 1772438626034627400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LPTUSDT.npz"
+    },
+    "spot:LQTYUSDT": {
+      "src_mtime_ns": 1772438662445275800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LQTYUSDT.npz"
+    },
+    "spot:LRCUSDT": {
+      "src_mtime_ns": 1772438671964749400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LRCUSDT.npz"
+    },
+    "spot:LSKUSDT": {
+      "src_mtime_ns": 1772438644677097200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LSKUSDT.npz"
+    },
+    "spot:LTCUSDT": {
+      "src_mtime_ns": 1772438643422942900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LTCUSDT.npz"
+    },
+    "spot:LUMIAUSDT": {
+      "src_mtime_ns": 1772438673550635900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LUMIAUSDT.npz"
+    },
+    "spot:LUNAUSDT": {
+      "src_mtime_ns": 1772438643546217500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LUNAUSDT.npz"
+    },
+    "spot:LUNCUSDT": {
+      "src_mtime_ns": 1772438658017201600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\LUNCUSDT.npz"
+    },
+    "spot:MAGICUSDT": {
+      "src_mtime_ns": 1772438645432668800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MAGICUSDT.npz"
+    },
+    "spot:MANAUSDT": {
+      "src_mtime_ns": 1772438665226175700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MANAUSDT.npz"
+    },
+    "spot:MANTAUSDT": {
+      "src_mtime_ns": 1772438634773528600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MANTAUSDT.npz"
+    },
+    "spot:MASKUSDT": {
+      "src_mtime_ns": 1772438642177539500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MASKUSDT.npz"
+    },
+    "spot:MAVUSDT": {
+      "src_mtime_ns": 1772438674798818400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MAVUSDT.npz"
+    },
+    "spot:MBLUSDT": {
+      "src_mtime_ns": 1772438674300147300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MBLUSDT.npz"
+    },
+    "spot:MBOXUSDT": {
+      "src_mtime_ns": 1772438666117219200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MBOXUSDT.npz"
+    },
+    "spot:MDTUSDT": {
+      "src_mtime_ns": 1772438670489453200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MDTUSDT.npz"
+    },
+    "spot:MEMEUSDT": {
+      "src_mtime_ns": 1772438650122582700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MEMEUSDT.npz"
+    },
+    "spot:METISUSDT": {
+      "src_mtime_ns": 1772438655673655300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\METISUSDT.npz"
+    },
+    "spot:METUSDT": {
+      "src_mtime_ns": 1772438668069168600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\METUSDT.npz"
+    },
+    "spot:MEUSDT": {
+      "src_mtime_ns": 1772438668826415600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MEUSDT.npz"
+    },
+    "spot:MINAUSDT": {
+      "src_mtime_ns": 1772438676338237400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MINAUSDT.npz"
+    },
+    "spot:MIRAUSDT": {
+      "src_mtime_ns": 1772438648627442800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MIRAUSDT.npz"
+    },
+    "spot:MITOUSDT": {
+      "src_mtime_ns": 1772438671250501600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MITOUSDT.npz"
+    },
+    "spot:MLNUSDT": {
+      "src_mtime_ns": 1772438667256107700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MLNUSDT.npz"
+    },
+    "spot:MMTUSDT": {
+      "src_mtime_ns": 1772438665732861900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MMTUSDT.npz"
+    },
+    "spot:MORPHOUSDT": {
+      "src_mtime_ns": 1772438630462936000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MORPHOUSDT.npz"
+    },
+    "spot:MOVEUSDT": {
+      "src_mtime_ns": 1772438629192287200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MOVEUSDT.npz"
+    },
+    "spot:MOVRUSDT": {
+      "src_mtime_ns": 1772438677889960700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MOVRUSDT.npz"
+    },
+    "spot:MTLUSDT": {
+      "src_mtime_ns": 1772438639734150000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MTLUSDT.npz"
+    },
+    "spot:MUBARAKUSDT": {
+      "src_mtime_ns": 1772438648994829000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\MUBARAKUSDT.npz"
+    },
+    "spot:NEARUSDT": {
+      "src_mtime_ns": 1772438668699846400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NEARUSDT.npz"
+    },
+    "spot:NEIROUSDT": {
+      "src_mtime_ns": 1772438626569423400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NEIROUSDT.npz"
+    },
+    "spot:NEOUSDT": {
+      "src_mtime_ns": 1772438644030822000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NEOUSDT.npz"
+    },
+    "spot:NEWTUSDT": {
+      "src_mtime_ns": 1772438650513001000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NEWTUSDT.npz"
+    },
+    "spot:NEXOUSDT": {
+      "src_mtime_ns": 1772438631469120200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NEXOUSDT.npz"
+    },
+    "spot:NFPUSDT": {
+      "src_mtime_ns": 1772438679171361000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NFPUSDT.npz"
+    },
+    "spot:NILUSDT": {
+      "src_mtime_ns": 1772438632585844900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NILUSDT.npz"
+    },
+    "spot:NMRUSDT": {
+      "src_mtime_ns": 1772438632337501400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NMRUSDT.npz"
+    },
+    "spot:NOMUSDT": {
+      "src_mtime_ns": 1772438672510379400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NOMUSDT.npz"
+    },
+    "spot:NOTUSDT": {
+      "src_mtime_ns": 1772438658387666700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NOTUSDT.npz"
+    },
+    "spot:NTRNUSDT": {
+      "src_mtime_ns": 1772438657643949200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NTRNUSDT.npz"
+    },
+    "spot:NXPCUSDT": {
+      "src_mtime_ns": 1772438672778880500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\NXPCUSDT.npz"
+    },
+    "spot:OGNUSDT": {
+      "src_mtime_ns": 1772438624993525400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\OGNUSDT.npz"
+    },
+    "spot:OGUSDT": {
+      "src_mtime_ns": 1772438671839263900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\OGUSDT.npz"
+    },
+    "spot:OMUSDT": {
+      "src_mtime_ns": 1772417077136496600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\OMUSDT.npz"
+    },
+    "spot:ONDOUSDT": {
+      "src_mtime_ns": 1772438624631301800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ONDOUSDT.npz"
+    },
+    "spot:ONEUSDT": {
+      "src_mtime_ns": 1772438670990920100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ONEUSDT.npz"
+    },
+    "spot:ONGUSDT": {
+      "src_mtime_ns": 1772438669323525600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ONGUSDT.npz"
+    },
+    "spot:ONTUSDT": {
+      "src_mtime_ns": 1772438646909936500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ONTUSDT.npz"
+    },
+    "spot:OPENUSDT": {
+      "src_mtime_ns": 1772438664729685100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\OPENUSDT.npz"
+    },
+    "spot:OPUSDT": {
+      "src_mtime_ns": 1772438678518352600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\OPUSDT.npz"
+    },
+    "spot:ORCAUSDT": {
+      "src_mtime_ns": 1772438637210498700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ORCAUSDT.npz"
+    },
+    "spot:ORDIUSDT": {
+      "src_mtime_ns": 1772438649236504800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ORDIUSDT.npz"
+    },
+    "spot:OSMOUSDT": {
+      "src_mtime_ns": 1772438666619452900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\OSMOUSDT.npz"
+    },
+    "spot:OXTUSDT": {
+      "src_mtime_ns": 1772438627078670500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\OXTUSDT.npz"
+    },
+    "spot:PARTIUSDT": {
+      "src_mtime_ns": 1772438672249773900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PARTIUSDT.npz"
+    },
+    "spot:PAXGUSDT": {
+      "src_mtime_ns": 1772438673298064300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PAXGUSDT.npz"
+    },
+    "spot:PENDLEUSDT": {
+      "src_mtime_ns": 1772438656169323200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PENDLEUSDT.npz"
+    },
+    "spot:PENGUUSDT": {
+      "src_mtime_ns": 1772438657769033200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PENGUUSDT.npz"
+    },
+    "spot:PEOPLEUSDT": {
+      "src_mtime_ns": 1772438641528441100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PEOPLEUSDT.npz"
+    },
+    "spot:PEPEUSDT": {
+      "src_mtime_ns": 1772438643298460500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PEPEUSDT.npz"
+    },
+    "spot:PHAUSDT": {
+      "src_mtime_ns": 1772438660567803400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PHAUSDT.npz"
+    },
+    "spot:PHBUSDT": {
+      "src_mtime_ns": 1772438641011803100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PHBUSDT.npz"
+    },
+    "spot:PIVXUSDT": {
+      "src_mtime_ns": 1772438638452505000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PIVXUSDT.npz"
+    },
+    "spot:PIXELUSDT": {
+      "src_mtime_ns": 1772438652968065400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PIXELUSDT.npz"
+    },
+    "spot:PLUMEUSDT": {
+      "src_mtime_ns": 1772438662308259900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PLUMEUSDT.npz"
+    },
+    "spot:PNUTUSDT": {
+      "src_mtime_ns": 1772438636209907800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PNUTUSDT.npz"
+    },
+    "spot:POLUSDT": {
+      "src_mtime_ns": 1772438637967742800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\POLUSDT.npz"
+    },
+    "spot:POLYXUSDT": {
+      "src_mtime_ns": 1772438655295475000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\POLYXUSDT.npz"
+    },
+    "spot:PONDUSDT": {
+      "src_mtime_ns": 1772438629449024600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PONDUSDT.npz"
+    },
+    "spot:PORTALUSDT": {
+      "src_mtime_ns": 1772438674671563200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PORTALUSDT.npz"
+    },
+    "spot:PORTOUSDT": {
+      "src_mtime_ns": 1772438678147727700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PORTOUSDT.npz"
+    },
+    "spot:POWRUSDT": {
+      "src_mtime_ns": 1772438629567653200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\POWRUSDT.npz"
+    },
+    "spot:PROMUSDT": {
+      "src_mtime_ns": 1772438642933016700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PROMUSDT.npz"
+    },
+    "spot:PROVEUSDT": {
+      "src_mtime_ns": 1772438645189089400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PROVEUSDT.npz"
+    },
+    "spot:PSGUSDT": {
+      "src_mtime_ns": 1772438666492072000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PSGUSDT.npz"
+    },
+    "spot:PUMPUSDT": {
+      "src_mtime_ns": 1772438677368665200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PUMPUSDT.npz"
+    },
+    "spot:PUNDIXUSDT": {
+      "src_mtime_ns": 1772438679418227500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PUNDIXUSDT.npz"
+    },
+    "spot:PYRUSDT": {
+      "src_mtime_ns": 1772438663468899100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PYRUSDT.npz"
+    },
+    "spot:PYTHUSDT": {
+      "src_mtime_ns": 1772438643053968800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\PYTHUSDT.npz"
+    },
+    "spot:QIUSDT": {
+      "src_mtime_ns": 1772438663088872400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\QIUSDT.npz"
+    },
+    "spot:QKCUSDT": {
+      "src_mtime_ns": 1772438661454337500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\QKCUSDT.npz"
+    },
+    "spot:QNTUSDT": {
+      "src_mtime_ns": 1772438643177489500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\QNTUSDT.npz"
+    },
+    "spot:QTUMUSDT": {
+      "src_mtime_ns": 1772438631847127300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\QTUMUSDT.npz"
+    },
+    "spot:QUICKUSDT": {
+      "src_mtime_ns": 1772438631967761200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\QUICKUSDT.npz"
+    },
+    "spot:RADUSDT": {
+      "src_mtime_ns": 1772438640888178500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RADUSDT.npz"
+    },
+    "spot:RAREUSDT": {
+      "src_mtime_ns": 1772438649610595200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RAREUSDT.npz"
+    },
+    "spot:RAYUSDT": {
+      "src_mtime_ns": 1772438625643542400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RAYUSDT.npz"
+    },
+    "spot:RDNTUSDT": {
+      "src_mtime_ns": 1772438651828024800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RDNTUSDT.npz"
+    },
+    "spot:REDUSDT": {
+      "src_mtime_ns": 1772438654515725200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\REDUSDT.npz"
+    },
+    "spot:RENDERUSDT": {
+      "src_mtime_ns": 1772438648383154700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RENDERUSDT.npz"
+    },
+    "spot:REQUSDT": {
+      "src_mtime_ns": 1772438627212423400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\REQUSDT.npz"
+    },
+    "spot:RESOLVUSDT": {
+      "src_mtime_ns": 1772438676072017900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RESOLVUSDT.npz"
+    },
+    "spot:REZUSDT": {
+      "src_mtime_ns": 1772438644149175300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\REZUSDT.npz"
+    },
+    "spot:RIFUSDT": {
+      "src_mtime_ns": 1772438639207857000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RIFUSDT.npz"
+    },
+    "spot:RLCUSDT": {
+      "src_mtime_ns": 1772438653591898300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RLCUSDT.npz"
+    },
+    "spot:RLUSDUSDT": {
+      "src_mtime_ns": 1772438659929335800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RLUSDUSDT.npz"
+    },
+    "spot:RONINUSDT": {
+      "src_mtime_ns": 1772438667533712200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RONINUSDT.npz"
+    },
+    "spot:ROSEUSDT": {
+      "src_mtime_ns": 1772438667129949100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ROSEUSDT.npz"
+    },
+    "spot:RPLUSDT": {
+      "src_mtime_ns": 1772438636957536900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RPLUSDT.npz"
+    },
+    "spot:RSRUSDT": {
+      "src_mtime_ns": 1772438641918579600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RSRUSDT.npz"
+    },
+    "spot:RUNEUSDT": {
+      "src_mtime_ns": 1772438643912219700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RUNEUSDT.npz"
+    },
+    "spot:RVNUSDT": {
+      "src_mtime_ns": 1772438660054113800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\RVNUSDT.npz"
+    },
+    "spot:SAGAUSDT": {
+      "src_mtime_ns": 1772438634897134100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SAGAUSDT.npz"
+    },
+    "spot:SAHARAUSDT": {
+      "src_mtime_ns": 1772438675948969100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SAHARAUSDT.npz"
+    },
+    "spot:SANDUSDT": {
+      "src_mtime_ns": 1772438661067141600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SANDUSDT.npz"
+    },
+    "spot:SANTOSUSDT": {
+      "src_mtime_ns": 1772438671716049900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SANTOSUSDT.npz"
+    },
+    "spot:SAPIENUSDT": {
+      "src_mtime_ns": 1772438662579003700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SAPIENUSDT.npz"
+    },
+    "spot:SCRTUSDT": {
+      "src_mtime_ns": 1772438651176455000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SCRTUSDT.npz"
+    },
+    "spot:SCRUSDT": {
+      "src_mtime_ns": 1772438638572654400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SCRUSDT.npz"
+    },
+    "spot:SCUSDT": {
+      "src_mtime_ns": 1772438655172145700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SCUSDT.npz"
+    },
+    "spot:SEIUSDT": {
+      "src_mtime_ns": 1772438650651153900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SEIUSDT.npz"
+    },
+    "spot:SENTUSDT": {
+      "src_mtime_ns": 1772438637091256600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SENTUSDT.npz"
+    },
+    "spot:SFPUSDT": {
+      "src_mtime_ns": 1772438669582248500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SFPUSDT.npz"
+    },
+    "spot:SHELLUSDT": {
+      "src_mtime_ns": 1772438654348335100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SHELLUSDT.npz"
+    },
+    "spot:SHIBUSDT": {
+      "src_mtime_ns": 1772438635023105000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SHIBUSDT.npz"
+    },
+    "spot:SIGNUSDT": {
+      "src_mtime_ns": 1772438666869708800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SIGNUSDT.npz"
+    },
+    "spot:SKLUSDT": {
+      "src_mtime_ns": 1772438659539226500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SKLUSDT.npz"
+    },
+    "spot:SKYUSDT": {
+      "src_mtime_ns": 1772438673803912800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SKYUSDT.npz"
+    },
+    "spot:SLPUSDT": {
+      "src_mtime_ns": 1772438640238773000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SLPUSDT.npz"
+    },
+    "spot:SNXUSDT": {
+      "src_mtime_ns": 1772438657519337200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SNXUSDT.npz"
+    },
+    "spot:SOLUSDT": {
+      "src_mtime_ns": 1772438640508475300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SOLUSDT.npz"
+    },
+    "spot:SOLVUSDT": {
+      "src_mtime_ns": 1772438673929667900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SOLVUSDT.npz"
+    },
+    "spot:SOMIUSDT": {
+      "src_mtime_ns": 1772438626169010000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SOMIUSDT.npz"
+    },
+    "spot:SOPHUSDT": {
+      "src_mtime_ns": 1772438638088471200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SOPHUSDT.npz"
+    },
+    "spot:SPELLUSDT": {
+      "src_mtime_ns": 1772438639609011600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SPELLUSDT.npz"
+    },
+    "spot:SPKUSDT": {
+      "src_mtime_ns": 1772438642314720400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SPKUSDT.npz"
+    },
+    "spot:SSVUSDT": {
+      "src_mtime_ns": 1772438631087690600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SSVUSDT.npz"
+    },
+    "spot:STEEMUSDT": {
+      "src_mtime_ns": 1772438677748425300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\STEEMUSDT.npz"
+    },
+    "spot:STGUSDT": {
+      "src_mtime_ns": 1772438670366407400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\STGUSDT.npz"
+    },
+    "spot:STORJUSDT": {
+      "src_mtime_ns": 1772438626694011900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\STORJUSDT.npz"
+    },
+    "spot:STOUSDT": {
+      "src_mtime_ns": 1772438635157469100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\STOUSDT.npz"
+    },
+    "spot:STRAXUSDT": {
+      "src_mtime_ns": 1772438646397951500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\STRAXUSDT.npz"
+    },
+    "spot:STRKUSDT": {
+      "src_mtime_ns": 1772438672378359600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\STRKUSDT.npz"
+    },
+    "spot:STXUSDT": {
+      "src_mtime_ns": 1772438657893691500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\STXUSDT.npz"
+    },
+    "spot:SUIUSDT": {
+      "src_mtime_ns": 1772438651039494800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SUIUSDT.npz"
+    },
+    "spot:SUNUSDT": {
+      "src_mtime_ns": 1772438625516020300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SUNUSDT.npz"
+    },
+    "spot:SUPERUSDT": {
+      "src_mtime_ns": 1772438658268064700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SUPERUSDT.npz"
+    },
+    "spot:SUSDT": {
+      "src_mtime_ns": 1772438625769064300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SUSDT.npz"
+    },
+    "spot:SUSHIUSDT": {
+      "src_mtime_ns": 1772438670856647300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SUSHIUSDT.npz"
+    },
+    "spot:SXPUSDT": {
+      "src_mtime_ns": 1772438661802462700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SXPUSDT.npz"
+    },
+    "spot:SXTUSDT": {
+      "src_mtime_ns": 1772438669192524100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SXTUSDT.npz"
+    },
+    "spot:SYNUSDT": {
+      "src_mtime_ns": 1772438626826308800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SYNUSDT.npz"
+    },
+    "spot:SYSUSDT": {
+      "src_mtime_ns": 1772438675688566200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\SYSUSDT.npz"
+    },
+    "spot:TAOUSDT": {
+      "src_mtime_ns": 1772438639337647400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TAOUSDT.npz"
+    },
+    "spot:TFUELUSDT": {
+      "src_mtime_ns": 1772438655801552200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TFUELUSDT.npz"
+    },
+    "spot:THETAUSDT": {
+      "src_mtime_ns": 1772438653472871000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\THETAUSDT.npz"
+    },
+    "spot:THEUSDT": {
+      "src_mtime_ns": 1772438648261695300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\THEUSDT.npz"
+    },
+    "spot:TIAUSDT": {
+      "src_mtime_ns": 1772438665868096900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TIAUSDT.npz"
+    },
+    "spot:TKOUSDT": {
+      "src_mtime_ns": 1772438650777487400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TKOUSDT.npz"
+    },
+    "spot:TLMUSDT": {
+      "src_mtime_ns": 1772438650251387700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TLMUSDT.npz"
+    },
+    "spot:TNSRUSDT": {
+      "src_mtime_ns": 1772438678650163000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TNSRUSDT.npz"
+    },
+    "spot:TONUSDT": {
+      "src_mtime_ns": 1772438649732165800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TONUSDT.npz"
+    },
+    "spot:TOWNSUSDT": {
+      "src_mtime_ns": 1772438654224188400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TOWNSUSDT.npz"
+    },
+    "spot:TRBUSDT": {
+      "src_mtime_ns": 1772438624870440400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TRBUSDT.npz"
+    },
+    "spot:TREEUSDT": {
+      "src_mtime_ns": 1772438659039875400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TREEUSDT.npz"
+    },
+    "spot:TRUMPUSDT": {
+      "src_mtime_ns": 1772438652453526700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TRUMPUSDT.npz"
+    },
+    "spot:TRUUSDT": {
+      "src_mtime_ns": 1772438655426896100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TRUUSDT.npz"
+    },
+    "spot:TRXUSDT": {
+      "src_mtime_ns": 1772438645067516900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TRXUSDT.npz"
+    },
+    "spot:TSTUSDT": {
+      "src_mtime_ns": 1772438640371277700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TSTUSDT.npz"
+    },
+    "spot:TURBOUSDT": {
+      "src_mtime_ns": 1772438644271139500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TURBOUSDT.npz"
+    },
+    "spot:TURTLEUSDT": {
+      "src_mtime_ns": 1772438654808651900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TURTLEUSDT.npz"
+    },
+    "spot:TUSDT": {
+      "src_mtime_ns": 1772438638329836200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TUSDT.npz"
+    },
+    "spot:TUTUSDT": {
+      "src_mtime_ns": 1772438632703279600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TUTUSDT.npz"
+    },
+    "spot:TWTUSDT": {
+      "src_mtime_ns": 1772438656784283000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\TWTUSDT.npz"
+    },
+    "spot:UMAUSDT": {
+      "src_mtime_ns": 1772438636838553400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\UMAUSDT.npz"
+    },
+    "spot:UNIUSDT": {
+      "src_mtime_ns": 1772438645797608500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\UNIUSDT.npz"
+    },
+    "spot:USD1USDT": {
+      "src_mtime_ns": 1772438651438041300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\USD1USDT.npz"
+    },
+    "spot:USDEUSDT": {
+      "src_mtime_ns": 1772438672910651700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\USDEUSDT.npz"
+    },
+    "spot:USTCUSDT": {
+      "src_mtime_ns": 1772438664609180500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\USTCUSDT.npz"
+    },
+    "spot:USUALUSDT": {
+      "src_mtime_ns": 1772438678923017400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\USUALUSDT.npz"
+    },
+    "spot:UTKUSDT": {
+      "src_mtime_ns": 1772438634270158700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\UTKUSDT.npz"
+    },
+    "spot:UUSDT": {
+      "src_mtime_ns": 1772438633719015700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\UUSDT.npz"
+    },
+    "spot:VANAUSDT": {
+      "src_mtime_ns": 1772438667928528000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\VANAUSDT.npz"
+    },
+    "spot:VANRYUSDT": {
+      "src_mtime_ns": 1772438641398526300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\VANRYUSDT.npz"
+    },
+    "spot:VELODROMEUSDT": {
+      "src_mtime_ns": 1772438630711862100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\VELODROMEUSDT.npz"
+    },
+    "spot:VETUSDT": {
+      "src_mtime_ns": 1772438671117921800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\VETUSDT.npz"
+    },
+    "spot:VICUSDT": {
+      "src_mtime_ns": 1772438651564141800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\VICUSDT.npz"
+    },
+    "spot:VIRTUALUSDT": {
+      "src_mtime_ns": 1772438668944367700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\VIRTUALUSDT.npz"
+    },
+    "spot:VTHOUSDT": {
+      "src_mtime_ns": 1772438670115591600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\VTHOUSDT.npz"
+    },
+    "spot:WALUSDT": {
+      "src_mtime_ns": 1772438639076348800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WALUSDT.npz"
+    },
+    "spot:WANUSDT": {
+      "src_mtime_ns": 1772438651309339200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WANUSDT.npz"
+    },
+    "spot:WAXPUSDT": {
+      "src_mtime_ns": 1772438629073067100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WAXPUSDT.npz"
+    },
+    "spot:WBETHUSDT": {
+      "src_mtime_ns": 1772438634138676000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WBETHUSDT.npz"
+    },
+    "spot:WBTCUSDT": {
+      "src_mtime_ns": 1772438627468505300,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WBTCUSDT.npz"
+    },
+    "spot:WCTUSDT": {
+      "src_mtime_ns": 1772438668192451400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WCTUSDT.npz"
+    },
+    "spot:WIFUSDT": {
+      "src_mtime_ns": 1772438672649672400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WIFUSDT.npz"
+    },
+    "spot:WINUSDT": {
+      "src_mtime_ns": 1772438666239209200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WINUSDT.npz"
+    },
+    "spot:WLDUSDT": {
+      "src_mtime_ns": 1772438628337820400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WLDUSDT.npz"
+    },
+    "spot:WLFIUSDT": {
+      "src_mtime_ns": 1772438649353348500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WLFIUSDT.npz"
+    },
+    "spot:WOOUSDT": {
+      "src_mtime_ns": 1772438636075077400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WOOUSDT.npz"
+    },
+    "spot:WUSDT": {
+      "src_mtime_ns": 1772438646649089100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\WUSDT.npz"
+    },
+    "spot:XAIUSDT": {
+      "src_mtime_ns": 1772438663591551000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\XAIUSDT.npz"
+    },
+    "spot:XECUSDT": {
+      "src_mtime_ns": 1772438653352031800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\XECUSDT.npz"
+    },
+    "spot:XLMUSDT": {
+      "src_mtime_ns": 1772438639992825100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\XLMUSDT.npz"
+    },
+    "spot:XNOUSDT": {
+      "src_mtime_ns": 1772438660433971400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\XNOUSDT.npz"
+    },
+    "spot:XPLUSDT": {
+      "src_mtime_ns": 1772438630088268200,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\XPLUSDT.npz"
+    },
+    "spot:XRPUSDT": {
+      "src_mtime_ns": 1772438639474092700,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\XRPUSDT.npz"
+    },
+    "spot:XTZUSDT": {
+      "src_mtime_ns": 1772438641275634000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\XTZUSDT.npz"
+    },
+    "spot:XUSDUSDT": {
+      "src_mtime_ns": 1772438631212548100,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\XUSDUSDT.npz"
+    },
+    "spot:XVGUSDT": {
+      "src_mtime_ns": 1772438674941621000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\XVGUSDT.npz"
+    },
+    "spot:XVSUSDT": {
+      "src_mtime_ns": 1772438676458225900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\XVSUSDT.npz"
+    },
+    "spot:YBUSDT": {
+      "src_mtime_ns": 1772438671394053600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\YBUSDT.npz"
+    },
+    "spot:YFIUSDT": {
+      "src_mtime_ns": 1772438675825931600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\YFIUSDT.npz"
+    },
+    "spot:YGGUSDT": {
+      "src_mtime_ns": 1772438652708034500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\YGGUSDT.npz"
+    },
+    "spot:ZAMAUSDT": {
+      "src_mtime_ns": 1772438658788233400,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ZAMAUSDT.npz"
+    },
+    "spot:ZBTUSDT": {
+      "src_mtime_ns": 1772438673428976500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ZBTUSDT.npz"
+    },
+    "spot:ZECUSDT": {
+      "src_mtime_ns": 1772438642042997600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ZECUSDT.npz"
+    },
+    "spot:ZENUSDT": {
+      "src_mtime_ns": 1772438646033855000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ZENUSDT.npz"
+    },
+    "spot:ZILUSDT": {
+      "src_mtime_ns": 1772438639867966900,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ZILUSDT.npz"
+    },
+    "spot:ZKCUSDT": {
+      "src_mtime_ns": 1772438660826778800,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ZKCUSDT.npz"
+    },
+    "spot:ZKPUSDT": {
+      "src_mtime_ns": 1772438645556546500,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ZKPUSDT.npz"
+    },
+    "spot:ZKUSDT": {
+      "src_mtime_ns": 1772438664473555000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ZKUSDT.npz"
+    },
+    "spot:ZROUSDT": {
+      "src_mtime_ns": 1772438654931197600,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ZROUSDT.npz"
+    },
+    "spot:ZRXUSDT": {
+      "src_mtime_ns": 1772438629951130000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\ZRXUSDT.npz"
+    },
+    "spot:币安人生USDT": {
+      "src_mtime_ns": 1772438667393350000,
+      "rows": 9,
+      "target": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\web\\data\\preprocessed\\spot\\币安人生USDT.npz"
+    }
+  }
+}

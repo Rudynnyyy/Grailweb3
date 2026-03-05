@@ -1,0 +1,38 @@
+{
+  "module": "online_query",
+  "baseline": {
+    "name": "online_query_baseline_compute_on_read",
+    "qps": 13.525,
+    "rt_ms": {
+      "avg": 3474.643,
+      "p50": 3056.636,
+      "p95": 7672.265,
+      "p99": 9949.263,
+      "max": 14796.772
+    },
+    "cpu_pct": null,
+    "mem_mb": null,
+    "io_mb_s": 0.0,
+    "requests": 1200,
+    "elapsed_s": 88.727
+  },
+  "optimized": {
+    "name": "online_query_optimized_precomputed_lookup",
+    "qps": 25254.385,
+    "rt_ms": {
+      "avg": 0.017,
+      "p50": 0.013,
+      "p95": 0.027,
+      "p99": 0.034,
+      "max": 0.071
+    },
+    "cpu_pct": null,
+    "mem_mb": null,
+    "io_mb_s": 0.0,
+    "requests": 1200,
+    "elapsed_s": 0.048
+  },
+  "artifacts": {
+    "meta_path": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_suite\\code\\online_query_meta.csv"
+  }
+}

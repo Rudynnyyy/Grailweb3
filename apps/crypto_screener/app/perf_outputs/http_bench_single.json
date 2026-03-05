@@ -1,0 +1,35 @@
+{
+  "endpoint": "http://127.0.0.1:8001/api/latest_enriched",
+  "server_pid": 18052,
+  "max_workers": 1,
+  "requests_per_user": 1,
+  "stages": [
+    {
+      "users": 1,
+      "requests_per_user": 1,
+      "total_requests": 1,
+      "concurrency_workers": 1,
+      "elapsed_s": 30.025,
+      "qps": 0.033,
+      "success": 0,
+      "errors": 1,
+      "error_rate": 1.0,
+      "latency_ms": {
+        "avg": 30024.218,
+        "p50": 30024.218,
+        "p95": 30024.218,
+        "p99": 30024.218,
+        "max": 30024.218
+      },
+      "codes": {
+        "-1": 1
+      },
+      "resource": {
+        "proc_cpu_pct": 6.362,
+        "proc_rss_mb": 3289.305,
+        "proc_io_mb_s": 0.001,
+        "net_mb_s": 0.007
+      }
+    }
+  ]
+}

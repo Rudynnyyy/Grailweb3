@@ -1,0 +1,37 @@
+{
+  "results": [
+    {
+      "format": "binary_npz",
+      "write_s": 0.004392300000000127,
+      "read_s": 0.013304900000000064,
+      "size_bytes": 3939,
+      "rows": 9,
+      "size_vs_source": 2.51372,
+      "source_csv": "数据获取\\data\\data_center\\kline\\swap\\BTCUSDT.csv",
+      "source_size_bytes": 1567,
+      "source_rows": 9
+    },
+    {
+      "format": "columnar_npy",
+      "write_s": 0.02929280000000012,
+      "read_s": 0.052023300000000106,
+      "size_bytes": 7664,
+      "rows": 9,
+      "size_vs_source": 4.890874,
+      "source_csv": "数据获取\\data\\data_center\\kline\\swap\\BTCUSDT.csv",
+      "source_size_bytes": 1567,
+      "source_rows": 9
+    },
+    {
+      "format": "memmap_close_only",
+      "write_s": 0.0010311000000000625,
+      "read_s": 0.0014492000000001504,
+      "size_bytes": 72,
+      "rows": 9,
+      "size_vs_source": 0.045948,
+      "source_csv": "数据获取\\data\\data_center\\kline\\swap\\BTCUSDT.csv",
+      "source_size_bytes": 1567,
+      "source_rows": 9
+    }
+  ]
+}

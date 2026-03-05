@@ -1,0 +1,12 @@
+# ignore everything
+*
+
+# allow only these folders
+!apps/
+!apps/**
+
+!linux_deploy/
+!linux_deploy/**
+
+# keep gitignore itself
+!.gitignore

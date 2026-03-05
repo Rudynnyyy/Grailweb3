@@ -1,0 +1,146 @@
+{
+  "pstats": "apps\\crypto_screener\\perf_profile.pstats",
+  "topn": 20,
+  "hotspots": [
+    {
+      "func": "perf_benchmark.py:58:_run_prefetch",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "total_time_s": 0.0023834000000000004,
+      "cum_time_s": 0.049616900000000005
+    },
+    {
+      "func": "expr_lang.py:420:eval_ast",
+      "primitive_calls": 400,
+      "total_calls": 2000,
+      "total_time_s": 0.0080224,
+      "cum_time_s": 0.025381400000000002
+    },
+    {
+      "func": "perf_benchmark.py:67:<listcomp>",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "total_time_s": 0.000402,
+      "cum_time_s": 0.012666
+    },
+    {
+      "func": "thread.py:155:submit",
+      "primitive_calls": 400,
+      "total_calls": 400,
+      "total_time_s": 0.0011815,
+      "cum_time_s": 0.012264
+    },
+    {
+      "func": "thread.py:174:_adjust_thread_count",
+      "primitive_calls": 400,
+      "total_calls": 400,
+      "total_time_s": 0.0005637,
+      "cum_time_s": 0.008359400000000001
+    },
+    {
+      "func": "threading.py:280:wait",
+      "primitive_calls": 281,
+      "total_calls": 281,
+      "total_time_s": 0.0007901000000000001,
+      "cum_time_s": 0.0075233
+    },
+    {
+      "func": "expr_lang.py:257:_sma_last",
+      "primitive_calls": 400,
+      "total_calls": 400,
+      "total_time_s": 0.0015727,
+      "cum_time_s": 0.007515900000000001
+    },
+    {
+      "func": "~:0:<method 'acquire' of '_thread.lock' objects>",
+      "primitive_calls": 1140,
+      "total_calls": 1140,
+      "total_time_s": 0.006325600000000001,
+      "cum_time_s": 0.006325600000000001
+    },
+    {
+      "func": "threading.py:556:wait",
+      "primitive_calls": 17,
+      "total_calls": 17,
+      "total_time_s": 0.00010860000000000001,
+      "cum_time_s": 0.0059299
+    },
+    {
+      "func": "_base.py:201:as_completed",
+      "primitive_calls": 401,
+      "total_calls": 401,
+      "total_time_s": 0.0002007,
+      "cum_time_s": 0.0048985
+    },
+    {
+      "func": "~:0:<method 'mean' of 'numpy.ndarray' objects>",
+      "primitive_calls": 400,
+      "total_calls": 400,
+      "total_time_s": 0.0002164,
+      "cum_time_s": 0.0039718
+    },
+    {
+      "func": "threading.py:855:start",
+      "primitive_calls": 16,
+      "total_calls": 16,
+      "total_time_s": 6.0200000000000006e-05,
+      "cum_time_s": 0.00391
+    },
+    {
+      "func": "_methods.py:101:_mean",
+      "primitive_calls": 400,
+      "total_calls": 400,
+      "total_time_s": 0.0013313,
+      "cum_time_s": 0.0037554000000000003
+    },
+    {
+      "func": "threading.py:404:acquire",
+      "primitive_calls": 400,
+      "total_calls": 400,
+      "total_time_s": 0.0012589,
+      "cum_time_s": 0.0035250000000000004
+    },
+    {
+      "func": "_ufunc_config.py:33:seterr",
+      "primitive_calls": 800,
+      "total_calls": 800,
+      "total_time_s": 0.0010902000000000002,
+      "cum_time_s": 0.0024681
+    },
+    {
+      "func": "_base.py:317:__init__",
+      "primitive_calls": 400,
+      "total_calls": 400,
+      "total_time_s": 0.0003956,
+      "cum_time_s": 0.0023094
+    },
+    {
+      "func": "~:0:<method 'reduce' of 'numpy.ufunc' objects>",
+      "primitive_calls": 800,
+      "total_calls": 800,
+      "total_time_s": 0.0021662,
+      "cum_time_s": 0.0021662
+    },
+    {
+      "func": "expr_lang.py:193:_as_series",
+      "primitive_calls": 800,
+      "total_calls": 800,
+      "total_time_s": 0.0006311,
+      "cum_time_s": 0.0021498000000000003
+    },
+    {
+      "func": "threading.py:228:__init__",
+      "primitive_calls": 418,
+      "total_calls": 418,
+      "total_time_s": 0.0012735000000000001,
+      "cum_time_s": 0.0019989
+    },
+    {
+      "func": "_ufunc_config.py:430:__enter__",
+      "primitive_calls": 400,
+      "total_calls": 400,
+      "total_time_s": 0.00035130000000000003,
+      "cum_time_s": 0.0017318000000000001
+    }
+  ]
+}

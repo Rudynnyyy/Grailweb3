@@ -1,0 +1,46 @@
+{
+  "enabled": true,
+  "paused": false,
+  "mode": "time",
+  "gray_percent": 5.0,
+  "step_percent": 5.0,
+  "interval_sec": 600,
+  "user_step": 200,
+  "last_advance_at": "2026-03-04T12:43:44",
+  "stable_percent": 0.0,
+  "history": [
+    {
+      "ts": "2026-03-04T12:43:44",
+      "from": 0.0,
+      "to": 5.0,
+      "reason": "auto_time"
+    }
+  ],
+  "salt": "qc-rollout",
+  "ab_weights": {
+    "A": 50.0,
+    "B": 50.0
+  },
+  "versions": {
+    "stable": {
+      "weight": 100.0,
+      "strategy": "fallback"
+    },
+    "canary_a": {
+      "weight": 50.0,
+      "strategy": "precompute"
+    },
+    "canary_b": {
+      "weight": 50.0,
+      "strategy": "precompute"
+    }
+  },
+  "thresholds": {
+    "error_rate_pct": 1.0,
+    "rt_p95_ms": 2000.0,
+    "success_rate_pct_min": 99.0
+  },
+  "alerts": [],
+  "recent_users": 0,
+  "impacted_users": 0
+}

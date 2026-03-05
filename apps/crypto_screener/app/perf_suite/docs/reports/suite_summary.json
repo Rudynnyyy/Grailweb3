@@ -1,0 +1,142 @@
+{
+  "modules": [
+    {
+      "module": "preprocess_table",
+      "baseline": {
+        "name": "preprocess_table_baseline_csv",
+        "qps": 6.934,
+        "rt_ms": {
+          "avg": 132.089,
+          "p50": 128.724,
+          "p95": 153.032,
+          "p99": 170.081,
+          "max": 176.137
+        },
+        "cpu_pct": 6.201,
+        "mem_mb": 14.308,
+        "io_mb_s": 49.903,
+        "requests": 120,
+        "elapsed_s": 17.307
+      },
+      "optimized": {
+        "name": "preprocess_table_optimized_npz",
+        "qps": 59.098,
+        "rt_ms": {
+          "avg": 16.61,
+          "p50": 16.138,
+          "p95": 18.635,
+          "p99": 19.318,
+          "max": 30.512
+        },
+        "cpu_pct": 6.204,
+        "mem_mb": 7.846,
+        "io_mb_s": 56.814,
+        "requests": 120,
+        "elapsed_s": 2.031
+      },
+      "artifacts": {
+        "csv_path": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_suite\\code\\table_raw.csv",
+        "npz_path": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_suite\\code\\table_preprocessed.npz"
+      }
+    },
+    {
+      "module": "incremental_update",
+      "baseline": {
+        "name": "incremental_baseline_full_recompute",
+        "qps": 1.798,
+        "rt_ms": {
+          "avg": 556.103,
+          "p50": 538.052,
+          "p95": 666.328,
+          "p99": 699.761,
+          "max": 709.727
+        },
+        "cpu_pct": 6.232,
+        "mem_mb": 6.872,
+        "io_mb_s": 0.0,
+        "requests": 100,
+        "elapsed_s": 55.63
+      },
+      "optimized": {
+        "name": "incremental_optimized_delta_update",
+        "qps": 1593.499,
+        "rt_ms": {
+          "avg": 0.556,
+          "p50": 0.52,
+          "p95": 0.715,
+          "p99": 0.803,
+          "max": 0.828
+        },
+        "cpu_pct": 6.225,
+        "mem_mb": 2.297,
+        "io_mb_s": 0.0,
+        "requests": 100,
+        "elapsed_s": 0.063
+      },
+      "artifacts": {
+        "meta_path": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_suite\\code\\incremental_input_meta.json"
+      }
+    },
+    {
+      "module": "online_query",
+      "baseline": {
+        "name": "online_query_baseline_compute_on_read",
+        "qps": 13.525,
+        "rt_ms": {
+          "avg": 3474.643,
+          "p50": 3056.636,
+          "p95": 7672.265,
+          "p99": 9949.263,
+          "max": 14796.772
+        },
+        "cpu_pct": null,
+        "mem_mb": null,
+        "io_mb_s": 0.0,
+        "requests": 1200,
+        "elapsed_s": 88.727
+      },
+      "optimized": {
+        "name": "online_query_optimized_precomputed_lookup",
+        "qps": 25254.385,
+        "rt_ms": {
+          "avg": 0.017,
+          "p50": 0.013,
+          "p95": 0.027,
+          "p99": 0.034,
+          "max": 0.071
+        },
+        "cpu_pct": null,
+        "mem_mb": null,
+        "io_mb_s": 0.0,
+        "requests": 1200,
+        "elapsed_s": 0.048
+      },
+      "artifacts": {
+        "meta_path": "D:\\量化交易\\中性1.8\\apps\\crypto_screener\\app\\perf_suite\\code\\online_query_meta.csv"
+      }
+    }
+  ],
+  "improvements": {
+    "preprocess_table": {
+      "qps_x": 8.523,
+      "rt_p95_x": 8.212,
+      "cpu_x": 1.0,
+      "mem_x": 0.548,
+      "io_x": 1.138
+    },
+    "incremental_update": {
+      "qps_x": 886.262,
+      "rt_p95_x": 931.927,
+      "cpu_x": 0.999,
+      "mem_x": 0.334,
+      "io_x": null
+    },
+    "online_query": {
+      "qps_x": 1867.237,
+      "rt_p95_x": 284157.963,
+      "cpu_x": null,
+      "mem_x": null,
+      "io_x": null
+    }
+  }
+}

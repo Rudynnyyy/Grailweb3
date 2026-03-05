@@ -1,0 +1,28 @@
+{
+  "syntax": {
+    "ok": true
+  },
+  "semantic": {
+    "ok": true,
+    "sma_err": 0.0,
+    "ema_err": 0.0,
+    "rsi": 100.0
+  },
+  "data": {
+    "ok": true,
+    "missing": []
+  },
+  "protocol": {
+    "ok": true,
+    "fields": [
+      "config",
+      "results",
+      "summary"
+    ]
+  },
+  "upstream_downstream": {
+    "ok": true,
+    "rule": "version_handshake+watermark"
+  },
+  "overall_ok": true
+}

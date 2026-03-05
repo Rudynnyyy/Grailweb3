@@ -1,0 +1,6 @@
+{
+  "users": 10000,
+  "workers": 64,
+  "gray_hits": 3490,
+  "gray_ratio_pct": 34.9
+}
