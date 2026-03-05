@@ -58,17 +58,66 @@ def _symbol_candidates(symbol: str) -> list[str]:
     return out
 
 
-def _pick_existing_csv(base_dirs: list[Path], symbol: str) -> tuple[Path | None, str]:
+def _probe_csv_tail_last_dt(path: Path, *, tail_hint: int) -> tuple[Any, int]:
+    try:
+        t = int(tail_hint)
+    except Exception:
+        t = 360
+    t = max(30, min(3650, t))
+    try:
+        df = read_merge_csv_tail(path, tail=min(120, t), extra=80)
+    except Exception:
+        return None, 0
+    if df is None or df.empty or "candle_begin_time" not in df.columns:
+        return None, 0
+    try:
+        dt = df["candle_begin_time"].iloc[-1]
+    except Exception:
+        dt = None
+    try:
+        n = int(len(df))
+    except Exception:
+        n = 0
+    return dt, n
+
+
+def _pick_existing_csv(base_dirs: list[Path], symbol: str, *, tail_hint: int) -> tuple[Path | None, str]:
     cands = _symbol_candidates(symbol)
-    for base in base_dirs:
+    found: list[tuple[int, Path, str]] = []
+    for bi, base in enumerate(list(base_dirs or [])):
         base_r = base.resolve()
         for sym in cands:
             p = (base / f"{sym}.csv").resolve()
             if base_r not in p.parents and p != base_r:
                 continue
-            if p.exists():
-                return p, sym
-    return None, ""
+            if p.exists() and p.is_file():
+                found.append((bi, p, sym))
+    if not found:
+        return None, ""
+    try:
+        t = int(tail_hint)
+    except Exception:
+        t = 360
+    min_rows = max(30, min(120, max(0, t) // 6))
+    best = None
+    best_score = None
+    for bi, p, sym in found:
+        dt0, n0 = _probe_csv_tail_last_dt(p, tail_hint=t)
+        dt_ms = -1
+        try:
+            dt_ms = int(getattr(dt0, "value", 0) // 1_000_000)
+        except Exception:
+            dt_ms = -1
+        ok_rows = int(n0) if int(n0) >= min_rows else 0
+        try:
+            size = int(p.stat().st_size)
+        except Exception:
+            size = 0
+        score = (dt_ms, ok_rows, size, -int(bi))
+        if best_score is None or score > best_score:
+            best_score = score
+            best = (p, sym)
+    return best if best is not None else (found[0][1], found[0][2])
 
 
 def _read_tail_text(path: Path, *, max_lines: int) -> list[str]:
@@ -174,7 +223,7 @@ def load_symbol_series(*, market: str, symbol: str, tail: int, repo_root: Path |
     base = swap_dir if is_swap else spot_dir
     dc_base = dc_swap_dir if is_swap else dc_spot_dir
     sym = str(symbol or "").strip()
-    csv_path, picked_sym = _pick_existing_csv([base, dc_base], sym)
+    csv_path, picked_sym = _pick_existing_csv([base, dc_base], sym, tail_hint=tail)
     if csv_path is None:
         return None
     base_r = csv_path.parent.resolve()

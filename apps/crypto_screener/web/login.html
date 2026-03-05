@@ -249,6 +249,147 @@
       document.getElementById("btnGoRegister").addEventListener("click", () => showPanel("register"));
       document.getElementById("btnBackToLogin").addEventListener("click", () => showPanel("login"));
 
+      function ensureHintAfterInput(inputId, hintId) {
+        const inp = document.getElementById(inputId);
+        if (!inp) return null;
+        const parent = inp.closest(".auth2-field");
+        if (!parent) return null;
+        let el = document.getElementById(hintId);
+        if (el) return el;
+        el = document.createElement("div");
+        el.id = hintId;
+        el.className = "auth2-hint";
+        parent.insertAdjacentElement("afterend", el);
+        return el;
+      }
+
+      const regUsernameHint = ensureHintAfterInput("regUsername", "regUsernameHint");
+      const regPasswordHint = ensureHintAfterInput("regPassword", "regPasswordHint");
+      const regPassword2Hint = ensureHintAfterInput("regPassword2", "regPassword2Hint");
+      const btnRegister = document.getElementById("btnRegister");
+
+      function setHint(el, text, kind) {
+        if (!el) return;
+        el.textContent = text || "";
+        el.classList.toggle("ok", kind === "ok");
+        el.classList.toggle("err", kind === "err");
+      }
+
+      function usernameRuleCheck(u) {
+        const s = String(u || "").trim();
+        if (!s) return { ok: false, msg: "" };
+        if (s.length < 3 || s.length > 32) return { ok: false, msg: "用户名长度需为 3-32 位" };
+        for (const ch of s) {
+          const ok = (ch >= "0" && ch <= "9") || (ch >= "A" && ch <= "Z") || (ch >= "a" && ch <= "z") || ch === "_" || ch === "-" || ch === ".";
+          if (!ok) return { ok: false, msg: "仅允许字母/数字/._-" };
+        }
+        return { ok: true, msg: "" };
+      }
+
+      function passwordRuleCheck(p) {
+        const s = String(p || "");
+        if (!s) return { ok: false, msg: "" };
+        if (s.length < 6 || s.length > 128) return { ok: false, msg: "密码长度需为 6-128 位" };
+        return { ok: true, msg: "" };
+      }
+
+      let unameTimer = null;
+      let lastUnameQuery = "";
+      let lastUnameResult = null;
+      async function checkUsernameExists(u) {
+        const q = String(u || "").trim();
+        if (!q) return null;
+        if (q === lastUnameQuery && lastUnameResult) return lastUnameResult;
+        lastUnameQuery = q;
+        try {
+          const res = await fetch(`./api/check_username?username=${encodeURIComponent(q)}`, { cache: "no-store" });
+          if (!res.ok) return null;
+          const j = await res.json();
+          if (!j || !j.ok) return null;
+          lastUnameResult = j;
+          return j;
+        } catch {
+          return null;
+        }
+      }
+
+      function updateRegisterBtn() {
+        if (!btnRegister) return;
+        const u = (document.getElementById("regUsername").value || "").trim();
+        const p1 = document.getElementById("regPassword").value || "";
+        const p2 = document.getElementById("regPassword2").value || "";
+        const u1 = usernameRuleCheck(u);
+        const pOk = passwordRuleCheck(p1);
+        const mOk = !p2 || p1 === p2;
+        const exists = lastUnameResult && lastUnameResult.username === u && lastUnameResult.valid ? !!lastUnameResult.exists : false;
+        const can = agreed() && u1.ok && pOk.ok && mOk && !exists;
+        btnRegister.disabled = !can;
+      }
+
+      function onRegUsernameInput() {
+        const u = (document.getElementById("regUsername").value || "").trim();
+        lastUnameResult = null;
+        const r = usernameRuleCheck(u);
+        if (!u) {
+          setHint(regUsernameHint, "", "");
+          updateRegisterBtn();
+          return;
+        }
+        if (!r.ok) {
+          setHint(regUsernameHint, r.msg, "err");
+          updateRegisterBtn();
+          return;
+        }
+        setHint(regUsernameHint, "检查用户名…", "");
+        if (unameTimer) clearTimeout(unameTimer);
+        unameTimer = setTimeout(async () => {
+          const j = await checkUsernameExists(u);
+          if (!j) {
+            setHint(regUsernameHint, "", "");
+            updateRegisterBtn();
+            return;
+          }
+          if (String(j.username || "") !== u) return;
+          if (!j.valid) {
+            setHint(regUsernameHint, "用户名不合法（3-32位：字母/数字/._-）", "err");
+          } else if (j.exists) {
+            setHint(regUsernameHint, "用户名已存在", "err");
+          } else {
+            setHint(regUsernameHint, "用户名可用", "ok");
+          }
+          updateRegisterBtn();
+        }, 450);
+        updateRegisterBtn();
+      }
+
+      function onRegPasswordInput() {
+        const p = document.getElementById("regPassword").value || "";
+        const r = passwordRuleCheck(p);
+        if (!p) setHint(regPasswordHint, "", "");
+        else if (!r.ok) setHint(regPasswordHint, r.msg, "err");
+        else setHint(regPasswordHint, "密码长度合规", "ok");
+        onRegPassword2Input();
+        updateRegisterBtn();
+      }
+
+      function onRegPassword2Input() {
+        const p1 = document.getElementById("regPassword").value || "";
+        const p2 = document.getElementById("regPassword2").value || "";
+        if (!p2) {
+          setHint(regPassword2Hint, "", "");
+          updateRegisterBtn();
+          return;
+        }
+        if (p1 === p2) setHint(regPassword2Hint, "两次密码一致", "ok");
+        else setHint(regPassword2Hint, "两次密码不一致", "err");
+        updateRegisterBtn();
+      }
+
+      document.getElementById("regUsername").addEventListener("input", onRegUsernameInput);
+      document.getElementById("regPassword").addEventListener("input", onRegPasswordInput);
+      document.getElementById("regPassword2").addEventListener("input", onRegPassword2Input);
+      document.getElementById("agree").addEventListener("change", updateRegisterBtn);
+
       document.getElementById("btnSendLoginCode").addEventListener("click", () => {
         const email = (document.getElementById("loginEmail").value || "").trim();
         if (!email) { setMsg("请输入邮箱"); return; }

@@ -41,18 +41,30 @@
     <div id="klineAlert" class="kline-alert hidden"></div>
     <div id="klineTooltip" class="kline-tooltip hidden"></div>
 
-    <div class="kline-panels">
-      <div class="kline-panel kline-candle-panel">
-        <div id="candleChipBar" class="kline-chipbar" data-panel="0"></div>
-        <div class="watermark watermark-kline">
-          <img class="watermark-logo" src="./grailweb3.png" alt="Grail区块链" />
-          <div class="watermark-text">Grail区块链</div>
+    <div class="kline-body">
+      <div class="kline-charts">
+        <div class="kline-panels">
+          <div class="kline-panel kline-candle-panel">
+            <div id="candleChipBar" class="kline-chipbar" data-panel="0"></div>
+            <div class="watermark watermark-kline">
+              <img class="watermark-logo" src="./grailweb3.png" alt="Grail区块链" />
+              <div class="watermark-text">Grail区块链</div>
+            </div>
+            <canvas id="candleCanvas" class="kline-canvas" height="420"></canvas>
+          </div>
+          <div id="indicatorPanel" class="kline-panel kline-indicator-panel">
+            <div id="indicatorStack" class="kline-indicator-stack"></div>
+          </div>
         </div>
-        <canvas id="candleCanvas" class="kline-canvas" height="420"></canvas>
       </div>
-      <div id="indicatorPanel" class="kline-panel kline-indicator-panel">
-        <div id="indicatorStack" class="kline-indicator-stack"></div>
-      </div>
+      <aside class="kline-picks" aria-label="选币栏">
+        <div class="kline-picks-head">
+          <div class="kline-picks-title">选币</div>
+          <input id="pickSearch" class="input kline-pick-search" placeholder="搜索币名" />
+          <div id="pickMeta" class="kline-picks-meta"></div>
+        </div>
+        <div id="pickList" class="kline-pick-list"></div>
+      </aside>
     </div>
 
     <div id="indicatorSettings" class="kline-settings hidden" role="dialog" aria-modal="true">

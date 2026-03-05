@@ -12,30 +12,98 @@ def render_selection_png(*, title: str, rows: list[dict], top_n: int) -> bytes:
     except Exception as e:
         raise RuntimeError(f"matplotlib_unavailable: {e}")
 
+    def _strip_quote(symbol: str) -> str:
+        s = str(symbol or "")
+        if s.endswith("-USDT"):
+            return s[:-5]
+        if s.endswith("USDT"):
+            return s[:-4]
+        return s
+
+    def _market_label(market: str) -> str:
+        m = str(market or "").lower()
+        if m == "spot":
+            return "现货"
+        if m == "swap":
+            return "合约"
+        return str(market or "")
+
+    def _fmt_num(x) -> str:
+        try:
+            if x is None:
+                return ""
+            v = float(x)
+            if v != v:
+                return ""
+            return f"{v:.6g}"
+        except Exception:
+            return ""
+
+    def _prev_close(r: dict) -> float | None:
+        try:
+            series = (r or {}).get("series") or {}
+            closes = series.get("close") if isinstance(series, dict) else None
+            if not isinstance(closes, list) or len(closes) < 2:
+                return None
+            v = closes[-2]
+            return float(v) if v is not None else None
+        except Exception:
+            return None
+
+    def _pct_change(r: dict, prev_close: float | None) -> float | None:
+        try:
+            v = (r or {}).get("pct_change")
+            if v is not None:
+                x = float(v)
+                if x == x:
+                    return x
+        except Exception:
+            pass
+        try:
+            c1 = (r or {}).get("close")
+            if prev_close is None or prev_close == 0:
+                return None
+            if c1 is None:
+                return None
+            x1 = float(c1)
+            if x1 != x1:
+                return None
+            return (x1 / float(prev_close) - 1.0) * 100.0
+        except Exception:
+            return None
+
     n = max(0, min(int(top_n), len(rows)))
     picks = rows[:n]
-    headers = ["Rank", "Symbol", "Market", "Close"]
+    headers = ["排名", "币种", "市场", "上小时收盘", "收盘价", "涨跌幅(%)"]
     data: list[list[str]] = []
     for r in picks:
         rk = r.get("_rank")
-        sym = str(r.get("symbol") or "")
-        market = str(r.get("market") or "")
+        sym = _strip_quote(str(r.get("symbol") or ""))
+        market = _market_label(str(r.get("market") or ""))
         close = r.get("close")
-        close_s = ""
-        try:
-            if close is not None:
-                close_s = f"{float(close):.6g}"
-        except Exception:
-            close_s = str(close) if close is not None else ""
-        data.append([str(rk) if rk is not None else "", sym, market, close_s])
+        prev = _prev_close(r)
+        pct = _pct_change(r, prev)
+        data.append(
+            [
+                str(rk) if rk is not None else "",
+                sym,
+                market,
+                _fmt_num(prev),
+                _fmt_num(close),
+                _fmt_num(pct),
+            ]
+        )
+    if not data:
+        data = [["", "无命中", "", "", "", ""]]
 
     fig_w = 10.0
-    fig_h = max(2.2, 1.3 + 0.35 * max(1, n))
+    fig_h = max(2.2, 0.9 + 0.35 * max(1, n))
     fig, ax = plt.subplots(figsize=(fig_w, fig_h))
     ax.axis("off")
-    ax.set_title(str(title or ""), fontsize=14, fontweight="bold", loc="left", pad=8)
+    fig.suptitle("")
+    ax.set_title("")
 
-    table = ax.table(cellText=data, colLabels=headers, loc="center", cellLoc="left")
+    table = ax.table(cellText=data, colLabels=headers, loc="center", cellLoc="center", colLoc="center")
     table.auto_set_font_size(False)
     table.set_fontsize(10)
     table.scale(1, 1.35)
@@ -47,13 +115,11 @@ def render_selection_png(*, title: str, rows: list[dict], top_n: int) -> bytes:
             cell.set_facecolor("#E5E7EB")
         else:
             cell.set_facecolor("#FFFFFF" if row % 2 == 1 else "#F9FAFB")
-        if col in (0, 3):
-            cell._loc = "right"
-            cell.set_text_props(ha="right")
+        cell._loc = "center"
+        cell.set_text_props(ha="center")
 
     buf = BytesIO()
     fig.tight_layout()
-    fig.savefig(buf, format="png", dpi=160, bbox_inches="tight", pad_inches=0.2)
+    fig.savefig(buf, format="png", dpi=160, bbox_inches="tight", pad_inches=0.15)
     plt.close(fig)
     return buf.getvalue()
-

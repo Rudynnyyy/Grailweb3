@@ -12,8 +12,11 @@ const state = {
   selectedKey: null, // `${market}|${symbol}`
   selectedRow: null,
   symbolQuery: "",
-  klineSeriesCache: {}, // { [key]: { dt: string[], series: object } }
-  klineSeriesPending: {}, // { [key]: Promise<void> }
+  klineSeriesCache: {},
+  klineSeriesPending: {},
+  baseConfig: null,
+  strategyGroups: [],
+  strategyDraft: null,
 };
 
 const storageKey = "crypto_screener_custom_factors_v1";
@@ -21,6 +24,411 @@ const columnVisibilityKey = "crypto_screener_column_visibility_v1";
 const plotKeysStorageKey = "crypto_screener_plot_keys_v1";
 const paramsStorageKey = "crypto_screener_params_v1";
 const selectedKeyStorageKey = "crypto_screener_selected_key_v1";
+const baseConfigStorageKey = "crypto_screener_base_config_v1";
+const strategyGroupsStorageKey = "crypto_screener_strategy_groups_v1";
+const baseCfgPaneStorageKey = "crypto_screener_basecfg_pane_v1";
+const lastPicksStorageKey = "crypto_screener_last_picks_v1";
+
+const defaultBlacklist = ["BKRW", "USDC", "USDP", "TUSD", "BUSD", "FDUSD", "DAI", "EUR", "GBP", "USBP", "SUSD", "PAXG", "AEUR", "EURI"];
+
+function loadBaseConfig() {
+  try {
+    const raw = localStorage.getItem(baseConfigStorageKey);
+    const j = raw ? JSON.parse(raw) : {};
+    const wl = Array.isArray(j.whitelist) ? j.whitelist : [];
+    const bl = Array.isArray(j.blacklist) ? j.blacklist : defaultBlacklist.slice();
+    const market0 = String(j.market || "all");
+    const market = market0 === "spot" || market0 === "swap" || market0 === "all" ? market0 : "all";
+    return { whitelist: wl, blacklist: bl, market };
+  } catch {
+    return { whitelist: [], blacklist: defaultBlacklist.slice(), market: "all" };
+  }
+}
+
+function saveBaseConfig(cfg) {
+  try {
+    const c = cfg && typeof cfg === "object" ? cfg : {};
+    const wl = Array.isArray(c.whitelist) ? c.whitelist : [];
+    const bl = Array.isArray(c.blacklist) ? c.blacklist : defaultBlacklist.slice();
+    const market0 = String(c.market || "all");
+    const market = market0 === "spot" || market0 === "swap" || market0 === "all" ? market0 : "all";
+    localStorage.setItem(baseConfigStorageKey, JSON.stringify({ whitelist: wl, blacklist: bl, market }));
+  } catch {}
+}
+
+function getSelectedMarket() {
+  const cfg = state.baseConfig || loadBaseConfig();
+  const market0 = String((cfg && cfg.market) || "all");
+  if (market0 === "spot" || market0 === "swap" || market0 === "all") return market0;
+  return "all";
+}
+
+function setSelectedMarket(market) {
+  const v0 = String(market || "all");
+  const v = v0 === "spot" || v0 === "swap" || v0 === "all" ? v0 : "all";
+  const cfg0 = state.baseConfig || loadBaseConfig();
+  const cfg = { ...(cfg0 || {}), market: v };
+  state.baseConfig = cfg;
+  saveBaseConfig(cfg);
+  if ($("baseMarketSelect")) $("baseMarketSelect").value = v;
+}
+
+function loadBaseCfgPane() {
+  try {
+    const raw = localStorage.getItem(baseCfgPaneStorageKey);
+    const v = String(raw || "");
+    return v === "plans" || v === "market" || v === "strategy" || v === "push" ? v : "strategy";
+  } catch {
+    return "strategy";
+  }
+}
+
+function saveBaseCfgPane(pane) {
+  try {
+    localStorage.setItem(baseCfgPaneStorageKey, String(pane || "strategy"));
+  } catch {}
+}
+
+function setBaseCfgPane(pane) {
+  const p0 = String(pane || "strategy");
+  const p = p0 === "plans" || p0 === "market" || p0 === "strategy" || p0 === "push" ? p0 : "strategy";
+  const tabs = [
+    { id: "basecfgTabPlans", p: "plans" },
+    { id: "basecfgTabMarket", p: "market" },
+    { id: "basecfgTabStrategy", p: "strategy" },
+    { id: "basecfgTabPush", p: "push" },
+  ];
+  for (const t of tabs) {
+    const el = $(t.id);
+    if (!el) continue;
+    el.classList.toggle("active", t.p === p);
+  }
+  const panes = [
+    { id: "basecfgPanePlans", p: "plans" },
+    { id: "basecfgPaneMarket", p: "market" },
+    { id: "basecfgPaneStrategy", p: "strategy" },
+    { id: "basecfgPanePush", p: "push" },
+  ];
+  for (const it of panes) {
+    const el = $(it.id);
+    if (!el) continue;
+    el.classList.toggle("hidden", it.p !== p);
+  }
+  saveBaseCfgPane(p);
+}
+
+function loadStrategyGroups() {
+  try {
+    const raw = localStorage.getItem(strategyGroupsStorageKey);
+    const j = raw ? JSON.parse(raw) : [];
+    return Array.isArray(j) ? j : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveStrategyGroups(gs) {
+  try {
+    localStorage.setItem(strategyGroupsStorageKey, JSON.stringify(Array.isArray(gs) ? gs : []));
+  } catch {}
+}
+
+function saveLastPicks(rows, latestSummary) {
+  try {
+    const arr = Array.isArray(rows) ? rows : [];
+    const out = {
+      saved_at: new Date().toISOString(),
+      summary: latestSummary && typeof latestSummary === "object" ? latestSummary : {},
+      rows: arr.slice(0, 800).map((r) => ({
+        rank: r && (r._rank ?? r.rank),
+        symbol: r && r.symbol,
+        market: r && r.market,
+        close: r && r.close,
+        pct_change: r && r.pct_change,
+      })),
+    };
+    localStorage.setItem(lastPicksStorageKey, JSON.stringify(out));
+  } catch {}
+}
+
+function deepCopy(x) {
+  try {
+    return JSON.parse(JSON.stringify(x === undefined ? null : x));
+  } catch {
+    return x;
+  }
+}
+
+function normalizeStrategyConfig(cfg) {
+  const c = cfg && typeof cfg === "object" ? cfg : {};
+  const params = c.params && typeof c.params === "object" ? c.params : {};
+  const toggles = c.toggles && typeof c.toggles === "object" ? c.toggles : {};
+  const sort = c.sort && typeof c.sort === "object" ? c.sort : {};
+  const lists0 = c.lists && typeof c.lists === "object" ? c.lists : {};
+  const customFactors0 = Array.isArray(c.customFactors) ? c.customFactors : [];
+  const cfMap = new Map(customFactors0.filter((x) => x && x.id).map((x) => [String(x.id), x]));
+  const customFactors = (Array.isArray(state.customFactors) ? state.customFactors : []).map((f) => {
+    const id = String(f && f.id ? f.id : "");
+    const cur = id ? cfMap.get(id) : null;
+    const params0 = Array.isArray(cur && cur.params) ? cur.params : Array.isArray(f && f.params) ? f.params : [];
+    return {
+      id,
+      folder: cur && cur.folder ? cur.folder : f && f.folder ? f.folder : "默认",
+      name: cur && cur.name ? cur.name : f && f.name ? f.name : id,
+      template: String((cur && (cur.template || cur.expr)) || (f && (f.template || f.expr)) || ""),
+      params: params0.map((x) => (Number.isFinite(Number(x)) ? Number(x) : 0)),
+      enabled: cur && cur.enabled !== undefined ? !!cur.enabled : !!(f && f.enabled),
+      thresholdEnabled: cur && cur.thresholdEnabled !== undefined ? !!cur.thresholdEnabled : !!(f && f.thresholdEnabled),
+      cmp: String((cur && cur.cmp) || (f && f.cmp) || ">="),
+      threshold: Number((cur && cur.threshold) !== undefined ? cur.threshold : (f && f.threshold) !== undefined ? f.threshold : 0),
+      show: cur && cur.show !== undefined ? !!cur.show : !!(f && f.show !== false),
+    };
+  });
+  return {
+    params: { ...params },
+    toggles: { ...toggles },
+    sort: { key: String(sort.key || "pct_change"), order: String(sort.order || "desc") },
+    customFactors,
+    lists: {
+      whitelist: Array.isArray(lists0.whitelist) ? lists0.whitelist : [],
+      blacklist: Array.isArray(lists0.blacklist) ? lists0.blacklist : defaultBlacklist.slice(),
+    },
+  };
+}
+
+function strategyHasAnyCondition(cfg) {
+  const c = normalizeStrategyConfig(cfg);
+  const t = c.toggles || {};
+  const anyBuiltIn = Object.values(t).some((x) => !!x);
+  const anyCustom = Array.isArray(c.customFactors) && c.customFactors.some((f) => f && f.enabled);
+  return anyBuiltIn || anyCustom;
+}
+
+function renderStrategyCondEditor() {
+  const host = $("strategyCondEditor");
+  if (!host) return;
+  const cfg = normalizeStrategyConfig(state.strategyDraft || buildWecomConfigFromCurrent());
+  state.strategyDraft = cfg;
+  host.innerHTML = "";
+
+  const makeLine = (labelText) => {
+    const line = document.createElement("div");
+    line.className = "help-line";
+    line.textContent = labelText;
+    return line;
+  };
+
+  const makeNumber = ({ value, min, max, step, onChange }) => {
+    const inp = document.createElement("input");
+    inp.className = "input";
+    inp.type = "number";
+    if (min !== undefined) inp.min = String(min);
+    if (max !== undefined) inp.max = String(max);
+    if (step !== undefined) inp.step = String(step);
+    inp.value = String(Number.isFinite(Number(value)) ? Number(value) : "");
+    inp.addEventListener("change", () => {
+      const v = Number(inp.value);
+      if (!Number.isFinite(v)) return;
+      onChange(v);
+      updateWecomSummary(state.strategyDraft);
+    });
+    return inp;
+  };
+
+  const makeSelect = ({ value, options, onChange }) => {
+    const sel = document.createElement("select");
+    sel.className = "select";
+    for (const opt0 of options) {
+      const opt = document.createElement("option");
+      opt.value = opt0.value;
+      opt.textContent = opt0.label;
+      sel.appendChild(opt);
+    }
+    sel.value = String(value || "");
+    sel.addEventListener("change", () => {
+      onChange(sel.value);
+      updateWecomSummary(state.strategyDraft);
+    });
+    return sel;
+  };
+
+  const builtins = [
+    { key: "condCloseMa", title: "close > MA", params: [{ k: "maPeriodClose", name: "MA 周期", min: 2, step: 1 }] },
+    { key: "condMa", title: "MA(快) > MA(慢)", params: [{ k: "maFast", name: "快", min: 2, step: 1 }, { k: "maSlow", name: "慢", min: 2, step: 1 }] },
+    { key: "condEma", title: "close > EMA", params: [{ k: "emaPeriod", name: "EMA 周期", min: 2, step: 1 }] },
+    { key: "condBollUp", title: "close > BOLLUP", params: [{ k: "bollPeriod", name: "周期", min: 2, step: 1 }, { k: "bollStd", name: "标准差", min: 0.1, step: 0.1 }] },
+    { key: "condBollDown", title: "close < BOLLDOWN", params: [{ k: "bollDownPeriod", name: "周期", min: 2, step: 1 }, { k: "bollDownStd", name: "标准差", min: 0.1, step: 0.1 }] },
+    { key: "condSuper", title: "close > SUPER", params: [{ k: "superAtrPeriod", name: "ATR 周期", min: 1, step: 1 }, { k: "superMult", name: "乘数", min: 0.1, step: 0.1 }] },
+    { key: "condRsi", title: "RSI > 阈值", params: [{ k: "rsiPeriod", name: "RSI 周期", min: 2, step: 1 }, { k: "rsiThreshold", name: "阈值", min: 0, max: 100, step: 0.1 }] },
+    { key: "condKdj", title: "KDJ(K > D)", params: [{ k: "kdjN", name: "N 周期", min: 1, step: 1 }, { k: "kdjM1", name: "M1 周期", min: 1, step: 1 }, { k: "kdjM2", name: "M2 周期", min: 1, step: 1 }] },
+    { key: "condObv", title: "OBV > MA", params: [{ k: "obvMaPeriod", name: "MA 周期", min: 2, step: 1 }] },
+    { key: "condStochRsi", title: "StochRSI(K > D)", params: [{ k: "stochRsiP", name: "RSI 周期", min: 2, step: 1 }, { k: "stochRsiK", name: "Stoch 周期", min: 2, step: 1 }, { k: "stochRsiSmK", name: "平滑 K", min: 1, step: 1 }, { k: "stochRsiSmD", name: "平滑 D", min: 1, step: 1 }] },
+  ];
+
+  for (const b of builtins) {
+    const card = document.createElement("div");
+    card.className = "cond";
+    const top = document.createElement("div");
+    top.className = "cond-top";
+    const chk = document.createElement("label");
+    chk.className = "check";
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = !!cfg.toggles[b.key];
+    cb.addEventListener("change", () => {
+      state.strategyDraft.toggles[b.key] = !!cb.checked;
+      updateWecomSummary(state.strategyDraft);
+    });
+    chk.appendChild(cb);
+    chk.appendChild(document.createTextNode(` ${b.title}`));
+    top.appendChild(chk);
+
+    const det = document.createElement("details");
+    det.className = "details details-inline";
+    const sum = document.createElement("summary");
+    sum.textContent = "参数";
+    det.appendChild(sum);
+    const plist = document.createElement("div");
+    plist.className = "param-list";
+    for (const p of b.params) {
+      const row = document.createElement("div");
+      row.className = "param-item";
+      const sp = document.createElement("span");
+      sp.className = "label-inline";
+      sp.textContent = p.name;
+      row.appendChild(sp);
+      row.appendChild(
+        makeNumber({
+          value: cfg.params[p.k],
+          min: p.min,
+          max: p.max,
+          step: p.step,
+          onChange: (v) => {
+            state.strategyDraft.params[p.k] = v;
+          },
+        })
+      );
+      plist.appendChild(row);
+    }
+    det.appendChild(plist);
+    top.appendChild(det);
+    card.appendChild(top);
+    host.appendChild(card);
+  }
+
+  host.appendChild(makeLine("自定义因子（从左侧已创建的因子中选择）"));
+  if (!cfg.customFactors.length) {
+    host.appendChild(makeLine("暂无自定义因子"));
+    return;
+  }
+
+  for (const f of cfg.customFactors) {
+    const card = document.createElement("div");
+    card.className = "cond";
+    const top = document.createElement("div");
+    top.className = "cond-top";
+    const chk = document.createElement("label");
+    chk.className = "check";
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = !!f.enabled;
+    cb.addEventListener("change", () => {
+      f.enabled = !!cb.checked;
+      updateWecomSummary(state.strategyDraft);
+    });
+    chk.appendChild(cb);
+    chk.appendChild(document.createTextNode(` [${f.folder || "默认"}] ${f.name || f.id}`));
+    top.appendChild(chk);
+
+    const det = document.createElement("details");
+    det.className = "details details-inline";
+    const sum = document.createElement("summary");
+    sum.textContent = "参数";
+    det.appendChild(sum);
+    const plist = document.createElement("div");
+    plist.className = "param-list";
+
+    if (Array.isArray(f.params) && f.params.length) {
+      const row = document.createElement("div");
+      row.className = "param-item";
+      const sp = document.createElement("span");
+      sp.className = "label-inline";
+      sp.textContent = "n 参数";
+      row.appendChild(sp);
+      const wrap = document.createElement("div");
+      wrap.style.display = "flex";
+      wrap.style.gap = "8px";
+      wrap.style.flexWrap = "wrap";
+      for (let i = 0; i < f.params.length; i++) {
+        const inp = makeNumber({
+          value: f.params[i],
+          step: 1,
+          onChange: (v) => {
+            f.params[i] = v;
+          },
+        });
+        inp.style.width = "86px";
+        inp.title = `n${i + 1}`;
+        wrap.appendChild(inp);
+      }
+      row.appendChild(wrap);
+      plist.appendChild(row);
+    }
+
+    const row2 = document.createElement("div");
+    row2.className = "param-item";
+    const sp2 = document.createElement("span");
+    sp2.className = "label-inline";
+    sp2.textContent = "阈值";
+    row2.appendChild(sp2);
+    const tWrap = document.createElement("div");
+    tWrap.style.display = "flex";
+    tWrap.style.gap = "8px";
+    tWrap.style.flexWrap = "wrap";
+    const thCbLabel = document.createElement("label");
+    thCbLabel.className = "check";
+    const thCb = document.createElement("input");
+    thCb.type = "checkbox";
+    thCb.checked = !!f.thresholdEnabled;
+    thCb.addEventListener("change", () => {
+      f.thresholdEnabled = !!thCb.checked;
+      updateWecomSummary(state.strategyDraft);
+    });
+    thCbLabel.appendChild(thCb);
+    thCbLabel.appendChild(document.createTextNode("启用"));
+    tWrap.appendChild(thCbLabel);
+    const cmpSel = makeSelect({
+      value: f.cmp || ">=",
+      options: [
+        { value: ">=", label: ">=" },
+        { value: ">", label: ">" },
+        { value: "<=", label: "<=" },
+        { value: "<", label: "<" },
+      ],
+      onChange: (v) => {
+        f.cmp = v;
+      },
+    });
+    cmpSel.style.width = "86px";
+    tWrap.appendChild(cmpSel);
+    const thrInp = makeNumber({
+      value: f.threshold,
+      step: 0.0001,
+      onChange: (v) => {
+        f.threshold = v;
+      },
+    });
+    thrInp.style.width = "120px";
+    tWrap.appendChild(thrInp);
+    row2.appendChild(tWrap);
+    plist.appendChild(row2);
+
+    det.appendChild(plist);
+    top.appendChild(det);
+    card.appendChild(top);
+    host.appendChild(card);
+  }
+}
 
 function loadColumnVisibility() {
   try {
@@ -1201,6 +1609,7 @@ function buildDisplayFields(params, customFactors) {
   fields.push({ key: "market", name: "市场", type: "str", get: (r) => marketLabel(r.market) });
   fields.push({ key: "dt_display", name: "时间", type: "dt", get: (r) => r.dt_display });
   fields.push({ key: "close", name: "收盘价", type: "num", get: (r) => r.close });
+  fields.push({ key: "pct_change", name: "涨跌幅(%)", type: "num", get: (r) => r.pct_change });
 
   const maCloseP = params.maPeriodClose;
   const maFast = params.maFast;
@@ -1262,7 +1671,7 @@ function buildDisplayFields(params, customFactors) {
   }
 
   // Filter based on user visibility preference
-  const pinned = new Set(["rank", "symbol", "market", "dt_display", "close"]);
+  const pinned = new Set(["rank", "symbol", "market", "dt_display", "close", "pct_change"]);
   const finalFields = fields.filter(f => {
     if (pinned.has(f.key)) return true;
     if (state.columnVisibility[f.key] === undefined) return true; // Default visible
@@ -1284,7 +1693,7 @@ function updateColumnSelector(allFields) {
   if (currentCount === allFields.length) return;
 
   host.innerHTML = "";
-  const pinned = new Set(["rank", "symbol", "market", "dt_display", "close"]);
+  const pinned = new Set(["rank", "symbol", "market", "dt_display", "close", "pct_change"]);
   for (const f of allFields) {
     const label = document.createElement("label");
     const cb = document.createElement("input");
@@ -1320,9 +1729,10 @@ function buildSortOptionsFromFields(fields, current) {
     sortKeyEl.appendChild(opt);
   }
 
-  const nextKey = existed.has(prevKey) ? prevKey : fields.find((f) => f.key.startsWith("rsi_"))?.key || "close";
+  const defKey = String((state.meta && state.meta.default_sort && state.meta.default_sort.key) || "pct_change");
+  const nextKey = existed.has(prevKey) ? prevKey : (existed.has(defKey) ? defKey : (fields.find((f) => f.key.startsWith("rsi_"))?.key || "close"));
   sortKeyEl.value = nextKey;
-  sortOrderEl.value = sortOrderEl.value || current?.order || "desc";
+  sortOrderEl.value = sortOrderEl.value || current?.order || String((state.meta && state.meta.default_sort && state.meta.default_sort.order) || "desc");
 }
 
 function buildTableHeader(fields) {
@@ -1448,7 +1858,7 @@ function updateSummary(summary) {
 }
 
 function getParams() {
-  const market = ($("marketSelect") && $("marketSelect").value) || "all";
+  const market = getSelectedMarket();
   const symbolQuery = String(state.symbolQuery || "").trim();
   const maPeriodClose = parseIntInput($("maPeriodClose"));
   const maFast = parseIntInput($("maFast"));
@@ -1518,6 +1928,19 @@ function applyAllFilters(rows, params, customFactors) {
   const enabledObv = $("condObv") && $("condObv").checked;
   const enabledStochRsi = $("condStochRsi") && $("condStochRsi").checked;
 
+  const lists0 = state.baseConfig || {};
+  const wl = Array.isArray(lists0.whitelist) ? lists0.whitelist : [];
+  const bl = Array.isArray(lists0.blacklist) ? lists0.blacklist : [];
+  const whitelist = new Set(wl.map((x) => String(x || "").trim().toUpperCase()).filter((x) => x));
+  const blacklist = new Set(bl.map((x) => String(x || "").trim().toUpperCase()).filter((x) => x));
+  const baseSymbol = (sym) => {
+    const s = String(sym || "").trim().toUpperCase();
+    if (s.endsWith("-USDT")) return s.slice(0, -5);
+    if (s.endsWith("USDT")) return s.slice(0, -4);
+    if (s.includes("-")) return s.split("-", 1)[0];
+    return s;
+  };
+
   const selected = [];
   let filteredOut = 0;
   let exprErrors = 0;
@@ -1533,6 +1956,10 @@ function applyAllFilters(rows, params, customFactors) {
       const s = String(r.symbol || "").toUpperCase();
       if (!s.includes(q)) continue;
     }
+    const sym0 = String(r.symbol || "").toUpperCase();
+    const bs0 = baseSymbol(sym0);
+    if (whitelist.size && !whitelist.has(sym0) && !whitelist.has(bs0)) continue;
+    if (blacklist.size && (blacklist.has(sym0) || blacklist.has(bs0))) continue;
     r._builtins = computeBuiltins(r, params);
     r._expr = (r && r._expr && typeof r._expr === "object") ? r._expr : {};
 
@@ -2028,9 +2455,12 @@ function buildWecomConfigFromCurrent() {
     cmp: f.cmp || ">=",
     threshold: Number(f.threshold),
   }));
-  const sortKey = ($("sortKey") && $("sortKey").value) || "close";
-  const sortOrder = ($("sortOrder") && $("sortOrder").value) || "desc";
-  return { params, toggles, customFactors, sort: { key: sortKey, order: sortOrder } };
+  const defKey = String((state.meta && state.meta.default_sort && state.meta.default_sort.key) || "pct_change");
+  const defOrder = String((state.meta && state.meta.default_sort && state.meta.default_sort.order) || "desc");
+  const sortKey = ($("sortKey") && $("sortKey").value) || defKey;
+  const sortOrder = ($("sortOrder") && $("sortOrder").value) || defOrder;
+  const lists = state.baseConfig || loadBaseConfig();
+  return { params, toggles, customFactors, sort: { key: sortKey, order: sortOrder }, lists };
 }
 
 function updateWecomSummary(cfg) {
@@ -2047,11 +2477,137 @@ function updateWecomSummary(cfg) {
   }
   const custom = Array.isArray(cfg.customFactors) ? cfg.customFactors.filter((x) => x && x.enabled) : [];
   const lines = [];
-  lines.push(`市场：${cfg.params && cfg.params.market ? cfg.params.market : "all"}`);
+  const mk0 = cfg.params && cfg.params.market ? String(cfg.params.market) : "all";
+  const mk = mk0 === "spot" || mk0 === "swap" || mk0 === "all" ? mk0 : "all";
+  const mkLabel = mk === "spot" ? "现货" : (mk === "swap" ? "合约" : "全市场");
+  lines.push(`市场：${mkLabel}`);
   lines.push(`内置条件：${on.length ? on.join(", ") : "无"}`);
   lines.push(`自定义条件：${custom.length}`);
   lines.push(`排序：${cfg.sort && cfg.sort.key ? cfg.sort.key : "close"} ${cfg.sort && cfg.sort.order ? cfg.sort.order : "desc"}`);
   el.textContent = lines.join(" ｜ ");
+}
+
+function parseSymbolListText(text) {
+  const s = String(text || "").trim();
+  if (!s) return [];
+  const parts = s.split(/[\s,，;；]+/g).map((x) => String(x || "").trim().toUpperCase()).filter((x) => x);
+  const uniq = [];
+  const seen = new Set();
+  for (const x of parts) {
+    if (seen.has(x)) continue;
+    seen.add(x);
+    uniq.push(x);
+  }
+  return uniq;
+}
+
+function renderStrategyGroupSelect() {
+  const sel = $("strategySelect");
+  if (!sel) return;
+  sel.innerHTML = "";
+  const gs = Array.isArray(state.strategyGroups) ? state.strategyGroups : [];
+  if (!gs.length) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "（无策略组）";
+    sel.appendChild(opt);
+    return;
+  }
+  const opt0 = document.createElement("option");
+  opt0.value = "";
+  opt0.textContent = "（不选择）";
+  sel.appendChild(opt0);
+  for (const g of gs) {
+    const opt = document.createElement("option");
+    opt.value = String(g.id || "");
+    opt.textContent = String(g.name || g.id || "");
+    sel.appendChild(opt);
+  }
+}
+
+function getSelectedStrategyGroup() {
+  const sel = $("strategySelect");
+  const id = sel ? String(sel.value || "") : "";
+  if (!id) return null;
+  const gs = Array.isArray(state.strategyGroups) ? state.strategyGroups : [];
+  return gs.find((x) => String(x.id || "") === id) || null;
+}
+
+function mergeConfigWithBase(cfg) {
+  const base = state.baseConfig || loadBaseConfig();
+  const out = Object.assign({}, cfg || {});
+  out.lists = { whitelist: (base.whitelist || []), blacklist: (base.blacklist || []) };
+  return out;
+}
+
+function applyConfigToUI(cfg) {
+  const params = (cfg && cfg.params) ? cfg.params : {};
+  const toggles = (cfg && cfg.toggles) ? cfg.toggles : {};
+  if (params.market) setSelectedMarket(params.market);
+  for (const [id, v] of Object.entries(params)) {
+    const el = $(id);
+    if (!el) continue;
+    if (el.tagName === "INPUT" || el.tagName === "SELECT" || el.tagName === "TEXTAREA") {
+      if (el.type === "checkbox") el.checked = !!v;
+      else el.value = String(v);
+    }
+  }
+  for (const [k, v] of Object.entries(toggles)) {
+    const el = $(k);
+    if (el && el.type === "checkbox") el.checked = !!v;
+  }
+  if ($("sortKey") && cfg && cfg.sort && cfg.sort.key) $("sortKey").value = String(cfg.sort.key);
+  if ($("sortOrder") && cfg && cfg.sort && cfg.sort.order) $("sortOrder").value = String(cfg.sort.order);
+  if (Array.isArray(cfg && cfg.customFactors)) {
+    state.customFactors = cfg.customFactors.map((f) => ({
+      id: f.id,
+      folder: f.folder || "默认",
+      name: f.name,
+      template: f.template || "",
+      params: Array.isArray(f.params) ? f.params : [],
+      enabled: !!f.enabled,
+      thresholdEnabled: !!f.thresholdEnabled,
+      cmp: f.cmp || ">=",
+      threshold: Number(f.threshold),
+      showColumn: f.showColumn !== undefined ? !!f.showColumn : (f.show !== undefined ? !!f.show : true),
+      show: f.show !== undefined ? !!f.show : (f.showColumn !== undefined ? !!f.showColumn : true),
+    }));
+    saveCustomFactors(state.customFactors);
+    updateFolderOptions();
+    renderFolderConditions();
+    renderCustomFactorList();
+  }
+}
+
+async function openBaseConfigModal() {
+  renderStrategyGroupSelect();
+  const cfg = state.baseConfig || loadBaseConfig();
+  state.baseConfig = cfg;
+  if ($("whitelistText")) $("whitelistText").value = (cfg.whitelist || []).join(",");
+  if ($("blacklistText")) $("blacklistText").value = (cfg.blacklist || []).join(",");
+  if ($("baseMarketSelect")) $("baseMarketSelect").value = getSelectedMarket();
+  if ($("sendEmailTo")) {
+    try {
+      const raw = localStorage.getItem("crypto_screener_send_email_to_v1");
+      if (raw) $("sendEmailTo").value = String(raw || "");
+    } catch {}
+  }
+  const serverCfg = await loadWecomConfig();
+  if (serverCfg) {
+    if ($("wecomWebhook")) $("wecomWebhook").value = String(serverCfg.webhook_url || "");
+    if ($("wecomEnabled")) $("wecomEnabled").checked = !!serverCfg.enabled;
+    if ($("wecomTopN")) $("wecomTopN").value = String(serverCfg.top_n || 20);
+    if (serverCfg.config) state.strategyDraft = normalizeStrategyConfig(serverCfg.config);
+    else state.strategyDraft = normalizeStrategyConfig(buildWecomConfigFromCurrent());
+  } else {
+    state.strategyDraft = normalizeStrategyConfig(buildWecomConfigFromCurrent());
+  }
+  if (state.strategyDraft && state.strategyDraft.params && state.strategyDraft.params.market) setSelectedMarket(state.strategyDraft.params.market);
+  renderStrategyCondEditor();
+  updateWecomSummary(state.strategyDraft);
+  setText("wecomResult", "-");
+  setBaseCfgPane(loadBaseCfgPane());
+  setModalOpen("wecomModal", true);
 }
 
 async function postJson(url, data) {
@@ -2192,6 +2748,7 @@ function rerenderFromLatest() {
     const { sorted, sortKey } = sortRows(selected, displayFields);
     assignRank(sorted, sortKey, displayFields);
     renderTable(sorted, displayFields);
+    saveLastPicks(sorted, latest.summary || {});
     syncSelectedRowFrom(sorted);
     const parts = [];
     if (exprErrors) parts.push(`表达式异常：${exprErrors}`);
@@ -2379,7 +2936,6 @@ function initControls(meta) {
     });
   }
 
-  if ($("marketSelect")) $("marketSelect").value = "all";
   $("maPeriodClose").value = String(cfg.cond_ma_slow || 20);
   $("maFast").value = String(cfg.cond_ma_fast || 10);
   $("maSlow").value = String(cfg.cond_ma_slow || 20);
@@ -2413,7 +2969,7 @@ function initControls(meta) {
 
   const ids = [
     "maPeriodClose", "maFast", "maSlow", "rsiPeriod", "rsiThreshold",
-    "condCloseMa", "condMa", "condRsi", "marketSelect",
+    "condCloseMa", "condMa", "condRsi",
     "emaPeriod", "bollPeriod", "bollStd", "bollDownPeriod", "bollDownStd", "superAtrPeriod", "superMult",
     "kdjN", "kdjM1", "kdjM2", "obvMaPeriod", "stochRsiP", "stochRsiK", "stochRsiSmK", "stochRsiSmD",
     "condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"
@@ -2422,10 +2978,6 @@ function initControls(meta) {
   for (const id of ids) {
     const el = $(id);
     if (!el) continue;
-    if (id === "marketSelect") {
-      el.addEventListener("change", () => rerenderFromLatest());
-      continue;
-    }
     const dyn = new Set(["condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"]);
     if (dyn.has(id)) {
       el.addEventListener("change", () => (el.checked ? refreshFactors() : rerenderFromLatest()));
@@ -2449,7 +3001,6 @@ function initControls(meta) {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       setHelpOpen(false);
-      setModalOpen("plansModal", false);
       setModalOpen("updateModal", false);
       setModalOpen("tutorialModal", false);
       setModalOpen("wecomModal", false);
@@ -2501,9 +3052,6 @@ function initControls(meta) {
     if (e.target && (menu.contains(e.target) || ($("profileBtn") && $("profileBtn").contains(e.target)))) return;
     closeProfileMenu();
   });
-  $("menuPlans").addEventListener("click", () => { closeProfileMenu(); setModalOpen("plansModal", true); });
-  $("plansClose").addEventListener("click", () => setModalOpen("plansModal", false));
-  $("plansModal").addEventListener("click", (e) => { if (e.target && e.target.id === "plansModal") setModalOpen("plansModal", false); });
 
   $("menuUpdateNotes").addEventListener("click", () => {
     closeProfileMenu();
@@ -2544,6 +3092,11 @@ function initControls(meta) {
     if ($("feedbackText")) $("feedbackText").value = "";
     setModalOpen("feedbackModal", true);
   });
+
+  $("menuBaseConfig").addEventListener("click", () => {
+    closeProfileMenu();
+    openBaseConfigModal();
+  });
   $("feedbackClose").addEventListener("click", () => setModalOpen("feedbackModal", false));
   $("feedbackModal").addEventListener("click", (e) => { if (e.target && e.target.id === "feedbackModal") setModalOpen("feedbackModal", false); });
   $("feedbackSend").addEventListener("click", async () => {
@@ -2567,28 +3120,115 @@ function initControls(meta) {
     }
   });
 
-  $("menuTestFeature").addEventListener("click", () => {
-    closeProfileMenu();
-    (async () => {
-      const serverCfg = await loadWecomConfig();
-      if (serverCfg) {
-        if ($("wecomWebhook")) $("wecomWebhook").value = String(serverCfg.webhook_url || "");
-        if ($("wecomEnabled")) $("wecomEnabled").checked = !!serverCfg.enabled;
-        if ($("wecomTopN")) $("wecomTopN").value = String(serverCfg.top_n || 20);
-        if (serverCfg.config) updateWecomSummary(serverCfg.config);
-        else updateWecomSummary(buildWecomConfigFromCurrent());
-      } else {
-        updateWecomSummary(buildWecomConfigFromCurrent());
-      }
-      setText("wecomResult", "-");
-      setModalOpen("wecomModal", true);
-    })();
-  });
   $("wecomClose").addEventListener("click", () => setModalOpen("wecomModal", false));
   $("wecomModal").addEventListener("click", (e) => { if (e.target && e.target.id === "wecomModal") setModalOpen("wecomModal", false); });
+  const baseTabs = [
+    ["basecfgTabPlans", "plans"],
+    ["basecfgTabMarket", "market"],
+    ["basecfgTabStrategy", "strategy"],
+    ["basecfgTabPush", "push"],
+  ];
+  for (const [id, pane] of baseTabs) {
+    const el = $(id);
+    if (!el) continue;
+    el.addEventListener("click", () => setBaseCfgPane(pane));
+  }
+  if ($("baseMarketApply")) {
+    $("baseMarketApply").addEventListener("click", async () => {
+      const v = ($("baseMarketSelect") && $("baseMarketSelect").value) ? $("baseMarketSelect").value : "all";
+      setSelectedMarket(v);
+      if (state.strategyDraft && state.strategyDraft.params) state.strategyDraft.params.market = getSelectedMarket();
+      updateWecomSummary(state.strategyDraft);
+      setText("wecomResult", "市场已应用");
+      rerenderFromLatest();
+    });
+  }
+  if ($("strategySelect")) {
+    $("strategySelect").addEventListener("change", () => {
+      const g = getSelectedStrategyGroup();
+      if ($("strategyName")) $("strategyName").value = g && g.name ? String(g.name) : "";
+      if (g && g.config) state.strategyDraft = normalizeStrategyConfig(g.config);
+      else state.strategyDraft = normalizeStrategyConfig(buildWecomConfigFromCurrent());
+      if (state.strategyDraft && state.strategyDraft.params && state.strategyDraft.params.market) setSelectedMarket(state.strategyDraft.params.market);
+      renderStrategyCondEditor();
+      updateWecomSummary(state.strategyDraft);
+      setText("wecomResult", "-");
+    });
+  }
+  $("strategySaveCurrent").addEventListener("click", () => {
+    const name = ($("strategyName").value || "").trim();
+    if (!name) {
+      setText("wecomResult", "请填写策略组名称");
+      return;
+    }
+    const draft = normalizeStrategyConfig(state.strategyDraft || buildWecomConfigFromCurrent());
+    if (!strategyHasAnyCondition(draft)) {
+      setText("wecomResult", "请至少选择一个条件后再保存策略组");
+      return;
+    }
+    const g0 = getSelectedStrategyGroup();
+    const id = g0 && g0.id ? String(g0.id) : String(Date.now());
+    const cfg0 = mergeConfigWithBase(draft);
+    const cfg = {
+      ...cfg0,
+      customFactors: Array.isArray(cfg0.customFactors) ? cfg0.customFactors.map((f) => ({ ...f, showColumn: (f && f.show !== undefined) ? !!f.show : undefined })) : [],
+    };
+    const gs = Array.isArray(state.strategyGroups) ? state.strategyGroups.slice() : [];
+    const idx = gs.findIndex((x) => String(x && x.id ? x.id : "") === id);
+    if (idx >= 0) gs[idx] = { ...gs[idx], id, name, config: cfg };
+    else gs.push({ id, name, config: cfg });
+    state.strategyGroups = gs;
+    saveStrategyGroups(gs);
+    renderStrategyGroupSelect();
+    if ($("strategySelect")) $("strategySelect").value = id;
+    setText("wecomResult", idx >= 0 ? "策略组已更新" : "策略组已保存");
+  });
+  $("strategyApply").addEventListener("click", async () => {
+    const draft = normalizeStrategyConfig(state.strategyDraft || buildWecomConfigFromCurrent());
+    if (!strategyHasAnyCondition(draft)) {
+      setText("wecomResult", "请至少选择一个条件后再应用");
+      return;
+    }
+    const cfg0 = mergeConfigWithBase(draft);
+    const cfg = {
+      ...cfg0,
+      customFactors: Array.isArray(cfg0.customFactors) ? cfg0.customFactors.map((f) => ({ ...f, showColumn: (f && f.show !== undefined) ? !!f.show : undefined })) : [],
+    };
+    applyConfigToUI(cfg);
+    setText("wecomResult", "已应用到主页");
+    await refresh({ skipBackend: true });
+  });
+  $("strategyDelete").addEventListener("click", () => {
+    const g = getSelectedStrategyGroup();
+    if (!g) {
+      setText("wecomResult", "请选择策略组");
+      return;
+    }
+    const gs = Array.isArray(state.strategyGroups) ? state.strategyGroups.slice() : [];
+    const next = gs.filter((x) => String(x.id || "") !== String(g.id || ""));
+    state.strategyGroups = next;
+    saveStrategyGroups(next);
+    renderStrategyGroupSelect();
+    state.strategyDraft = normalizeStrategyConfig(buildWecomConfigFromCurrent());
+    renderStrategyCondEditor();
+    updateWecomSummary(state.strategyDraft);
+    setText("wecomResult", "策略组已删除");
+  });
+  $("saveBaseConfig").addEventListener("click", async () => {
+    const wl = parseSymbolListText($("whitelistText").value || "");
+    const bl0 = parseSymbolListText($("blacklistText").value || "");
+    const bl = bl0.length ? bl0 : defaultBlacklist.slice();
+    const base0 = state.baseConfig || loadBaseConfig();
+    const cfg = { ...(base0 || {}), whitelist: wl, blacklist: bl };
+    state.baseConfig = cfg;
+    saveBaseConfig(cfg);
+    setText("wecomResult", "黑白名单已保存");
+    await refresh({ skipBackend: true });
+  });
   $("wecomImport").addEventListener("click", () => {
-    const cfg = buildWecomConfigFromCurrent();
-    updateWecomSummary(cfg);
+    state.strategyDraft = normalizeStrategyConfig(buildWecomConfigFromCurrent());
+    renderStrategyCondEditor();
+    updateWecomSummary(state.strategyDraft);
     setText("wecomResult", "已导入当前筛选");
   });
 
@@ -2596,7 +3236,7 @@ function initControls(meta) {
     const webhook_url = ($("wecomWebhook").value || "").trim();
     const enabled = !!($("wecomEnabled") && $("wecomEnabled").checked);
     const top_n = Number($("wecomTopN").value || 20);
-    const config = buildWecomConfigFromCurrent();
+    const config = mergeConfigWithBase(normalizeStrategyConfig(state.strategyDraft || buildWecomConfigFromCurrent()));
     try {
       const { r, j } = await postJson("./api/wecom_config", { webhook_url, enabled, top_n, config });
       if (!r.ok) {
@@ -2613,7 +3253,7 @@ function initControls(meta) {
   $("wecomSendNow").addEventListener("click", async () => {
     const webhook_url = ($("wecomWebhook").value || "").trim();
     const top_n = Number($("wecomTopN").value || 20);
-    const config = buildWecomConfigFromCurrent();
+    const config = mergeConfigWithBase(normalizeStrategyConfig(state.strategyDraft || buildWecomConfigFromCurrent()));
     try {
       const { r, j } = await postJson("./api/wecom/send_now", { webhook_url, top_n, config });
       if (!r.ok) {
@@ -2630,6 +3270,29 @@ function initControls(meta) {
       if (d && d.image) parts.push(`图片：${d.image.ok ? "成功" : "失败"}${d.image.message ? "（" + d.image.message + "）" : ""}`);
       if (parts.length) setText("wecomResult", parts.join(" ｜ "));
       else setText("wecomResult", (j && j.message) || "已发送");
+    } catch {
+      setText("wecomResult", "发送失败");
+    }
+  });
+
+  $("emailSendNow").addEventListener("click", async () => {
+    const to_email = ($("sendEmailTo").value || "").trim();
+    if (!to_email) {
+      setText("wecomResult", "请填写收件人邮箱");
+      return;
+    }
+    try {
+      localStorage.setItem("crypto_screener_send_email_to_v1", to_email);
+    } catch {}
+    const top_n = Number($("wecomTopN").value || 20);
+    const config = mergeConfigWithBase(normalizeStrategyConfig(state.strategyDraft || buildWecomConfigFromCurrent()));
+    try {
+      const { r, j } = await postJson("./api/email/send_now", { to_email, top_n, config });
+      if (!r.ok) {
+        setText("wecomResult", (j && j.message) || "发送失败");
+        return;
+      }
+      setText("wecomResult", "已发送");
     } catch {
       setText("wecomResult", "发送失败");
     }
@@ -2657,6 +3320,8 @@ async function boot() {
   const localFactors = loadCustomFactors();
   state.customFactors = localFactors;
   state.columnVisibility = loadColumnVisibility();
+  state.baseConfig = loadBaseConfig();
+  state.strategyGroups = loadStrategyGroups();
   updateFolderOptions();
   renderFolderConditions();
   renderCustomFactorList();

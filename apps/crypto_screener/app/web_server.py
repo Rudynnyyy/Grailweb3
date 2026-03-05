@@ -172,6 +172,21 @@ def _normalize_email_addr(raw: str) -> str:
     return out
 
 
+def _username_ok_public(u: str) -> bool:
+    s = (u or "").strip()
+    if not s:
+        return False
+    if len(s) < 3 or len(s) > 32:
+        return False
+    for ch in s:
+        if ch.isalnum():
+            continue
+        if ch in ("_", "-", "."):
+            continue
+        return False
+    return True
+
+
 def _send_email_code(*, to_email: str, scene: str, code: str) -> tuple[bool, str]:
     host = (os.environ.get("QC_SMTP_HOST") or "").strip()
     port_raw = (os.environ.get("QC_SMTP_PORT") or "").strip()
@@ -219,6 +234,11 @@ def _send_email_code(*, to_email: str, scene: str, code: str) -> tuple[bool, str
                 s.login(user, pwd)
                 s.send_message(msg, from_addr=user_addr, to_addrs=[to_addr])
         return True, "ok"
+    except smtplib.SMTPAuthenticationError:
+        return (
+            False,
+            "邮箱服务认证失败：请检查 QC_SMTP_USER/QC_SMTP_PASS 是否正确；多数邮箱需要开启SMTP并使用授权码（非网页登录密码），如开启了二次验证需使用应用专用密码。",
+        )
     except Exception as e:
         return False, str(e)
 
@@ -264,6 +284,11 @@ def _send_email(*, to_email: str, subject: str, body: str) -> tuple[bool, str]:
                 s.login(user, pwd)
                 s.send_message(msg, from_addr=user_addr, to_addrs=[to_addr])
         return True, "ok"
+    except smtplib.SMTPAuthenticationError:
+        return (
+            False,
+            "邮箱服务认证失败：请检查 QC_SMTP_USER/QC_SMTP_PASS 是否正确；多数邮箱需要开启SMTP并使用授权码（非网页登录密码），如开启了二次验证需使用应用专用密码。",
+        )
     except Exception as e:
         return False, str(e)
 
@@ -466,20 +491,106 @@ def _series_to_list(arr) -> list[float | None]:
     return out
 
 
+def _config_needs_series(config: dict) -> bool:
+    try:
+        toggles = (config or {}).get("toggles") or {}
+        custom_factors = (config or {}).get("customFactors") or []
+        sort0 = (config or {}).get("sort") or {}
+    except Exception:
+        toggles = {}
+        custom_factors = []
+        sort0 = {}
+    for k in ("condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"):
+        try:
+            if bool(toggles.get(k)):
+                return True
+        except Exception:
+            continue
+    try:
+        for f in custom_factors:
+            if not isinstance(f, dict):
+                continue
+            if bool(f.get("enabled")) or bool(f.get("thresholdEnabled")) or bool(f.get("showColumn")):
+                return True
+    except Exception:
+        pass
+    sk = str((sort0 or {}).get("key") or "")
+    if sk.startswith("_expr."):
+        return True
+    if sk in ("ema", "boll_up", "boll_down", "supertrend", "kdj_k", "kdj_d", "obv", "obv_ma", "stoch_rsi_k", "stoch_rsi_d"):
+        return True
+    return False
+
+
+def _attach_series_to_rows(*, rows: list[dict], config: dict, tail: int) -> list[dict]:
+    if not rows:
+        return []
+    if not _config_needs_series(config):
+        return rows
+    try:
+        t = int(tail)
+    except Exception:
+        t = 720
+    t = max(60, min(3650, t))
+    out: list[dict] = []
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        m = str(r.get("market") or "").lower()
+        s = str(r.get("symbol") or "")
+        if not m or not s:
+            out.append(r)
+            continue
+        try:
+            ctx = _get_series_cached(market=m, symbol=s, tail=t)
+        except Exception:
+            ctx = None
+        if not isinstance(ctx, dict):
+            out.append(r)
+            continue
+        series0 = ctx.get("series")
+        dt0 = ctx.get("dt")
+        latest0 = ctx.get("latest") if isinstance(ctx.get("latest"), dict) else {}
+        r2 = dict(r)
+        if isinstance(series0, dict):
+            s_out: dict[str, Any] = {}
+            for k in ("open", "high", "low", "close", "volume", "quote_volume"):
+                arr = series0.get(k)
+                if isinstance(arr, list):
+                    s_out[k] = arr
+                else:
+                    s_out[k] = _series_to_list(arr)
+            r2["series"] = s_out
+        try:
+            c0 = latest0.get("close") if isinstance(latest0, dict) else None
+            if c0 is not None:
+                r2["close"] = float(c0)
+        except Exception:
+            pass
+        try:
+            if isinstance(dt0, list) and dt0:
+                r2["dt_close"] = str(dt0[-1])
+        except Exception:
+            pass
+        out.append(r2)
+    return out
+
+
 def _build_wecom_markdown(*, latest: dict | None, rows: list[dict], top_n: int) -> str:
     summary = (latest or {}).get("summary") or {}
     dt = str(summary.get("latest_dt_display") or summary.get("latest_dt_close") or summary.get("generated_at") or "")
-    title = f"**自动化选币器｜每小时推送**\n> 时间：{dt}\n> 命中：{len(rows)}\n"
+    title = f"时间：{dt} ｜ 命中：{len(rows)}\n"
     if not rows:
         return title + "\n无命中\n"
     lines = []
     for r in rows[: max(1, int(top_n))]:
         sym = _strip_quote(str(r.get("symbol") or ""))
-        m = str(r.get("market") or "")
+        m0 = str(r.get("market") or "").lower()
+        m = "现货" if m0 == "spot" else ("合约" if m0 == "swap" else str(r.get("market") or ""))
         close = r.get("close")
         rk = r.get("_rank")
         close_s = f"{float(close):.6g}" if isinstance(close, (int, float)) else (str(close) if close is not None else "")
-        lines.append(f"- {rk}. {sym} ({m})  close={close_s}")
+        lines.append(f"- {rk}. {sym}（{m}） close={close_s}")
     return title + "\n".join(lines)
 
 
@@ -499,15 +610,15 @@ def _send_wecom_for_all_enabled() -> None:
                 webhook_url = str(c.get("webhook_url") or "").strip()
                 top_n = int(c.get("top_n") or 20)
                 config = c.get("config") if isinstance(c.get("config"), dict) else {}
-                r = apply_all_filters(all_rows, config)
+                tail0 = int(((latest or {}).get("config") or {}).get("tail_len") or 720)
+                rows0 = _attach_series_to_rows(rows=all_rows, config=config, tail=tail0)
+                r = apply_all_filters(rows0, config)
                 selected = r.get("selected") if isinstance(r, dict) else []
                 selected = selected if isinstance(selected, list) else []
                 sorted_rows, sort_key = sort_rows(selected, config)
                 assign_rank(sorted_rows, sort_key, config)
-                content = _build_wecom_markdown(latest=latest, rows=sorted_rows, top_n=top_n)
-                send_markdown(webhook_url=webhook_url, content=content)
                 try:
-                    img = render_selection_png(title="Auto Crypto Screener", rows=sorted_rows, top_n=top_n)
+                    img = render_selection_png(title="", rows=sorted_rows, top_n=top_n)
                     send_image(webhook_url=webhook_url, image_bytes=img)
                 except Exception:
                     pass
@@ -1029,29 +1140,62 @@ class Handler(BaseHTTPRequestHandler):
             if not all_rows:
                 self._send_json(500, {"ok": False, "error": "no_snapshot", "message": "快照不存在，请先运行一次更新/生成快照"})
                 return
-            r = apply_all_filters(all_rows, config)
+            tail0 = int(((latest or {}).get("config") or {}).get("tail_len") or 720)
+            rows0 = _attach_series_to_rows(rows=all_rows, config=config, tail=tail0)
+            r = apply_all_filters(rows0, config)
             selected = r.get("selected") if isinstance(r, dict) else []
             selected = selected if isinstance(selected, list) else []
             sorted_rows, sort_key = sort_rows(selected, config)
             assign_rank(sorted_rows, sort_key, config)
-            content = _build_wecom_markdown(latest=latest, rows=sorted_rows, top_n=top_n)
-            text_ok, text_msg = send_markdown(webhook_url=webhook_url, content=content)
+            text_ok, text_msg = True, "skipped"
             img_ok = False
             img_msg = "skipped"
             try:
-                img = render_selection_png(title="Auto Crypto Screener", rows=sorted_rows, top_n=top_n)
+                img = render_selection_png(title="", rows=sorted_rows, top_n=top_n)
                 img_ok, img_msg = send_image(webhook_url=webhook_url, image_bytes=img)
             except Exception as e:
                 img_ok, img_msg = False, str(e)
 
             detail = {"text": {"ok": text_ok, "message": text_msg}, "image": {"ok": img_ok, "message": img_msg}}
-            if text_ok and img_ok:
+            if img_ok:
                 self._send_json(200, {"ok": True, "detail": detail})
                 return
-            if text_ok or img_ok:
-                self._send_json(200, {"ok": True, "detail": detail, "message": "部分发送成功"})
-                return
             self._send_json(500, {"ok": False, "error": "send_failed", "message": "发送失败", "detail": detail})
+            return
+        if path == "/api/email/send_now":
+            user = self._require_auth()
+            if not user:
+                return
+            payload = self._read_json() or {}
+            to_email = str(payload.get("to_email") or "").strip()
+            if not to_email:
+                self._send_json(400, {"ok": False, "error": "bad_request", "message": "收件人邮箱不能为空"})
+                return
+            try:
+                top_n = int(payload.get("top_n") or 20)
+            except Exception:
+                top_n = 20
+            config = payload.get("config") if isinstance(payload.get("config"), dict) else {}
+            latest, all_rows = _load_latest_rows()
+            if not all_rows:
+                self._send_json(500, {"ok": False, "error": "no_snapshot", "message": "快照不存在，请先运行一次更新/生成快照"})
+                return
+            tail0 = int(((latest or {}).get("config") or {}).get("tail_len") or 720)
+            rows0 = _attach_series_to_rows(rows=all_rows, config=config, tail=tail0)
+            r = apply_all_filters(rows0, config)
+            selected = r.get("selected") if isinstance(r, dict) else []
+            selected = selected if isinstance(selected, list) else []
+            sorted_rows, sort_key = sort_rows(selected, config)
+            assign_rank(sorted_rows, sort_key, config)
+            content = _build_wecom_markdown(latest=latest, rows=sorted_rows, top_n=top_n)
+            summary = (latest or {}).get("summary") or {}
+            dt = str(summary.get("latest_dt_display") or summary.get("latest_dt_close") or summary.get("generated_at") or "")
+            subject = f"自动化选币器｜{dt}"
+            ok, msg = _send_email(to_email=to_email, subject=subject, body=content)
+            if ok:
+                self._send_json(200, {"ok": True})
+                return
+            self._send_json(500, {"ok": False, "error": "email_send_failed", "message": msg})
             return
         if path == "/api/custom_factors/replace":
             user = self._require_auth()
@@ -1247,6 +1391,19 @@ class Handler(BaseHTTPRequestHandler):
             enabled = bool(prefix and scene_id)
             self._send_json(200, {"ok": True, "captcha": {"enabled": enabled, "prefix": prefix, "sceneId": scene_id, "region": region}})
             return
+        if path == "/api/check_username":
+            qs = parse_qs(parsed.query or "")
+            username = (qs.get("username", [""])[0] or "").strip()
+            valid = _username_ok_public(username)
+            exists = False
+            if valid:
+                try:
+                    u = get_user_by_username_or_phone(auth_cfg, identity=username)
+                    exists = bool(u and str(u.get("username") or "") == username)
+                except Exception:
+                    exists = False
+            self._send_json(200, {"ok": True, "username": username, "valid": valid, "exists": exists})
+            return
         if path == "/api/debug_env":
             missing = _sms_missing_env()
             self._send_json(
@@ -1380,7 +1537,7 @@ class Handler(BaseHTTPRequestHandler):
                 base_dc = dc_swap_dir if market == "swap" else dc_spot_dir
                 csv_info["merge_dir"] = str(base_merge)
                 csv_info["dc_dir"] = str(base_dc)
-                p0, picked_sym = ss._pick_existing_csv([base_merge, base_dc], sym)
+                p0, picked_sym = ss._pick_existing_csv([base_merge, base_dc], sym, tail_hint=tail)
                 if p0 is not None:
                     csv_info["picked_sym"] = picked_sym
                     csv_info["csv_path"] = str(p0)

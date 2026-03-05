@@ -7,6 +7,7 @@ const placementStorageKey = "crypto_screener_kline_placement_v1";
 const tailStorageKey = "crypto_screener_kline_tail_v2";
 const hiddenKeysStorageKey = "crypto_screener_kline_hidden_keys_v1";
 const customFactorsStorageKey = "crypto_screener_custom_factors_v1";
+const lastPicksStorageKey = "crypto_screener_last_picks_v1";
 const axisL = 72;
 try {
   window.__klineStarted = true;
@@ -15,6 +16,7 @@ const viewState = {
   key: "",
   row: null,
   latestSummary: null,
+  latestRows: [],
   barHours: 1,
   dt: [],
   timesMs: [],
@@ -37,6 +39,9 @@ const viewState = {
   dragStartX: 0,
   dragStartOffset: 0,
   hoverLocalIdx: null,
+  pickQuery: "",
+  pickRows: [],
+  pickLabel: "",
 };
 
 function loadPlacement() {
@@ -130,6 +135,108 @@ function updateChipBar(host, items) {
       scheduleDraw();
     });
     host.appendChild(btn);
+  }
+}
+
+function pickKey(row) {
+  return `${String(row && row.market ? row.market : "")}|${String(row && row.symbol ? row.symbol : "")}`;
+}
+
+function setSelectedKey(nextKey) {
+  const k = String(nextKey || "");
+  if (!k) return;
+  try {
+    localStorage.setItem(selectedKeyStorageKey, k);
+  } catch {}
+  try {
+    const u = new URL(window.location.href);
+    u.searchParams.set("key", k);
+    window.history.replaceState({}, "", u.toString());
+  } catch {}
+}
+
+function renderPickList(rows, activeKey) {
+  const host = document.getElementById("pickList");
+  if (!host) return;
+  const q = String(viewState.pickQuery || "").trim().toUpperCase();
+  const arr0 = Array.isArray(rows) ? rows : [];
+  const arr = arr0
+    .filter((r) => {
+      if (!q) return true;
+      const s = stripQuote(r && r.symbol ? r.symbol : "").toUpperCase();
+      return s.includes(q);
+    })
+    .slice()
+    .sort((a, b) => {
+      const ra = Number(a && (a.rank ?? a._rank));
+      const rb = Number(b && (b.rank ?? b._rank));
+      const va = Number.isFinite(ra) ? ra : 1e12;
+      const vb = Number.isFinite(rb) ? rb : 1e12;
+      return va - vb;
+    });
+
+  host.innerHTML = "";
+  for (const r of arr) {
+    const key = pickKey(r);
+    const item = document.createElement("div");
+    item.className = "kline-pick-item";
+    item.classList.toggle("active", key === String(activeKey || ""));
+    const rankEl = document.createElement("div");
+    rankEl.className = "kline-pick-rank";
+    const rr = Number(r && (r.rank ?? r._rank));
+    rankEl.textContent = Number.isFinite(rr) ? `#${Math.trunc(rr)}` : "";
+    const nameEl = document.createElement("div");
+    nameEl.className = "kline-pick-name";
+    nameEl.textContent = stripQuote(r && r.symbol ? r.symbol : "");
+    const sub = document.createElement("div");
+    sub.className = "kline-pick-sub";
+    const market = document.createElement("span");
+    market.textContent = marketLabel(r && r.market ? r.market : "");
+    const close = document.createElement("span");
+    close.textContent = `收盘 ${fmtNum(r && r.close)}`;
+    const pct = document.createElement("span");
+    const p0 = Number(r && r.pct_change);
+    if (Number.isFinite(p0)) {
+      pct.textContent = `${p0.toFixed(2)}%`;
+      pct.className = p0 >= 0 ? "up" : "down";
+    } else {
+      pct.textContent = "-";
+    }
+    sub.appendChild(market);
+    sub.appendChild(close);
+    sub.appendChild(pct);
+    item.appendChild(rankEl);
+    item.appendChild(nameEl);
+    item.appendChild(sub);
+    item.addEventListener("click", () => {
+      if (!key || key === String(viewState.key || "")) return;
+      setSelectedKey(key);
+      render();
+    });
+    host.appendChild(item);
+  }
+
+  const meta = document.getElementById("pickMeta");
+  if (meta) {
+    const total = arr0.length;
+    const shown = arr.length;
+    const head = String(viewState.pickLabel || "");
+    const base = q ? `匹配 ${shown}/${total}` : `共 ${total}`;
+    meta.textContent = head ? `${head}｜${base}` : base;
+  }
+}
+
+function loadLastPicks() {
+  try {
+    const raw = localStorage.getItem(lastPicksStorageKey);
+    const j = raw ? JSON.parse(raw) : null;
+    if (!j || typeof j !== "object") return null;
+    const rows = Array.isArray(j.rows) ? j.rows : [];
+    const summary = j.summary && typeof j.summary === "object" ? j.summary : {};
+    const saved_at = String(j.saved_at || "");
+    return { rows, summary, saved_at };
+  } catch {
+    return null;
   }
 }
 
@@ -665,7 +772,9 @@ function drawLineSeries(ctx, arr, mapX, mapY, color) {
   ctx.beginPath();
   let started = false;
   for (let i = 0; i < arr.length; i++) {
-    const v = Number(arr[i]);
+    const v0 = arr[i];
+    if (v0 === null || v0 === undefined) continue;
+    const v = Number(v0);
     if (!Number.isFinite(v)) continue;
     const x = mapX(i);
     const y = mapY(v);
@@ -1113,7 +1222,22 @@ async function render() {
 
     const latest = await loadJsonNoCache("./data/latest.json");
     const rows = Array.isArray(latest.results) ? latest.results : [];
+    viewState.latestRows = rows;
+    const lastPicks = loadLastPicks();
+    const pickRows = lastPicks && Array.isArray(lastPicks.rows) && lastPicks.rows.length ? lastPicks.rows : rows;
+    viewState.pickRows = pickRows;
+    viewState.pickLabel = lastPicks && Array.isArray(lastPicks.rows) && lastPicks.rows.length ? "主页" : "";
     const row = rows.find((r) => `${String(r.market)}|${String(r.symbol)}` === selectedKey);
+    const searchEl = document.getElementById("pickSearch");
+    if (searchEl && !searchEl.__wired) {
+      searchEl.__wired = true;
+      searchEl.addEventListener("input", () => {
+        viewState.pickQuery = String(searchEl.value || "");
+        renderPickList(viewState.pickRows, viewState.key || selectedKey);
+      });
+    }
+    if (searchEl && String(searchEl.value || "") !== String(viewState.pickQuery || "")) searchEl.value = String(viewState.pickQuery || "");
+    renderPickList(pickRows, selectedKey);
     if (!row) {
       $("klineTitle").textContent = "K线";
       $("klineSub").textContent = "未找到该币种（可能不在当前筛选结果或市场切换）";

@@ -322,6 +322,15 @@ def build_latest_snapshot_from_data_center(
 
             closes = series_obj.get("close", [])
             if closes:
+                pct_change = None
+                try:
+                    c1 = float(closes[-1]) if closes and closes[-1] is not None else None
+                    c0 = float(closes[-2]) if len(closes) >= 2 and closes[-2] is not None else None
+                    if c0 is not None and c1 is not None and c0 != 0.0:
+                        pct_change = (c1 / c0 - 1.0) * 100.0
+                except Exception:
+                    pct_change = None
+                record["pct_change"] = pct_change
                 record["_default_ma_fast"] = _sma_last(closes, cfg.cond_ma_fast)
                 record["_default_ma_slow"] = _sma_last(closes, cfg.cond_ma_slow)
                 record["_default_rsi"] = _rsi_last(closes, cfg.cond_rsi_period)
@@ -441,6 +450,7 @@ def build_meta(cfg: ScreenerRuleConfig | None = None) -> dict[str, Any]:
         {"key": "market", "name": "市场"},
         {"key": "dt_display", "name": "时间"},
         {"key": "close", "name": "收盘价"},
+        {"key": "pct_change", "name": "涨跌幅(%)"},
     ]
 
     return {
@@ -448,7 +458,7 @@ def build_meta(cfg: ScreenerRuleConfig | None = None) -> dict[str, Any]:
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "fields": fields,
         "config": asdict(cfg),
-        "default_sort": {"key": "close", "order": "desc"},
+        "default_sort": {"key": "pct_change", "order": "desc"},
     }
 
 

@@ -666,6 +666,24 @@ body.light-theme .boot-overlay {
   margin-bottom: 10px;
 }
 
+.auth2-hint {
+  margin-top: 6px;
+  margin-left: 0;
+  padding-left: 12px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-dim);
+  min-height: 16px;
+}
+
+.auth2-hint.ok {
+  color: var(--success);
+}
+
+.auth2-hint.err {
+  color: var(--danger);
+}
+
 .legal-wrap {
   min-height: 100vh;
   padding: 22px;
@@ -1316,28 +1334,142 @@ body.light-theme .kline-binance-link:hover {
   text-overflow: ellipsis;
 }
 
-.kline-panels {
+.kline-body {
   flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.kline-charts {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.kline-panels {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 12px;
+  min-height: 0;
+  overflow: auto;
+}
+
+.kline-picks {
+  width: clamp(240px, 20vw, 360px);
+  flex: 0 0 auto;
+  border-left: 1px solid var(--border);
+  background: var(--bg-sidebar);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+}
+
+.kline-picks-head {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kline-picks-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.kline-pick-search {
+  width: 100%;
+}
+
+.kline-picks-meta {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kline-pick-list {
+  padding: 10px 10px 12px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kline-pick-item {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 10px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 4px 10px;
+}
+
+.kline-pick-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.kline-pick-item.active {
+  border-color: rgba(59, 130, 246, 0.55);
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.kline-pick-rank {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.kline-pick-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kline-pick-sub {
+  grid-column: 2 / 3;
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.kline-pick-sub .up {
+  color: var(--success);
+}
+
+.kline-pick-sub .down {
+  color: var(--danger);
 }
 
 .kline-candle-panel {
   flex: 6 1 0;
-  min-height: 320px;
+  min-height: 0;
   position: relative;
 }
 
 .kline-indicator-panel {
   flex: 4 1 0;
-  min-height: 220px;
+  min-height: 0;
 }
 
 .kline-panel {
   flex: 1 1 auto;
+  min-height: 0;
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
@@ -1576,6 +1708,57 @@ body.light-theme .table tr.selected td {
   gap: 12px;
 }
 
+.basecfg {
+  display: flex;
+  gap: 14px;
+  min-height: 520px;
+}
+
+.basecfg-nav {
+  width: 140px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 14px;
+  border-right: 1px solid var(--border);
+}
+
+.basecfg-tab {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-main);
+  cursor: pointer;
+  font: inherit;
+}
+
+.basecfg-tab:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.basecfg-tab.active {
+  border-color: rgba(59, 130, 246, 0.55);
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.basecfg-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: auto;
+  display: flex;
+}
+
+.basecfg-pane {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .help-line {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border);
@@ -1583,6 +1766,25 @@ body.light-theme .table tr.selected td {
   border-radius: 10px;
   font-size: 13px;
   line-height: 1.6;
+}
+
+.strategy-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.strategy-editor .cond {
+  margin-bottom: 0;
+}
+
+.strategy-editor .param-list {
+  margin-top: 10px;
+}
+
+.modal-body textarea.textarea {
+  min-height: 96px;
+  font-family: inherit;
 }
 
 /* Scrollbar styling for general app */

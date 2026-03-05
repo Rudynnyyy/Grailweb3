@@ -51,8 +51,8 @@
             <div class="profile-menu-k">登录邮箱</div>
             <div id="profileEmail" class="profile-menu-v">-</div>
           </div>
-          <button id="menuPlans" class="profile-menu-item" type="button">我的计划</button>
           <button id="menuFeedback" class="profile-menu-item" type="button">反馈</button>
+          <button id="menuBaseConfig" class="profile-menu-item" type="button">基础配置</button>
           <div class="profile-menu-sep"></div>
           <button id="menuHelp" class="profile-menu-item profile-menu-parent" type="button" aria-haspopup="true" aria-expanded="false">
             帮助 <span class="profile-menu-chev">›</span>
@@ -60,7 +60,6 @@
           <div id="helpSubmenu" class="profile-submenu hidden" role="menu" aria-label="帮助">
             <button id="menuUpdateNotes" class="profile-menu-item" type="button">更新说明</button>
             <button id="menuTutorial" class="profile-menu-item" type="button">教程</button>
-            <button id="menuTestFeature" class="profile-menu-item" type="button">测试功能</button>
           </div>
           <div class="profile-menu-sep"></div>
           <button id="menuLogout" class="profile-menu-item danger" type="button">登出</button>
@@ -72,12 +71,6 @@
       <div class="sidebar-scroll">
         <div class="block">
         <div class="block-title">数据</div>
-        <label class="label">市场</label>
-        <select id="marketSelect" class="select">
-          <option value="all">全市场</option>
-          <option value="spot">现货</option>
-          <option value="swap">合约</option>
-        </select>
         <button id="btnRefresh" class="btn">刷新</button>
       </div>
 
@@ -385,20 +378,6 @@
     </div>
   </div>
 
-  <div id="plansModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="plansTitle">
-    <div class="modal-card">
-      <div class="modal-head">
-        <div id="plansTitle" class="modal-title">我的计划</div>
-        <button id="plansClose" class="help-close" type="button">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="help-line">测试账号</div>
-        <div class="help-line">测试账号</div>
-        <div class="help-line">测试账号</div>
-      </div>
-    </div>
-  </div>
-
   <div id="updateModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="updateTitle">
     <div class="modal-card">
       <div class="modal-head">
@@ -426,30 +405,93 @@
   <div id="wecomModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="wecomTitle">
     <div class="modal-card">
       <div class="modal-head">
-        <div id="wecomTitle" class="modal-title">测试功能</div>
+        <div id="wecomTitle" class="modal-title">基础配置</div>
         <button id="wecomClose" class="help-close" type="button">×</button>
       </div>
       <div class="modal-body">
-        <label class="label">企业微信机器人 Webhook URL</label>
-        <input id="wecomWebhook" class="input" placeholder="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=..." />
+        <div class="basecfg">
+          <div class="basecfg-nav">
+            <button id="basecfgTabPlans" class="basecfg-tab" type="button" data-pane="plans">我的计划</button>
+            <button id="basecfgTabMarket" class="basecfg-tab" type="button" data-pane="market">市场选择</button>
+            <button id="basecfgTabStrategy" class="basecfg-tab" type="button" data-pane="strategy">策略条件</button>
+            <button id="basecfgTabPush" class="basecfg-tab" type="button" data-pane="push">消息推送</button>
+          </div>
+          <div class="basecfg-main">
+            <div id="basecfgPanePlans" class="basecfg-pane hidden" data-pane="plans">
+              <div class="help-line"><b>我的计划</b></div>
+              <div class="help-line">测试账号</div>
+              <div class="help-line">测试账号</div>
+              <div class="help-line">测试账号</div>
+            </div>
 
-        <label class="check"><input id="wecomEnabled" type="checkbox" /> 每小时自动推送</label>
-        <label class="label">每次最多推送条数</label>
-        <input id="wecomTopN" class="input" type="number" min="1" step="1" value="20" />
+            <div id="basecfgPaneMarket" class="basecfg-pane hidden" data-pane="market">
+              <div class="help-line"><b>市场选择</b></div>
+              <label class="label">市场</label>
+              <select id="baseMarketSelect" class="select">
+                <option value="all">全市场</option>
+                <option value="spot">现货</option>
+                <option value="swap">合约</option>
+              </select>
+              <div class="row-actions">
+                <button id="baseMarketApply" class="btn btn-secondary" type="button">应用到主页</button>
+              </div>
 
-        <div class="row-actions">
-          <button id="wecomImport" class="btn btn-secondary" type="button">从当前筛选导入</button>
-          <button id="wecomSave" class="btn btn-secondary" type="button">保存配置</button>
-          <button id="wecomSendNow" class="btn" type="button">立即发送</button>
-        </div>
+              <div class="help-line"><b>白名单 / 黑名单</b></div>
+              <label class="label">白名单（只交易这些币）</label>
+              <textarea id="whitelistText" class="textarea" rows="4" placeholder="逗号/空格/换行分隔，留空表示不过滤"></textarea>
+              <label class="label">黑名单（不交易这些币）</label>
+              <textarea id="blacklistText" class="textarea" rows="4" placeholder="逗号/空格/换行分隔"></textarea>
+              <div class="row-actions">
+                <button id="saveBaseConfig" class="btn btn-secondary" type="button">保存黑白名单</button>
+              </div>
+            </div>
 
-        <div class="help-line">
-          <div class="label-inline">当前选择摘要</div>
-          <div id="wecomSummary" style="margin-top: 6px;">-</div>
-        </div>
-        <div class="help-line">
-          <div class="label-inline">发送结果</div>
-          <div id="wecomResult" style="margin-top: 6px;">-</div>
+            <div id="basecfgPaneStrategy" class="basecfg-pane hidden" data-pane="strategy">
+              <div class="help-line"><b>策略组</b></div>
+              <label class="label">策略组名称</label>
+              <input id="strategyName" class="input" placeholder="例如：动量1h" />
+              <div class="row-actions">
+                <button id="strategySaveCurrent" class="btn btn-secondary" type="button">保存/更新策略组</button>
+              </div>
+              <label class="label">选择策略组</label>
+              <select id="strategySelect" class="select"></select>
+              <div class="row-actions">
+                <button id="strategyApply" class="btn btn-secondary" type="button">应用到主页</button>
+                <button id="strategyDelete" class="btn btn-secondary" type="button">删除策略组</button>
+              </div>
+
+              <div class="help-line"><b>策略条件</b></div>
+              <div id="strategyCondEditor" class="strategy-editor"></div>
+            </div>
+
+            <div id="basecfgPanePush" class="basecfg-pane hidden" data-pane="push">
+              <div class="help-line"><b>消息推送</b></div>
+              <label class="label">企业微信机器人 Webhook URL</label>
+              <input id="wecomWebhook" class="input" placeholder="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=..." />
+
+              <label class="check"><input id="wecomEnabled" type="checkbox" /> 每小时自动推送</label>
+              <label class="label">每次最多推送条数</label>
+              <input id="wecomTopN" class="input" type="number" min="1" step="1" value="20" />
+              <label class="label">收件人邮箱</label>
+              <input id="sendEmailTo" class="input" placeholder="name@example.com" />
+
+              <div class="row-actions">
+                <button id="wecomImport" class="btn btn-secondary" type="button">从当前筛选导入</button>
+                <button id="wecomSave" class="btn btn-secondary" type="button">保存配置</button>
+                <button id="wecomSendNow" class="btn" type="button">立即发送</button>
+                <button id="emailSendNow" class="btn" type="button">发送邮箱</button>
+              </div>
+
+              <div class="help-line">
+                <div class="label-inline">当前选择摘要</div>
+                <div id="wecomSummary" style="margin-top: 6px;">-</div>
+              </div>
+              <div class="help-line">
+                <div class="label-inline">发送结果</div>
+                <div id="wecomResult" style="margin-top: 6px;">-</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -91,7 +91,7 @@ def main() -> None:
     base_dc = dc_swap_dir if market == "swap" else dc_spot_dir
 
     cands = ss._symbol_candidates(symbol)  # type: ignore[attr-defined]
-    csv_path, picked_sym = ss._pick_existing_csv([base_merge, base_dc], symbol)  # type: ignore[attr-defined]
+    csv_path, picked_sym = ss._pick_existing_csv([base_merge, base_dc], symbol, tail_hint=tail)  # type: ignore[attr-defined]
 
     out: dict[str, object] = {
         "repo_root": str(repo_root),

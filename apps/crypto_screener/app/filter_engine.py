@@ -703,12 +703,35 @@ def apply_all_filters(rows: list, config: dict) -> dict:
     toggles = (config or {}).get("toggles") or {}
     custom_factors = (config or {}).get("customFactors") or []
     market = str(params.get("market") or "all")
+    lists0 = (config or {}).get("lists") or {}
+    wl0 = (lists0.get("whitelist") if isinstance(lists0, dict) else None) or (config or {}).get("whitelist") or []
+    bl0 = (lists0.get("blacklist") if isinstance(lists0, dict) else None) or (config or {}).get("blacklist") or []
+    whitelist = {str(x).strip().upper() for x in (wl0 or []) if str(x).strip()}
+    blacklist = {str(x).strip().upper() for x in (bl0 or []) if str(x).strip()}
+
+    def base_symbol(sym: str) -> str:
+        s = str(sym or "").strip().upper()
+        if s.endswith("-USDT"):
+            return s[:-5]
+        if s.endswith("USDT"):
+            return s[:-4]
+        if "-" in s:
+            return s.split("-", 1)[0]
+        return s
 
     selected: list[dict] = []
     filtered_out = 0
     expr_errors = 0
     for r in rows or []:
         if market != "all" and str(r.get("market")) != market:
+            continue
+        sym0 = str(r.get("symbol") or "")
+        bs0 = base_symbol(sym0)
+        if whitelist and (sym0.upper() not in whitelist) and (bs0 not in whitelist):
+            filtered_out += 1
+            continue
+        if blacklist and ((sym0.upper() in blacklist) or (bs0 in blacklist)):
+            filtered_out += 1
             continue
         r["_builtins"] = compute_builtins(r, params)
         r["_expr"] = {}
