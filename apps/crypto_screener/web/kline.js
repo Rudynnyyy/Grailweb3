@@ -42,6 +42,7 @@ const viewState = {
   pickQuery: "",
   pickRows: [],
   pickLabel: "",
+  pickRankMap: null,
 };
 
 function loadPlacement() {
@@ -160,6 +161,7 @@ function renderPickList(rows, activeKey) {
   if (!host) return;
   const q = String(viewState.pickQuery || "").trim().toUpperCase();
   const arr0 = Array.isArray(rows) ? rows : [];
+  const rankMap = viewState.pickRankMap instanceof Map ? viewState.pickRankMap : new Map();
   const arr = arr0
     .filter((r) => {
       if (!q) return true;
@@ -168,11 +170,17 @@ function renderPickList(rows, activeKey) {
     })
     .slice()
     .sort((a, b) => {
-      const ra = Number(a && (a.rank ?? a._rank));
-      const rb = Number(b && (b.rank ?? b._rank));
+      const ka = pickKey(a);
+      const kb = pickKey(b);
+      const ra = Number(rankMap.get(ka));
+      const rb = Number(rankMap.get(kb));
       const va = Number.isFinite(ra) ? ra : 1e12;
       const vb = Number.isFinite(rb) ? rb : 1e12;
-      return va - vb;
+      if (va !== vb) return va - vb;
+      const sa = stripQuote(a && a.symbol ? a.symbol : "").toUpperCase();
+      const sb = stripQuote(b && b.symbol ? b.symbol : "").toUpperCase();
+      if (sa !== sb) return sa < sb ? -1 : 1;
+      return ka < kb ? -1 : (ka > kb ? 1 : 0);
     });
 
   host.innerHTML = "";
@@ -183,7 +191,7 @@ function renderPickList(rows, activeKey) {
     item.classList.toggle("active", key === String(activeKey || ""));
     const rankEl = document.createElement("div");
     rankEl.className = "kline-pick-rank";
-    const rr = Number(r && (r.rank ?? r._rank));
+    const rr = Number(rankMap.get(key));
     rankEl.textContent = Number.isFinite(rr) ? `#${Math.trunc(rr)}` : "";
     const nameEl = document.createElement("div");
     nameEl.className = "kline-pick-name";
@@ -1224,9 +1232,17 @@ async function render() {
     const rows = Array.isArray(latest.results) ? latest.results : [];
     viewState.latestRows = rows;
     const lastPicks = loadLastPicks();
-    const pickRows = lastPicks && Array.isArray(lastPicks.rows) && lastPicks.rows.length ? lastPicks.rows : rows;
-    viewState.pickRows = pickRows;
-    viewState.pickLabel = lastPicks && Array.isArray(lastPicks.rows) && lastPicks.rows.length ? "主页" : "";
+    const rankMap = new Map();
+    const pickArr = lastPicks && Array.isArray(lastPicks.rows) ? lastPicks.rows : [];
+    for (const it of pickArr) {
+      const k = pickKey(it);
+      if (!k || k === "|") continue;
+      const rr = Number(it && (it.rank ?? it._rank));
+      if (Number.isFinite(rr)) rankMap.set(k, rr);
+    }
+    viewState.pickRankMap = rankMap;
+    viewState.pickRows = rows;
+    viewState.pickLabel = rankMap.size ? `主页榜${rankMap.size}` : "";
     const row = rows.find((r) => `${String(r.market)}|${String(r.symbol)}` === selectedKey);
     const searchEl = document.getElementById("pickSearch");
     if (searchEl && !searchEl.__wired) {
@@ -1237,7 +1253,7 @@ async function render() {
       });
     }
     if (searchEl && String(searchEl.value || "") !== String(viewState.pickQuery || "")) searchEl.value = String(viewState.pickQuery || "");
-    renderPickList(pickRows, selectedKey);
+    renderPickList(rows, selectedKey);
     if (!row) {
       $("klineTitle").textContent = "K线";
       $("klineSub").textContent = "未找到该币种（可能不在当前筛选结果或市场切换）";

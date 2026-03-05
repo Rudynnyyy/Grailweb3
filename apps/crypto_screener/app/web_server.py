@@ -522,10 +522,10 @@ def _config_needs_series(config: dict) -> bool:
     return False
 
 
-def _attach_series_to_rows(*, rows: list[dict], config: dict, tail: int) -> list[dict]:
+def _attach_series_to_rows(*, rows: list[dict], config: dict, tail: int, force: bool = False) -> list[dict]:
     if not rows:
         return []
-    if not _config_needs_series(config):
+    if (not force) and (not _config_needs_series(config)):
         return rows
     try:
         t = int(tail)
@@ -594,6 +594,46 @@ def _build_wecom_markdown(*, latest: dict | None, rows: list[dict], top_n: int) 
     return title + "\n".join(lines)
 
 
+def _pick_series_tail_for_filters(*, latest: dict | None, config: dict, fallback: int = 720) -> int:
+    try:
+        base = int((((latest or {}).get("config") or {}).get("tail_len") if isinstance((latest or {}).get("config"), dict) else None) or fallback)
+    except Exception:
+        base = fallback
+    params = (config or {}).get("params") or {}
+    toggles = (config or {}).get("toggles") or {}
+
+    def _int0(x) -> int:
+        try:
+            return int(float(x))
+        except Exception:
+            return 0
+
+    need = 0
+    if toggles.get("condCloseMa"):
+        need = max(need, _int0(params.get("maPeriodClose")) + 2)
+    if toggles.get("condMa"):
+        need = max(need, _int0(params.get("maFast")) + 2, _int0(params.get("maSlow")) + 2)
+    if toggles.get("condRsi"):
+        need = max(need, _int0(params.get("rsiPeriod")) + 3)
+    if toggles.get("condEma"):
+        need = max(need, _int0(params.get("emaPeriod")) + 3)
+    if toggles.get("condBollUp"):
+        need = max(need, _int0(params.get("bollPeriod")) + 3)
+    if toggles.get("condBollDown"):
+        need = max(need, _int0(params.get("bollDownPeriod")) + 3)
+    if toggles.get("condSuper"):
+        need = max(need, _int0(params.get("superAtrPeriod")) + 5)
+    if toggles.get("condKdj"):
+        need = max(need, _int0(params.get("kdjN")) + 3)
+    if toggles.get("condObv"):
+        need = max(need, _int0(params.get("obvMaPeriod")) + 5)
+    if toggles.get("condStochRsi"):
+        need = max(need, _int0(params.get("stochRsiP")) + _int0(params.get("stochRsiK")) + 10)
+
+    tail = max(base, 360, need * 4)
+    return max(80, min(2160, int(tail)))
+
+
 def _send_wecom_for_all_enabled() -> None:
     try:
         with wecom_lock:
@@ -608,17 +648,27 @@ def _send_wecom_for_all_enabled() -> None:
         for c in cfgs:
             try:
                 webhook_url = str(c.get("webhook_url") or "").strip()
-                top_n = int(c.get("top_n") or 20)
+                top_n = max(1, int(c.get("top_n") or 20))
                 config = c.get("config") if isinstance(c.get("config"), dict) else {}
-                tail0 = int(((latest or {}).get("config") or {}).get("tail_len") or 720)
+                tail0 = _pick_series_tail_for_filters(latest=latest, config=config, fallback=720)
                 rows0 = _attach_series_to_rows(rows=all_rows, config=config, tail=tail0)
                 r = apply_all_filters(rows0, config)
                 selected = r.get("selected") if isinstance(r, dict) else []
                 selected = selected if isinstance(selected, list) else []
                 sorted_rows, sort_key = sort_rows(selected, config)
                 assign_rank(sorted_rows, sort_key, config)
+                if not sorted_rows:
+                    try:
+                        content = _build_wecom_markdown(latest=latest, rows=[], top_n=top_n)
+                        send_markdown(webhook_url=webhook_url, content=content)
+                    except Exception:
+                        pass
+                    continue
                 try:
-                    img = render_selection_png(title="", rows=sorted_rows, top_n=top_n)
+                    shown0 = min(top_n, len(sorted_rows))
+                    rows_img0 = sorted_rows[:shown0]
+                    rows_img = _attach_series_to_rows(rows=rows_img0, config=config, tail=120, force=True)
+                    img = render_selection_png(title="", rows=rows_img, top_n=shown0)
                     send_image(webhook_url=webhook_url, image_bytes=img)
                 except Exception:
                     pass
@@ -1135,28 +1185,64 @@ class Handler(BaseHTTPRequestHandler):
                 top_n = int(payload.get("top_n") or 20)
             except Exception:
                 top_n = 20
+            top_n = max(1, top_n)
             config = payload.get("config") if isinstance(payload.get("config"), dict) else {}
             latest, all_rows = _load_latest_rows()
             if not all_rows:
                 self._send_json(500, {"ok": False, "error": "no_snapshot", "message": "快照不存在，请先运行一次更新/生成快照"})
                 return
-            tail0 = int(((latest or {}).get("config") or {}).get("tail_len") or 720)
-            rows0 = _attach_series_to_rows(rows=all_rows, config=config, tail=tail0)
-            r = apply_all_filters(rows0, config)
-            selected = r.get("selected") if isinstance(r, dict) else []
-            selected = selected if isinstance(selected, list) else []
-            sorted_rows, sort_key = sort_rows(selected, config)
-            assign_rank(sorted_rows, sort_key, config)
+            tail0 = _pick_series_tail_for_filters(latest=latest, config=config, fallback=720)
+            picks0 = payload.get("picks")
+            use_picks = isinstance(picks0, list) and bool(picks0)
+            if use_picks:
+                want_keys: list[str] = []
+                seen = set()
+                for p in picks0:
+                    if not isinstance(p, dict):
+                        continue
+                    m = str(p.get("market") or "").strip()
+                    s = str(p.get("symbol") or "").strip()
+                    if not m or not s:
+                        continue
+                    k = f"{m}|{s}"
+                    if k in seen:
+                        continue
+                    seen.add(k)
+                    want_keys.append(k)
+                row_map: dict[str, dict] = {}
+                for r0 in all_rows:
+                    k = f"{str(r0.get('market') or '')}|{str(r0.get('symbol') or '')}"
+                    if k in seen:
+                        row_map[k] = r0
+                subset = [row_map[k] for k in want_keys if k in row_map]
+                rows0 = subset
+                for i, rr in enumerate(rows0, start=1):
+                    rr["_rank"] = i
+                sorted_rows = rows0
+            else:
+                rows0 = _attach_series_to_rows(rows=all_rows, config=config, tail=tail0)
+                r = apply_all_filters(rows0, config)
+                selected = r.get("selected") if isinstance(r, dict) else []
+                selected = selected if isinstance(selected, list) else []
+                sorted_rows, sort_key = sort_rows(selected, config)
+                assign_rank(sorted_rows, sort_key, config)
             text_ok, text_msg = True, "skipped"
             img_ok = False
             img_msg = "skipped"
             try:
-                img = render_selection_png(title="", rows=sorted_rows, top_n=top_n)
+                shown0 = min(top_n, len(sorted_rows))
+                rows_img0 = sorted_rows[:shown0]
+                rows_img = _attach_series_to_rows(rows=rows_img0, config=config, tail=tail0, force=True)
+                img = render_selection_png(title="", rows=rows_img, top_n=shown0)
                 img_ok, img_msg = send_image(webhook_url=webhook_url, image_bytes=img)
             except Exception as e:
                 img_ok, img_msg = False, str(e)
 
-            detail = {"text": {"ok": text_ok, "message": text_msg}, "image": {"ok": img_ok, "message": img_msg}}
+            count0 = len(sorted_rows)
+            shown0 = min(top_n, count0)
+            if img_ok and (img_msg or "").strip().lower() == "ok":
+                img_msg = f"ok（命中{count0}，展示{shown0}）"
+            detail = {"text": {"ok": text_ok, "message": text_msg}, "image": {"ok": img_ok, "message": img_msg, "count": count0, "shown": shown0}}
             if img_ok:
                 self._send_json(200, {"ok": True, "detail": detail})
                 return
@@ -1175,12 +1261,13 @@ class Handler(BaseHTTPRequestHandler):
                 top_n = int(payload.get("top_n") or 20)
             except Exception:
                 top_n = 20
+            top_n = max(1, top_n)
             config = payload.get("config") if isinstance(payload.get("config"), dict) else {}
             latest, all_rows = _load_latest_rows()
             if not all_rows:
                 self._send_json(500, {"ok": False, "error": "no_snapshot", "message": "快照不存在，请先运行一次更新/生成快照"})
                 return
-            tail0 = int(((latest or {}).get("config") or {}).get("tail_len") or 720)
+            tail0 = _pick_series_tail_for_filters(latest=latest, config=config, fallback=720)
             rows0 = _attach_series_to_rows(rows=all_rows, config=config, tail=tail0)
             r = apply_all_filters(rows0, config)
             selected = r.get("selected") if isinstance(r, dict) else []
@@ -1836,8 +1923,6 @@ def main() -> None:
     cleanup_email(auth_cfg)
     t = threading.Thread(target=_scheduler_loop, daemon=True)
     t.start()
-    t2 = threading.Thread(target=_wecom_scheduler_loop, daemon=True)
-    t2.start()
     if os.environ.get("QC_BOOTSTRAP_UPDATE") == "1":
         now = datetime.now()
         latest_path = repo_root / "apps" / "crypto_screener" / "web" / "data" / "latest.json"

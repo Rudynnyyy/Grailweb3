@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from io import BytesIO
 
 
@@ -11,6 +12,78 @@ def render_selection_png(*, title: str, rows: list[dict], top_n: int) -> bytes:
         import matplotlib.pyplot as plt
     except Exception as e:
         raise RuntimeError(f"matplotlib_unavailable: {e}")
+
+    def _setup_cjk_font():
+        try:
+            from matplotlib import font_manager
+
+            env_font = str(os.environ.get("QC_CJK_FONT") or "").strip()
+            if env_font and os.path.exists(env_font):
+                try:
+                    fp = font_manager.FontProperties(fname=env_font)
+                    matplotlib.rcParams["axes.unicode_minus"] = False
+                    return fp
+                except Exception:
+                    pass
+
+            candidates = [
+                ("Microsoft YaHei", [r"C:\Windows\Fonts\msyh.ttc", r"C:\Windows\Fonts\msyh.ttf"]),
+                ("SimHei", [r"C:\Windows\Fonts\simhei.ttf"]),
+                ("SimSun", [r"C:\Windows\Fonts\simsun.ttc"]),
+                ("PingFang SC", []),
+                ("Noto Sans CJK SC", []),
+                ("WenQuanYi Zen Hei", []),
+                ("Source Han Sans CN", []),
+                ("Arial Unicode MS", []),
+            ]
+            for name, files in candidates:
+                for p in files:
+                    if p and os.path.exists(p):
+                        try:
+                            fp = font_manager.FontProperties(fname=p)
+                            matplotlib.rcParams["axes.unicode_minus"] = False
+                            return fp
+                        except Exception:
+                            continue
+                try:
+                    fp = font_manager.FontProperties(family=name)
+                    path = font_manager.findfont(fp, fallback_to_default=False)
+                    if path:
+                        matplotlib.rcParams["font.sans-serif"] = [name]
+                        matplotlib.rcParams["axes.unicode_minus"] = False
+                        return fp
+                except Exception:
+                    continue
+
+            try:
+                import glob
+
+                patterns = [
+                    "/usr/share/fonts/**/NotoSansCJK*.ttc",
+                    "/usr/share/fonts/**/NotoSansCJK*.otf",
+                    "/usr/share/fonts/**/SourceHanSans*SC*.otf",
+                    "/usr/share/fonts/**/wqy-zenhei*.ttc",
+                    "/usr/local/share/fonts/**/NotoSansCJK*.ttc",
+                    "/usr/local/share/fonts/**/NotoSansCJK*.otf",
+                    os.path.expanduser("~/.fonts/**/NotoSansCJK*.ttc"),
+                    os.path.expanduser("~/.fonts/**/NotoSansCJK*.otf"),
+                ]
+                for pat in patterns:
+                    for p in glob.glob(pat, recursive=True):
+                        if p and os.path.exists(p):
+                            try:
+                                fp = font_manager.FontProperties(fname=p)
+                                matplotlib.rcParams["axes.unicode_minus"] = False
+                                return fp
+                            except Exception:
+                                continue
+            except Exception:
+                pass
+        except Exception:
+            return None
+        return None
+
+    font_prop = _setup_cjk_font()
 
     def _strip_quote(symbol: str) -> str:
         s = str(symbol or "")
@@ -117,6 +190,11 @@ def render_selection_png(*, title: str, rows: list[dict], top_n: int) -> bytes:
             cell.set_facecolor("#FFFFFF" if row % 2 == 1 else "#F9FAFB")
         cell._loc = "center"
         cell.set_text_props(ha="center")
+        if font_prop is not None:
+            try:
+                cell.get_text().set_fontproperties(font_prop)
+            except Exception:
+                pass
 
     buf = BytesIO()
     fig.tight_layout()

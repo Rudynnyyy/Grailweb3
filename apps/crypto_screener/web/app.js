@@ -11,6 +11,7 @@ const state = {
   columnVisibility: {}, // { key: boolean }
   selectedKey: null, // `${market}|${symbol}`
   selectedRow: null,
+  lastRenderedRows: [],
   symbolQuery: "",
   klineSeriesCache: {},
   klineSeriesPending: {},
@@ -2747,6 +2748,7 @@ function rerenderFromLatest() {
     const { selected, exprErrors, exprMissing, missingBuiltins } = applyAllFilters(allRows, params, customFactors);
     const { sorted, sortKey } = sortRows(selected, displayFields);
     assignRank(sorted, sortKey, displayFields);
+    state.lastRenderedRows = Array.isArray(sorted) ? sorted.slice() : [];
     renderTable(sorted, displayFields);
     saveLastPicks(sorted, latest.summary || {});
     syncSelectedRowFrom(sorted);
@@ -2844,8 +2846,10 @@ async function refresh(opts = {}) {
     showProgress(85, "排序与渲染...");
     const { sorted, sortKey } = sortRows(selected, displayFields);
     assignRank(sorted, sortKey, displayFields);
+    state.lastRenderedRows = Array.isArray(sorted) ? sorted.slice() : [];
     renderTable(sorted, displayFields);
     syncSelectedRowFrom(sorted);
+    saveLastPicks(sorted, latest.summary || {});
 
     const parts = [];
     if (exprErrors) parts.push(`表达式异常：${exprErrors}`);
@@ -3254,8 +3258,13 @@ function initControls(meta) {
     const webhook_url = ($("wecomWebhook").value || "").trim();
     const top_n = Number($("wecomTopN").value || 20);
     const config = mergeConfigWithBase(normalizeStrategyConfig(state.strategyDraft || buildWecomConfigFromCurrent()));
+    const rows0 = Array.isArray(state.lastRenderedRows) ? state.lastRenderedRows : [];
+    const picks = rows0.slice(0, Math.max(1, Math.min(200, Math.floor(top_n || 20)))).map((r) => ({
+      market: r && r.market ? String(r.market) : "",
+      symbol: r && r.symbol ? String(r.symbol) : "",
+    })).filter((x) => x.market && x.symbol);
     try {
-      const { r, j } = await postJson("./api/wecom/send_now", { webhook_url, top_n, config });
+      const { r, j } = await postJson("./api/wecom/send_now", { webhook_url, top_n, config, picks });
       if (!r.ok) {
         const d = j && j.detail ? j.detail : null;
         const parts = [];
