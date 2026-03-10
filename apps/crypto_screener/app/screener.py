@@ -345,12 +345,19 @@ def build_latest_snapshot_from_data_center(
 
             rows.append(record)
 
-    ingest_folder(data_center_root / "kline" / "swap", "swap", symbol_from_filename=True, fallback_dir=fallback_swap_dir)
-    ingest_folder(data_center_root / "kline" / "spot", "spot", symbol_from_filename=True, fallback_dir=fallback_spot_dir)
+    primary = str(os.environ.get("QC_SNAPSHOT_PRIMARY") or "merge").strip().lower()
+    prefer_merge = primary.startswith("m")
+    swap_primary = fallback_swap_dir if prefer_merge else (data_center_root / "kline" / "swap")
+    spot_primary = fallback_spot_dir if prefer_merge else (data_center_root / "kline" / "spot")
+    swap_secondary = (data_center_root / "kline" / "swap") if prefer_merge else fallback_swap_dir
+    spot_secondary = (data_center_root / "kline" / "spot") if prefer_merge else fallback_spot_dir
+
+    ingest_folder(swap_primary, "swap", symbol_from_filename=True, fallback_dir=None)
+    ingest_folder(spot_primary, "spot", symbol_from_filename=True, fallback_dir=None)
 
     if len(rows) < fallback_min_symbols:
-        ingest_folder(fallback_swap_dir, "swap", symbol_from_filename=False, fallback_dir=None)
-        ingest_folder(fallback_spot_dir, "spot", symbol_from_filename=False, fallback_dir=None)
+        ingest_folder(swap_secondary, "swap", symbol_from_filename=True, fallback_dir=None)
+        ingest_folder(spot_secondary, "spot", symbol_from_filename=True, fallback_dir=None)
 
     merged: dict[tuple[str, str], dict[str, Any]] = {}
     for r in rows:
@@ -399,16 +406,16 @@ def build_latest_snapshot_from_data_center(
             "results": rows,
         }
 
-    min_keep = latest_dt_dt - timedelta(hours=cfg.dt_tolerance_hours)
-    filtered_rows = rows
-    fresh_size = 0
+    min_keep = latest_dt_dt - timedelta(hours=2)
+    filtered_rows = []
     for r in rows:
         try:
             r_dt = datetime.fromisoformat(str(r["dt_close"]).replace("Z", "+00:00"))
         except Exception:
             continue
         if r_dt >= min_keep:
-            fresh_size += 1
+            filtered_rows.append(r)
+    fresh_size = len(filtered_rows)
 
     selected_rows = []
     for r in filtered_rows:

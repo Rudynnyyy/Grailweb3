@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+from collections import OrderedDict
 import smtplib
 import ssl
 import sys
@@ -61,7 +62,7 @@ from apps.db.aliyun_sms import load_from_env as load_aliyun_sms, send_code as al
 
 run_lock = threading.Lock()
 wecom_lock = threading.Lock()
-wecom_state = {"last_hour_key": None}
+wecom_state = {"last_hour_key": None, "last_meta_updated_at": None}
 gz_cache_lock = threading.Lock()
 gz_cache: dict[str, tuple[str, bytes]] = {}
 latest_cache_lock = threading.Lock()
@@ -69,10 +70,18 @@ latest_cache: tuple[str, dict] | None = None
 expr_cache_lock = threading.Lock()
 expr_cache: dict[str, dict] = {}
 series_cache_lock = threading.Lock()
-series_cache: dict[tuple[str, str, int], dict] = {}
+series_cache: OrderedDict[tuple[str, str, int], dict] = OrderedDict()
 enriched_cache_lock = threading.Lock()
-enriched_cache: dict[tuple[int, str, str], tuple[str, bytes, bytes]] = {}
+enriched_cache: OrderedDict[tuple[int, str, str, int, int], dict] = OrderedDict()
 update_state = {
+    "running": False,
+    "last_started": None,
+    "last_finished": None,
+    "last_error": None,
+    "last_error_preprocess": None,
+}
+pkl_build_lock = threading.Lock()
+pkl_build_state = {
     "running": False,
     "last_started": None,
     "last_finished": None,
@@ -401,19 +410,63 @@ def _scalar_from_val(v) -> float | None:
 
 def _get_series_cached(*, market: str, symbol: str, tail: int) -> dict | None:
     key = (str(market).lower(), str(symbol), int(tail))
+    now0 = time.time()
+    try:
+        ttl_sec = int(os.environ.get("QC_SERIES_CACHE_TTL_SEC") or "180")
+    except Exception:
+        ttl_sec = 180
+    ttl_sec = max(15, min(3600, ttl_sec))
+    try:
+        verify_every_sec = int(os.environ.get("QC_SERIES_CACHE_VERIFY_INTERVAL_SEC") or "20")
+    except Exception:
+        verify_every_sec = 20
+    verify_every_sec = max(0, min(600, verify_every_sec))
+    verify_enabled = str(os.environ.get("QC_SERIES_CACHE_VERIFY") or "1").strip() != "0"
     with series_cache_lock:
         hit = series_cache.get(key)
+        if isinstance(hit, dict):
+            ts0 = float(hit.get("ts") or 0.0)
+            if now0 - ts0 > ttl_sec:
+                series_cache.pop(key, None)
+                hit = None
+            else:
+                series_cache.move_to_end(key)
     if hit is not None:
         payload = hit.get("payload") if isinstance(hit, dict) and "payload" in hit else hit
         try:
-            dt0 = payload.get("dt") if isinstance(payload, dict) else None
-            n0 = len(dt0) if isinstance(dt0, list) else 0
-            need = int(tail)
-            thr = max(30, min(120, need // 3))
-            if n0 >= thr:
-                return payload
+            need_verify = False
+            if verify_enabled:
+                checked_at = float(hit.get("checked_at") or 0.0) if isinstance(hit, dict) else 0.0
+                need_verify = (now0 - checked_at) >= float(verify_every_sec)
+            if need_verify:
+                ver0 = hit.get("ver") if isinstance(hit, dict) else None
+                from apps.crypto_screener.app import series_source as ss  # noqa: E402
+
+                cur = ss.get_series_versions(market=key[0], symbol=key[1], tail=key[2], repo_root=repo_root)
+                if isinstance(ver0, dict):
+                    if int(ver0.get("csv_mtime_ns") or -1) != int(cur.get("csv_mtime_ns") or -1):
+                        payload = None
+                    elif int(ver0.get("pkl_mtime_ns") or -1) != int(cur.get("pkl_mtime_ns") or -1):
+                        payload = None
+                if payload is not None and isinstance(hit, dict):
+                    hit["checked_at"] = now0
+                    with series_cache_lock:
+                        if key in series_cache and isinstance(series_cache.get(key), dict):
+                            series_cache[key]["checked_at"] = now0
         except Exception:
-            return payload
+            pass
+        if payload is None:
+            hit = None
+        else:
+            try:
+                dt0 = payload.get("dt") if isinstance(payload, dict) else None
+                n0 = len(dt0) if isinstance(dt0, list) else 0
+                need = int(tail)
+                thr = max(30, min(120, need // 3))
+                if n0 >= thr:
+                    return payload
+            except Exception:
+                return payload
     s0 = load_symbol_series(market=key[0], symbol=key[1], tail=key[2], repo_root=repo_root)
     if s0 is None:
         return None
@@ -426,39 +479,50 @@ def _get_series_cached(*, market: str, symbol: str, tail: int) -> dict | None:
         "volume": None,
         "quote_volume": None,
     }
-    try:
-        import numpy as np
-    except Exception:
-        np = None
     out_series: dict[str, Any] = {}
     for k in ("open", "high", "low", "close", "volume", "quote_volume"):
-        arr = series.get(k) or []
-        if np is not None:
-            xs = np.array([np.nan if v is None else float(v) for v in arr], dtype="float64")
-            out_series[k] = xs
-            lv = None
-            for i in range(int(xs.shape[0]) - 1, -1, -1):
-                x = float(xs[i])
-                if x == x:
-                    lv = x
-                    break
-            latest[k] = lv
+        arr0 = series.get(k) or []
+        if isinstance(arr0, list):
+            arr = arr0
         else:
-            out_series[k] = arr
-            for i in range(len(arr) - 1, -1, -1):
-                v = arr[i]
-                try:
-                    x = float(v)
-                    if x == x:
-                        latest[k] = x
-                        break
-                except Exception:
-                    continue
-    payload = {"market": key[0], "symbol": key[1], "dt": s0.dt, "series": out_series, "latest": latest}
+            try:
+                arr = list(arr0)
+            except Exception:
+                arr = []
+        out_series[k] = arr
+        for i in range(len(arr) - 1, -1, -1):
+            v = arr[i]
+            try:
+                x = float(v)
+                if x == x:
+                    latest[k] = x
+                    break
+            except Exception:
+                continue
+    src0 = str(getattr(s0, "source", "csv") or "csv")
+    payload = {"market": key[0], "symbol": key[1], "dt": s0.dt, "series": out_series, "latest": latest, "source": src0}
+    try:
+        from apps.crypto_screener.app import series_source as ss  # noqa: E402
+
+        ver = ss.get_series_versions(market=key[0], symbol=key[1], tail=key[2], repo_root=repo_root)
+    except Exception:
+        ver = None
+    with metrics_lock:
+        by_src = metrics.get("series_source")
+        if not isinstance(by_src, dict):
+            by_src = {}
+            metrics["series_source"] = by_src
+        by_src[src0] = int(by_src.get(src0) or 0) + 1
+    try:
+        max_items = int(os.environ.get("QC_SERIES_CACHE_MAX") or "2000")
+    except Exception:
+        max_items = 2000
+    max_items = max(200, min(20000, max_items))
     with series_cache_lock:
-        if len(series_cache) > int(os.environ.get("QC_SERIES_CACHE_MAX") or "2000"):
-            series_cache.clear()
-        series_cache[key] = {"ts": time.time(), "payload": payload}
+        series_cache[key] = {"ts": now0, "payload": payload, "ver": ver if isinstance(ver, dict) else {}, "checked_at": now0}
+        series_cache.move_to_end(key)
+        while len(series_cache) > max_items:
+            series_cache.popitem(last=False)
     return payload
 
 
@@ -679,6 +743,7 @@ def _send_wecom_for_all_enabled() -> None:
 
 
 def _wecom_scheduler_loop() -> None:
+    meta_path = repo_root / "apps" / "crypto_screener" / "web" / "data" / "meta.json"
     while True:
         now = datetime.now()
         next_hour = (now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1))
@@ -686,7 +751,26 @@ def _wecom_scheduler_loop() -> None:
         time.sleep(min(60.0, seconds))
         if datetime.now() < next_hour:
             continue
-        _send_wecom_for_all_enabled()
+        start = time.time()
+        last = None
+        with wecom_lock:
+            last = wecom_state.get("last_meta_updated_at")
+        while True:
+            cur = None
+            try:
+                if meta_path.exists():
+                    payload = json.loads(meta_path.read_text(encoding="utf-8"))
+                    cur = str(payload.get("updated_at") or "")
+            except Exception:
+                cur = None
+            if cur and cur != str(last or ""):
+                with wecom_lock:
+                    wecom_state["last_meta_updated_at"] = cur
+                _send_wecom_for_all_enabled()
+                break
+            if time.time() - start >= float(os.environ.get("QC_WECOM_WAIT_META_SECONDS") or "1800"):
+                break
+            time.sleep(5.0)
 
 
 def _run_update(fetch: bool) -> None:
@@ -695,15 +779,54 @@ def _run_update(fetch: bool) -> None:
         update_state["running"] = True
         update_state["last_started"] = datetime.now().isoformat(timespec="seconds")
         update_state["last_error"] = None
+        update_state["last_error_preprocess"] = None
         try:
             run_once(paths, fetch=fetch)
+            try:
+                threading.Thread(target=_send_wecom_for_all_enabled, daemon=True).start()
+            except Exception:
+                pass
+            try:
+                from 数据获取.incremental_update import run_incremental_catchup
+
+                cfg_path = Path(os.environ.get("QC_PREPROCESS_CONFIG") or (repo_root / "数据获取" / "config.yaml"))
+                lag_h = int(os.environ.get("QC_PREPROCESS_LAG_HOURS") or "1")
+                max_h = int(os.environ.get("QC_PREPROCESS_MAX_HOURS_PER_RUN") or "24")
+                run_incremental_catchup(cfg_path, lag_hours=lag_h, max_hours=max_h)
+                if str(os.environ.get("QC_BUILD_PKL_CACHE") or "0").strip() != "0":
+                    with pkl_build_lock:
+                        running = bool(pkl_build_state.get("running"))
+                        if not running:
+                            pkl_build_state["running"] = True
+                            pkl_build_state["last_started"] = datetime.now().isoformat(timespec="seconds")
+                            pkl_build_state["last_error"] = None
+
+                            def pkl_worker() -> None:
+                                try:
+                                    from 数据获取.factor_cache_update import build_market_cache
+
+                                    tail = int(os.environ.get("QC_PKL_CACHE_TAIL") or "2160")
+                                    workers = int(os.environ.get("QC_PKL_CACHE_WORKERS") or "8")
+                                    build_market_cache(market="swap", tail=tail, symbols_limit=0, workers=workers, incremental=True)
+                                    build_market_cache(market="spot", tail=tail, symbols_limit=0, workers=workers, incremental=True)
+                                except Exception as e:
+                                    with pkl_build_lock:
+                                        pkl_build_state["last_error"] = str(e)
+                                finally:
+                                    with pkl_build_lock:
+                                        pkl_build_state["running"] = False
+                                        pkl_build_state["last_finished"] = datetime.now().isoformat(timespec="seconds")
+
+                            threading.Thread(target=pkl_worker, daemon=True).start()
+            except Exception as e:
+                update_state["last_error_preprocess"] = str(e)
         except Exception as e:
             update_state["last_error"] = str(e)
         finally:
             update_state["running"] = False
             update_state["last_finished"] = datetime.now().isoformat(timespec="seconds")
             if update_state.get("last_error") is None:
-                _send_wecom_for_all_enabled()
+                pass
 
 
 def start_update(fetch: bool) -> bool:
@@ -907,11 +1030,95 @@ class Handler(BaseHTTPRequestHandler):
                 import hashlib
                 params = payload.get("params") if isinstance(payload.get("params"), dict) else {}
                 toggles = payload.get("toggles") if isinstance(payload.get("toggles"), dict) else {}
-                req_sig_obj = {"custom_factors": factors, "tail": tail, "params": params, "toggles": toggles}
+                fields_raw = payload.get("fields")
+                if isinstance(fields_raw, list):
+                    req_fields = [str(x).strip() for x in fields_raw if str(x).strip()]
+                elif isinstance(fields_raw, str):
+                    req_fields = [x.strip() for x in fields_raw.split(",") if x.strip()]
+                else:
+                    req_fields = []
+                include_debug_raw = payload.get("include_debug")
+                include_debug = bool(include_debug_raw) if isinstance(include_debug_raw, bool) else str(include_debug_raw or "0").strip().lower() in ("1", "true", "yes", "on")
+                symbols_raw = payload.get("symbols")
+                symbols_norm: list[dict[str, str]] = []
+                if isinstance(symbols_raw, list):
+                    for it in symbols_raw:
+                        if isinstance(it, dict):
+                            m = str(it.get("market") or "").strip().lower()
+                            s = str(it.get("symbol") or "").strip()
+                            if m in ("swap", "spot") and s:
+                                symbols_norm.append({"market": m, "symbol": s})
+                        elif isinstance(it, str):
+                            t0 = it.strip()
+                            if "|" in t0:
+                                m, s = t0.split("|", 1)
+                                m = m.strip().lower()
+                                s = s.strip()
+                                if m in ("swap", "spot") and s:
+                                    symbols_norm.append({"market": m, "symbol": s})
+                symbols_sig = hashlib.sha1(json.dumps(symbols_norm, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest() if symbols_norm else ""
+                try:
+                    chunk_offset = max(0, int(payload.get("chunk_offset") or 0))
+                except Exception:
+                    chunk_offset = 0
+                try:
+                    chunk_limit = int(payload.get("chunk_limit") or 0)
+                except Exception:
+                    chunk_limit = 0
+                if chunk_limit <= 0:
+                    try:
+                        chunk_limit = int(os.environ.get("QC_ENRICHED_CHUNK_SIZE") or "120")
+                    except Exception:
+                        chunk_limit = 120
+                chunk_limit = max(10, min(500, chunk_limit))
+                req_sig_obj = {
+                    "custom_factors": factors,
+                    "tail": tail,
+                    "params": params,
+                    "toggles": toggles,
+                    "chunk_offset": chunk_offset,
+                    "chunk_limit": chunk_limit,
+                    "fields": req_fields,
+                    "include_debug": include_debug,
+                    "symbols_sig": symbols_sig,
+                }
                 req_sig = hashlib.sha1(json.dumps(req_sig_obj, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
             except Exception:
                 params = payload.get("params") if isinstance(payload.get("params"), dict) else {}
                 toggles = payload.get("toggles") if isinstance(payload.get("toggles"), dict) else {}
+                fields_raw = payload.get("fields")
+                if isinstance(fields_raw, list):
+                    req_fields = [str(x).strip() for x in fields_raw if str(x).strip()]
+                elif isinstance(fields_raw, str):
+                    req_fields = [x.strip() for x in fields_raw.split(",") if x.strip()]
+                else:
+                    req_fields = []
+                include_debug_raw = payload.get("include_debug")
+                include_debug = bool(include_debug_raw) if isinstance(include_debug_raw, bool) else str(include_debug_raw or "0").strip().lower() in ("1", "true", "yes", "on")
+                symbols_raw = payload.get("symbols")
+                symbols_norm = []
+                if isinstance(symbols_raw, list):
+                    for it in symbols_raw:
+                        if isinstance(it, dict):
+                            m = str(it.get("market") or "").strip().lower()
+                            s = str(it.get("symbol") or "").strip()
+                            if m in ("swap", "spot") and s:
+                                symbols_norm.append({"market": m, "symbol": s})
+                symbols_sig = ""
+                try:
+                    chunk_offset = max(0, int(payload.get("chunk_offset") or 0))
+                except Exception:
+                    chunk_offset = 0
+                try:
+                    chunk_limit = int(payload.get("chunk_limit") or 0)
+                except Exception:
+                    chunk_limit = 0
+                if chunk_limit <= 0:
+                    try:
+                        chunk_limit = int(os.environ.get("QC_ENRICHED_CHUNK_SIZE") or "120")
+                    except Exception:
+                        chunk_limit = 120
+                chunk_limit = max(10, min(500, chunk_limit))
                 req_sig = str(len(factors))
 
             try:
@@ -919,14 +1126,27 @@ class Handler(BaseHTTPRequestHandler):
                 latest_etag = f"{int(st.st_mtime_ns):x}-{int(st.st_size):x}"
             except Exception:
                 latest_etag = "na"
-            cache_key = (int(user["id"]), latest_etag, req_sig)
+            cache_key = (int(user["id"]), latest_etag, req_sig, int(chunk_offset), int(chunk_limit))
             accept = str(self.headers.get("Accept-Encoding") or "")
             want_gz = "gzip" in accept.lower()
 
             with enriched_cache_lock:
                 hit = enriched_cache.get(cache_key)
+                if isinstance(hit, dict):
+                    try:
+                        ttl0 = int(os.environ.get("QC_ENRICHED_CACHE_TTL_SEC") or "45")
+                    except Exception:
+                        ttl0 = 45
+                    ttl0 = max(5, min(900, ttl0))
+                    if time.time() - float(hit.get("ts") or 0.0) > ttl0:
+                        enriched_cache.pop(cache_key, None)
+                        hit = None
+                    else:
+                        enriched_cache.move_to_end(cache_key)
             if hit:
-                etag, raw_b, gz_b = hit
+                etag = hit.get("etag")
+                raw_b = hit.get("raw")
+                gz_b = hit.get("gz")
                 if self._maybe_304(etag):
                     return
                 if want_gz:
@@ -934,7 +1154,6 @@ class Handler(BaseHTTPRequestHandler):
                 else:
                     self._send_bytes(200, raw_b, content_type="application/json; charset=utf-8", etag=etag)
                 return
-
             compiled: list[tuple[str, dict, dict]] = []
             for f in factors:
                 if not isinstance(f, dict):
@@ -1039,7 +1258,50 @@ class Handler(BaseHTTPRequestHandler):
                 stoch_rsi_sm_d = 0
 
             req_market = str(params.get("market") or "all").strip().lower()
-            for r in all_rows:
+            base_keep = {"market", "symbol", "name", "dt_display", "dt_close", "close", "pct_change", "_rank", "_new_on_list"}
+            req_fields_set = set(req_fields)
+            return_fields_mode = bool(req_fields_set)
+            wanted_builtin_keys = {k for k in req_fields_set if (k.startswith("ma_") or k.startswith("rsi_") or k in {"ema", "boll_up", "boll_down", "supertrend", "kdj_k", "kdj_d", "kdj_j", "obv", "obv_ma", "stoch_rsi_k", "stoch_rsi_d"})}
+            wanted_expr_ids = {k[5:] for k in req_fields_set if k.startswith("expr_") and len(k) > 5}
+            try:
+                budget_ms = int(os.environ.get("QC_ENRICHED_BUDGET_MS") or "25000")
+            except Exception:
+                budget_ms = 25000
+            budget_ms = max(5000, min(55000, budget_ms))
+            deadline = time.perf_counter() + (float(budget_ms) / 1000.0)
+
+            row_map: dict[str, dict] = {}
+            for rr in all_rows:
+                if not isinstance(rr, dict):
+                    continue
+                mk = str(rr.get("market") or "").strip().lower()
+                sk = str(rr.get("symbol") or "").strip()
+                if mk in ("swap", "spot") and sk:
+                    row_map[f"{mk}|{sk}"] = rr
+            use_rows = all_rows
+            if symbols_norm:
+                subset: list[dict] = []
+                seen_keys = set()
+                for it in symbols_norm:
+                    k = f"{it.get('market')}|{it.get('symbol')}"
+                    if k in seen_keys:
+                        continue
+                    seen_keys.add(k)
+                    rr = row_map.get(k)
+                    if rr is not None:
+                        subset.append(rr)
+                use_rows = subset
+
+            total_rows = int(len(use_rows))
+            begin = min(max(0, int(chunk_offset)), total_rows)
+            end = min(total_rows, begin + int(chunk_limit))
+            src_rows = use_rows[begin:end]
+            t_series = 0.0
+            t_expr = 0.0
+            t_builtin = 0.0
+            for r in src_rows:
+                if time.perf_counter() > deadline and rows2:
+                    break
                 if not isinstance(r, dict):
                     continue
                 sym = str(r.get("symbol") or "").strip()
@@ -1050,103 +1312,165 @@ class Handler(BaseHTTPRequestHandler):
                 if req_market in ("swap", "spot") and market != req_market:
                     rows2.append(r)
                     continue
+                t0 = time.perf_counter()
                 ctx = _get_series_cached(market=market, symbol=sym, tail=tail)
+                t_series += max(0.0, time.perf_counter() - t0)
                 if ctx is None:
                     rows2.append(r)
                     continue
                 expr_out: dict[str, float | None] = {}
+                t1 = time.perf_counter()
                 for fid, ast, _f in compiled:
+                    if wanted_expr_ids and fid not in wanted_expr_ids:
+                        continue
                     try:
                         v = eval_ast(ast, series=ctx["series"], latest=ctx["latest"])
                         expr_out[fid] = _scalar_from_val(v)
                     except Exception:
                         expr_out[fid] = None
+                t_expr += max(0.0, time.perf_counter() - t1)
                 r2 = dict(r)
-                r2["_expr"] = expr_out
+                if expr_out:
+                    r2["_expr"] = expr_out
                 b0 = r.get("_builtins") if isinstance(r.get("_builtins"), dict) else {}
                 builtins_out = dict(b0)
                 series = ctx.get("series") if isinstance(ctx, dict) else {}
-                closes = _series_to_list(series.get("close") if isinstance(series, dict) else None)
-                highs = _series_to_list(series.get("high") if isinstance(series, dict) else None)
-                lows = _series_to_list(series.get("low") if isinstance(series, dict) else None)
-                volumes = _series_to_list(series.get("volume") if isinstance(series, dict) else None)
+                t2 = time.perf_counter()
+                need_closes = bool(ma_close_p > 0 or ma_fast_p > 0 or ma_slow_p > 0 or rsi_p > 0 or want_ema or want_boll_up or want_boll_down or want_super or want_kdj or want_obv or want_stoch_rsi)
+                need_hl = bool(want_super or want_kdj)
+                need_vol = bool(want_obv)
+                if return_fields_mode and wanted_builtin_keys:
+                    need_closes = need_closes and bool(wanted_builtin_keys & {f"ma_{ma_close_p}", f"ma_{ma_fast_p}", f"ma_{ma_slow_p}", f"rsi_{rsi_p}", "ema", "boll_up", "boll_down", "supertrend", "kdj_k", "kdj_d", "kdj_j", "obv", "obv_ma", "stoch_rsi_k", "stoch_rsi_d"})
+                    need_hl = need_hl and bool(wanted_builtin_keys & {"supertrend", "kdj_k", "kdj_d", "kdj_j"})
+                    need_vol = need_vol and bool(wanted_builtin_keys & {"obv", "obv_ma"})
+                closes0 = series.get("close") if (need_closes and isinstance(series, dict)) else None
+                highs0 = series.get("high") if (need_hl and isinstance(series, dict)) else None
+                lows0 = series.get("low") if (need_hl and isinstance(series, dict)) else None
+                volumes0 = series.get("volume") if (need_vol and isinstance(series, dict)) else None
+                closes = closes0 if isinstance(closes0, list) else _series_to_list(closes0)
+                highs = highs0 if isinstance(highs0, list) else _series_to_list(highs0)
+                lows = lows0 if isinstance(lows0, list) else _series_to_list(lows0)
+                volumes = volumes0 if isinstance(volumes0, list) else _series_to_list(volumes0)
 
-                if ma_close_p > 0:
+                if ma_close_p > 0 and (not return_fields_mode or f"ma_{ma_close_p}" in wanted_builtin_keys):
                     v0 = sma(closes, ma_close_p)
                     if v0 is not None:
                         builtins_out[f"ma_{ma_close_p}"] = v0
-                if ma_fast_p > 0:
+                if ma_fast_p > 0 and (not return_fields_mode or f"ma_{ma_fast_p}" in wanted_builtin_keys):
                     v0 = sma(closes, ma_fast_p)
                     if v0 is not None:
                         builtins_out[f"ma_{ma_fast_p}"] = v0
-                if ma_slow_p > 0:
+                if ma_slow_p > 0 and (not return_fields_mode or f"ma_{ma_slow_p}" in wanted_builtin_keys):
                     v0 = sma(closes, ma_slow_p)
                     if v0 is not None:
                         builtins_out[f"ma_{ma_slow_p}"] = v0
-                if rsi_p > 0:
+                if rsi_p > 0 and (not return_fields_mode or f"rsi_{rsi_p}" in wanted_builtin_keys):
                     v0 = rsi(closes, rsi_p)
                     if v0 is not None:
                         builtins_out[f"rsi_{rsi_p}"] = v0
-                if want_ema and ema_p > 0:
+                if want_ema and ema_p > 0 and (not return_fields_mode or "ema" in wanted_builtin_keys):
                     v0 = ema(closes, ema_p)
                     if v0 is not None:
                         builtins_out["ema"] = v0
-                if want_boll_up and boll_p > 0:
+                if want_boll_up and boll_p > 0 and (not return_fields_mode or "boll_up" in wanted_builtin_keys):
                     ma_v = sma(closes, boll_p)
                     std_v = rolling_std(closes, boll_p)
                     if ma_v is not None and std_v is not None:
                         builtins_out["boll_up"] = ma_v + boll_std * std_v
-                if want_boll_down and boll_down_p > 0:
+                if want_boll_down and boll_down_p > 0 and (not return_fields_mode or "boll_down" in wanted_builtin_keys):
                     ma_v = sma(closes, boll_down_p)
                     std_v = rolling_std(closes, boll_down_p)
                     if ma_v is not None and std_v is not None:
                         builtins_out["boll_down"] = ma_v - boll_down_std * std_v
-                if want_super and super_atr_p > 0:
+                if want_super and super_atr_p > 0 and (not return_fields_mode or "supertrend" in wanted_builtin_keys):
                     v0 = supertrend(highs, lows, closes, super_atr_p, super_mult)
                     if v0 is not None:
                         builtins_out["supertrend"] = v0
-                if want_kdj and kdj_n > 0 and kdj_m1 > 0 and kdj_m2 > 0:
+                if want_kdj and kdj_n > 0 and kdj_m1 > 0 and kdj_m2 > 0 and (not return_fields_mode or bool(wanted_builtin_keys & {"kdj_k", "kdj_d", "kdj_j"})):
                     x = kdj(highs, lows, closes, kdj_n, kdj_m1, kdj_m2)
                     if isinstance(x, dict):
                         k0 = x.get("k")
                         d0 = x.get("d")
                         j0 = x.get("j")
-                        if k0 is not None:
+                        if k0 is not None and (not return_fields_mode or "kdj_k" in wanted_builtin_keys):
                             builtins_out["kdj_k"] = k0
-                        if d0 is not None:
+                        if d0 is not None and (not return_fields_mode or "kdj_d" in wanted_builtin_keys):
                             builtins_out["kdj_d"] = d0
-                        if j0 is not None:
+                        if j0 is not None and (not return_fields_mode or "kdj_j" in wanted_builtin_keys):
                             builtins_out["kdj_j"] = j0
-                if want_obv and obv_ma_p > 0:
+                if want_obv and obv_ma_p > 0 and (not return_fields_mode or bool(wanted_builtin_keys & {"obv", "obv_ma"})):
                     x = obv_with_ma(closes, volumes, obv_ma_p)
                     if isinstance(x, dict):
                         obv0 = x.get("obv")
                         ma0 = x.get("ma")
-                        if obv0 is not None:
+                        if obv0 is not None and (not return_fields_mode or "obv" in wanted_builtin_keys):
                             builtins_out["obv"] = obv0
-                        if ma0 is not None:
+                        if ma0 is not None and (not return_fields_mode or "obv_ma" in wanted_builtin_keys):
                             builtins_out["obv_ma"] = ma0
-                if want_stoch_rsi and stoch_rsi_p > 0 and stoch_rsi_k > 0 and stoch_rsi_sm_k > 0 and stoch_rsi_sm_d > 0:
+                if want_stoch_rsi and stoch_rsi_p > 0 and stoch_rsi_k > 0 and stoch_rsi_sm_k > 0 and stoch_rsi_sm_d > 0 and (not return_fields_mode or bool(wanted_builtin_keys & {"stoch_rsi_k", "stoch_rsi_d"})):
                     x = stoch_rsi(closes, stoch_rsi_p, stoch_rsi_k, stoch_rsi_sm_k, stoch_rsi_sm_d)
                     if isinstance(x, dict):
                         k0 = x.get("k")
                         d0 = x.get("d")
-                        if k0 is not None:
+                        if k0 is not None and (not return_fields_mode or "stoch_rsi_k" in wanted_builtin_keys):
                             builtins_out["stoch_rsi_k"] = k0
-                        if d0 is not None:
+                        if d0 is not None and (not return_fields_mode or "stoch_rsi_d" in wanted_builtin_keys):
                             builtins_out["stoch_rsi_d"] = d0
                 if builtins_out:
                     r2["_builtins"] = builtins_out
+                t_builtin += max(0.0, time.perf_counter() - t2)
+                if not include_debug and "_debug" in r2:
+                    r2.pop("_debug", None)
+                if return_fields_mode:
+                    keep = set(base_keep)
+                    keep.update(req_fields_set)
+                    if "_expr" in r2 and (wanted_expr_ids or not wanted_expr_ids):
+                        keep.add("_expr")
+                    if "_builtins" in r2 and (wanted_builtin_keys or not wanted_builtin_keys):
+                        keep.add("_builtins")
+                    r2 = {k: v for k, v in r2.items() if (k in keep)}
+                    if "_builtins" in r2 and wanted_builtin_keys:
+                        b1 = r2.get("_builtins")
+                        if isinstance(b1, dict):
+                            r2["_builtins"] = {k: v for k, v in b1.items() if k in wanted_builtin_keys}
+                    if "_expr" in r2 and wanted_expr_ids:
+                        e1 = r2.get("_expr")
+                        if isinstance(e1, dict):
+                            r2["_expr"] = {k: v for k, v in e1.items() if k in wanted_expr_ids}
                 rows2.append(r2)
 
-            resp = {"ok": True, "summary": latest.get("summary") or {}, "config": cfg0 or {}, "results": rows2}
+            t_encode_start = time.perf_counter()
+            resp = {
+                "ok": True,
+                "summary": latest.get("summary") or {},
+                "config": cfg0 or {},
+                "results": rows2,
+                "chunk": {"offset": int(begin), "limit": int(chunk_limit), "count": int(len(rows2)), "total": int(total_rows)},
+            }
             raw = json.dumps(resp, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
             gz_b = gzip.compress(raw, compresslevel=6)
+            t_encode = max(0.0, time.perf_counter() - t_encode_start)
             etag = f"\"{latest_etag}-{req_sig[:10]}\""
             with enriched_cache_lock:
-                if len(enriched_cache) > int(os.environ.get("QC_ENRICHED_CACHE_MAX") or "800"):
-                    enriched_cache.clear()
-                enriched_cache[cache_key] = (etag, raw, gz_b)
+                enriched_cache[cache_key] = {"ts": time.time(), "etag": etag, "raw": raw, "gz": gz_b}
+                enriched_cache.move_to_end(cache_key)
+                try:
+                    ec_max = int(os.environ.get("QC_ENRICHED_CACHE_MAX") or "800")
+                except Exception:
+                    ec_max = 800
+                ec_max = max(80, min(5000, ec_max))
+                while len(enriched_cache) > ec_max:
+                    enriched_cache.popitem(last=False)
+            with metrics_lock:
+                le = metrics.get("latest_enriched")
+                if not isinstance(le, dict):
+                    le = {"count": 0, "series_s": 0.0, "expr_s": 0.0, "builtins_s": 0.0, "encode_s": 0.0}
+                    metrics["latest_enriched"] = le
+                le["count"] = int(le.get("count") or 0) + 1
+                le["series_s"] = float(le.get("series_s") or 0.0) + float(t_series)
+                le["expr_s"] = float(le.get("expr_s") or 0.0) + float(t_expr)
+                le["builtins_s"] = float(le.get("builtins_s") or 0.0) + float(t_builtin)
+                le["encode_s"] = float(le.get("encode_s") or 0.0) + float(t_encode)
             if self._maybe_304(etag):
                 return
             if want_gz:
@@ -1561,13 +1885,21 @@ class Handler(BaseHTTPRequestHandler):
                     }
             except Exception:
                 lock_info = None
-            self._send_json(200, {"ok": True, "server": "v2", "req_raw": self.path, "req_path": parsed.path, "update": update_state, "lock": lock_info})
+            with pkl_build_lock:
+                pkl0 = json.loads(json.dumps(pkl_build_state))
+            self._send_json(200, {"ok": True, "server": "v2", "req_raw": self.path, "req_path": parsed.path, "update": update_state, "pkl": pkl0, "lock": lock_info})
             return
         if path == "/api/metrics":
             if not self._require_auth():
                 return
             with metrics_lock:
                 m = json.loads(json.dumps(metrics))
+            try:
+                from apps.crypto_screener.app import filter_engine as fe  # noqa: E402
+
+                m["factor_cache"] = fe.get_factor_cache_metrics()
+            except Exception:
+                pass
             extra = {
                 "cache": {
                     "latest_cache": 1 if latest_cache else 0,
@@ -1673,8 +2005,44 @@ class Handler(BaseHTTPRequestHandler):
                 "QC_SCREENER_FALLBACK_SWAP_DIR": os.environ.get("QC_SCREENER_FALLBACK_SWAP_DIR"),
                 "QC_SCREENER_FALLBACK_SPOT_DIR": os.environ.get("QC_SCREENER_FALLBACK_SPOT_DIR"),
                 "QC_DATA_CENTER_ROOT": os.environ.get("QC_DATA_CENTER_ROOT"),
+                "QC_USE_PKL_SERIES_CACHE": os.environ.get("QC_USE_PKL_SERIES_CACHE"),
+                "QC_USE_PREPROCESSED_SERIES": os.environ.get("QC_USE_PREPROCESSED_SERIES"),
+                "QC_PKL_CACHE_ROOT": os.environ.get("QC_PKL_CACHE_ROOT"),
+                "QC_BUILD_PKL_CACHE": os.environ.get("QC_BUILD_PKL_CACHE"),
             }
-            self._send_json(200, {"ok": True, "repo_root": str(repo_root), "market": market, "symbol": sym, "tail_req": int(tail), "env": env0, "series_cache": cache_info, "csv": csv_info, "ctx": {"dt_len": ctx_dt_len, "error": ctx_err}})
+            ctx_src = ctx.get("source") if isinstance(ctx, dict) else None
+            pkl0 = {"series": {"present": False, "dt_len": None}, "factors": {"present": False}}
+            try:
+                from apps.crypto_screener.app import series_source as ss  # noqa: E402
+
+                s_pkl, _stale = ss._load_series_from_pkl_cache(market=market, symbol=sym, tail=tail, repo_root=repo_root, return_stale=True)
+                if s_pkl is not None:
+                    pkl0["series"]["present"] = True
+                    pkl0["series"]["dt_len"] = len(getattr(s_pkl, "dt", []) or [])
+            except Exception:
+                pass
+            try:
+                from apps.crypto_screener.app import filter_engine as fe  # noqa: E402
+
+                f_pkl = fe._get_cached_factors(market=market, symbol=sym)
+                pkl0["factors"]["present"] = bool(isinstance(f_pkl, dict) and f_pkl)
+            except Exception:
+                pass
+            self._send_json(
+                200,
+                {
+                    "ok": True,
+                    "repo_root": str(repo_root),
+                    "market": market,
+                    "symbol": sym,
+                    "tail_req": int(tail),
+                    "env": env0,
+                    "series_cache": cache_info,
+                    "csv": csv_info,
+                    "pkl_cache": pkl0,
+                    "ctx": {"dt_len": ctx_dt_len, "source": ctx_src, "error": ctx_err},
+                },
+            )
             return
         if path == "/api/kline":
             if not self._require_auth():

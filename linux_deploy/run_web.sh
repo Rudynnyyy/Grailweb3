@@ -56,6 +56,6 @@ mkdir -p "$ROOT_DIR/数据获取/data/swap_lin" "$ROOT_DIR/数据获取/data/spo
 cd "$ROOT_DIR"
 if [ ! -f "$ROOT_DIR/apps/crypto_screener/web/data/latest.json" ]; then
   echo "[run_web] latest.json not found; generating snapshot once..."
-  python3 -c "import sys; sys.path.insert(0, r'$ROOT_DIR'); from apps.crypto_screener.app.pipeline import run_once, default_paths; run_once(default_paths(), fetch=False)"
+  "$QC_GAMMA_PYTHON" -c "import sys; sys.path.insert(0, r'$ROOT_DIR'); from apps.crypto_screener.app.pipeline import run_once, default_paths; run_once(default_paths(), fetch=False)"
 fi
-exec python3 apps/crypto_screener/app/web_server.py
+exec "$QC_GAMMA_PYTHON" apps/crypto_screener/app/web_server.py

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>自动化选币器</title>
-  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./style.css?v=20260310_1" />
 </head>
 <body data-page="main">
   <div id="bootOverlay" class="boot-overlay" aria-hidden="false">
@@ -274,6 +274,10 @@
           </div>
         </div>
         <div id="folder_momentum" class="folder-conds"></div>
+        <div id="enrichProgress" class="enrich-progress hidden">
+          <div id="enrichProgressText" class="enrich-progress-text">因子计算中 0%</div>
+          <div class="enrich-progress-bar"><div id="enrichProgressFill" class="enrich-progress-fill"></div></div>
+        </div>
         <div id="counts" class="counts"></div>
       </div>
 
@@ -294,7 +298,10 @@
           <button id="exprHelp" class="help-btn" type="button" aria-label="帮助">?</button>
         </div>
 
-        <button id="exprToggle" class="btn btn-secondary">添加因子</button>
+        <div class="row-actions" style="justify-content: flex-start; gap: 10px;">
+          <button id="exprToggle" class="btn btn-secondary">添加因子</button>
+          <button id="factorLibToggle" class="btn btn-secondary" type="button">因子库</button>
+        </div>
 
         <div id="exprEditor" class="group hidden">
         <label class="label">文件夹</label>
@@ -324,6 +331,11 @@
 
         <label class="check"><input id="exprShow" type="checkbox" checked /> 显示列</label>
         <button id="exprAdd" class="btn btn-secondary">添加/更新</button>
+        </div>
+
+        <div id="factorLib" class="factor-lib hidden">
+          <input id="factorLibQuery" class="input" placeholder="搜索因子（名称/表达式/简介）" />
+          <div id="factorLibList" class="factor-lib-list"></div>
         </div>
 
         <div id="exprList" class="plugin-list"></div>
@@ -432,6 +444,7 @@
                 <option value="spot">现货</option>
                 <option value="swap">合约</option>
               </select>
+              <label class="check"><input id="baseNewOnList" type="checkbox" /> 榜上新币红点提示</label>
               <div class="row-actions">
                 <button id="baseMarketApply" class="btn btn-secondary" type="button">应用到主页</button>
               </div>
@@ -532,6 +545,6 @@
     </main>
   </div>
 
-  <script src="./app.js"></script>
+  <script src="./app.js?v=20260310_1"></script>
 </body>
 </html>

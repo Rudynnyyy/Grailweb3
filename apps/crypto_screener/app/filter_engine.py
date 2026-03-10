@@ -20,6 +20,402 @@ def last_non_null(arr: list) -> float | None:
     return None
 
 
+_factor_cache_lock = None
+_factor_cache: dict = {"root": "", "files": {}}
+_factor_metrics_lock = None
+_factor_metrics: dict = {"lookups": 0, "hits": 0, "misses": 0, "used_keys": {}, "miss_symbols": {}}
+_expr_ast_cache_lock = None
+_expr_ast_cache: dict[str, dict] = {}
+
+
+def _repo_root() -> "Path":
+    from pathlib import Path
+
+    return Path(__file__).resolve().parents[3]
+
+
+def _symbol_candidates(symbol: str) -> list[str]:
+    s = str(symbol or "").strip()
+    if not s:
+        return []
+    out: list[str] = []
+    for x in (s, s.upper()):
+        if x and x not in out:
+            out.append(x)
+    up = s.upper()
+    if up.endswith("-USDT"):
+        no_dash = up.replace("-", "")
+        if no_dash not in out:
+            out.append(no_dash)
+    elif up.endswith("USDT"):
+        with_dash = f"{up[:-4]}-USDT"
+        if with_dash not in out:
+            out.append(with_dash)
+    elif "-" not in up:
+        with_dash = f"{up}-USDT"
+        if with_dash not in out:
+            out.append(with_dash)
+        no_dash = f"{up}USDT"
+        if no_dash not in out:
+            out.append(no_dash)
+    return out
+
+
+def _factor_lock():
+    global _factor_cache_lock
+    if _factor_cache_lock is None:
+        import threading
+
+        _factor_cache_lock = threading.Lock()
+    return _factor_cache_lock
+
+
+def _metrics_lock():
+    global _factor_metrics_lock
+    if _factor_metrics_lock is None:
+        import threading
+
+        _factor_metrics_lock = threading.Lock()
+    return _factor_metrics_lock
+
+
+def _expr_lock():
+    global _expr_ast_cache_lock
+    if _expr_ast_cache_lock is None:
+        import threading
+
+        _expr_ast_cache_lock = threading.Lock()
+    return _expr_ast_cache_lock
+
+
+def _compile_expr(expr: str) -> dict:
+    s = str(expr or "")
+    lock = _expr_lock()
+    with lock:
+        hit = _expr_ast_cache.get(s)
+    if hit is not None:
+        return hit
+    ast = parse_expr_tokens(tokenize_expr(s))
+    with lock:
+        _expr_ast_cache[s] = ast
+    return ast
+
+
+def get_factor_cache_metrics() -> dict:
+    lock = _metrics_lock()
+    with lock:
+        import json
+
+        return json.loads(json.dumps(_factor_metrics))
+
+
+def reset_factor_cache_metrics() -> None:
+    lock = _metrics_lock()
+    with lock:
+        _factor_metrics["lookups"] = 0
+        _factor_metrics["hits"] = 0
+        _factor_metrics["misses"] = 0
+        _factor_metrics["used_keys"] = {}
+        _factor_metrics["miss_symbols"] = {}
+
+
+def _last_series_value(arr: list, *, shift_n: int = 0) -> float | None:
+    if not isinstance(arr, list) or not arr:
+        return None
+    idx = len(arr) - 1 - int(shift_n or 0)
+    if idx < 0 or idx >= len(arr):
+        return None
+    v = arr[idx]
+    return float(v) if _is_num(v) else None
+
+
+def _eval_expr_scalar(node: dict, ctx: dict) -> tuple[str, object | None]:
+    k = node.get("k")
+    if k == "num":
+        v = node.get("v")
+        return ("scalar", float(v) if _is_num(v) else None)
+    if k == "id":
+        name = str(node.get("name") or "").lower()
+        if name in ("open", "high", "low", "close", "volume", "quote_volume"):
+            arr = (ctx.get("series") or {}).get(name) or []
+            return ("series", arr if isinstance(arr, list) else [])
+        if name == "quotevolume":
+            arr = (ctx.get("series") or {}).get("quote_volume") or []
+            return ("series", arr if isinstance(arr, list) else [])
+        if name == "eps":
+            return ("scalar", 1e-12)
+        if name in ("latest_close", "latestclose"):
+            v = ((ctx.get("latest") or {}).get("close")) if isinstance(ctx.get("latest"), dict) else None
+            return ("scalar", float(v) if _is_num(v) else None)
+        return ("scalar", None)
+    if k == "member":
+        return ("scalar", None)
+    if k == "unary":
+        op = str(node.get("op") or "")
+        t, v = _eval_expr_scalar(node.get("x") or {}, ctx)
+        if t == "series":
+            x = _last_series_value(v if isinstance(v, list) else [])
+            if x is None:
+                return ("scalar", None)
+            return ("scalar", -float(x) if op == "-" else float(x))
+        if v is None or not _is_num(v):
+            return ("scalar", None)
+        return ("scalar", -float(v) if op == "-" else float(v))
+    if k in ("bin", "cmp"):
+        op = str(node.get("op") or "")
+        ta, a = _eval_expr_scalar(node.get("a") or {}, ctx)
+        tb, b = _eval_expr_scalar(node.get("b") or {}, ctx)
+
+        def to_scalar(t0: str, v0) -> float | None:
+            if t0 == "series":
+                return _last_series_value(v0 if isinstance(v0, list) else [])
+            if v0 is None or not _is_num(v0):
+                return None
+            return float(v0)
+
+        av = to_scalar(ta, a)
+        bv = to_scalar(tb, b)
+        if av is None or bv is None:
+            return ("scalar", None)
+        if k == "bin":
+            if op == "+":
+                return ("scalar", av + bv)
+            if op == "-":
+                return ("scalar", av - bv)
+            if op == "*":
+                return ("scalar", av * bv)
+            if op == "/":
+                return ("scalar", None if bv == 0 else av / bv)
+            return ("scalar", None)
+        if op == ">":
+            return ("scalar", 1.0 if av > bv else 0.0)
+        if op == ">=":
+            return ("scalar", 1.0 if av >= bv else 0.0)
+        if op == "<":
+            return ("scalar", 1.0 if av < bv else 0.0)
+        if op == "<=":
+            return ("scalar", 1.0 if av <= bv else 0.0)
+        if op == "==":
+            return ("scalar", 1.0 if av == bv else 0.0)
+        if op == "!=":
+            return ("scalar", 1.0 if av != bv else 0.0)
+        return ("scalar", None)
+    if k == "call":
+        name = str(node.get("name") or "").lower()
+        args = node.get("args") or []
+
+        def ensure_scalar(n: dict) -> float | None:
+            t0, v0 = _eval_expr_scalar(n, ctx)
+            if t0 == "series":
+                return _last_series_value(v0 if isinstance(v0, list) else [])
+            return float(v0) if _is_num(v0) else None
+
+        def ensure_series(n: dict) -> list:
+            t0, v0 = _eval_expr_scalar(n, ctx)
+            if t0 == "series" and isinstance(v0, list):
+                return v0
+            return []
+
+        if name == "abs":
+            if not args:
+                return ("scalar", None)
+            x = ensure_scalar(args[0])
+            return ("scalar", None if x is None else abs(float(x)))
+        if name == "shift":
+            if not args:
+                return ("scalar", None)
+            if len(args) >= 2:
+                series = ensure_series(args[0])
+                n = ensure_scalar(args[1])
+            else:
+                series = (ctx.get("series") or {}).get("close") or []
+                n = ensure_scalar(args[0])
+            if not series or n is None:
+                return ("scalar", None)
+            return ("scalar", _last_series_value(series, shift_n=int(n)))
+        if name in ("ma", "sma", "ema", "mean", "std"):
+            if not args:
+                return ("scalar", None)
+            if len(args) >= 2:
+                series = ensure_series(args[0])
+                w = ensure_scalar(args[1])
+            else:
+                series = (ctx.get("series") or {}).get("close") or []
+                w = ensure_scalar(args[0])
+            if not series or w is None:
+                return ("scalar", None)
+            win = int(w)
+            if name == "std":
+                return ("scalar", rolling_std(series, win))
+            if name == "ema":
+                return ("scalar", ema(series, win))
+            return ("scalar", sma(series, win))
+        if name == "rsi":
+            if not args:
+                return ("scalar", None)
+            if len(args) >= 2:
+                series = ensure_series(args[0])
+                p = ensure_scalar(args[1])
+            else:
+                series = (ctx.get("series") or {}).get("close") or []
+                p = ensure_scalar(args[0])
+            if not series or p is None:
+                return ("scalar", None)
+            return ("scalar", rsi(series, int(p)))
+        if name == "corr":
+            if len(args) < 3:
+                return ("scalar", None)
+            x = ensure_series(args[0])
+            y = ensure_series(args[1])
+            w = ensure_scalar(args[2])
+            if not x or not y or w is None:
+                return ("scalar", None)
+            return ("scalar", rolling_corr(x, y, int(w)))
+        return ("scalar", None)
+    return ("scalar", None)
+
+
+def _factor_cache_root() -> "Path":
+    from pathlib import Path
+    import os
+
+    env = (os.environ.get("QC_PKL_CACHE_ROOT") or "").strip()
+    if env:
+        return Path(env)
+    out_root = (os.environ.get("QC_PREPROCESS_OUT_ROOT") or "").strip()
+    if out_root:
+        return Path(out_root) / "pkl_cache"
+    repo_root = _repo_root()
+    return (repo_root / "数据获取" / "data" / "preprocessed_hourly") / "pkl_cache"
+
+
+def _load_factor_payload(*, market: str) -> dict:
+    import os
+    from pathlib import Path
+
+    root = _factor_cache_root()
+    fp = Path(root) / f"factors_{str(market).lower()}.pkl"
+    if not fp.exists():
+        return {}
+    try:
+        st_mtime_ns = int(fp.stat().st_mtime_ns)
+    except Exception:
+        st_mtime_ns = -1
+    lock = _factor_lock()
+    with lock:
+        if _factor_cache.get("root") == str(root):
+            files0 = _factor_cache.get("files")
+            if isinstance(files0, dict):
+                rec = files0.get(str(market).lower())
+                if isinstance(rec, dict) and int(rec.get("mtime_ns", -1)) == st_mtime_ns:
+                    data0 = rec.get("data")
+                    return data0 if isinstance(data0, dict) else {}
+        try:
+            import pickle
+
+            with fp.open("rb") as f:
+                payload = pickle.load(f)
+        except Exception:
+            payload = {}
+        if not isinstance(payload, dict):
+            payload = {}
+        if _factor_cache.get("root") != str(root):
+            _factor_cache["root"] = str(root)
+            _factor_cache["files"] = {}
+        files1 = _factor_cache.get("files")
+        if not isinstance(files1, dict):
+            files1 = {}
+            _factor_cache["files"] = files1
+        files1[str(market).lower()] = {"mtime_ns": st_mtime_ns, "data": payload}
+        return payload
+
+
+def _get_cached_factors(*, market: str, symbol: str) -> dict | None:
+    if not market or not symbol:
+        return None
+    lock = _metrics_lock()
+    with lock:
+        _factor_metrics["lookups"] = int(_factor_metrics.get("lookups") or 0) + 1
+    try:
+        import os
+        from pathlib import Path
+
+        if str(os.environ.get("QC_PKL_REQUIRE_FRESH") or "1").strip() != "0":
+            root = _factor_cache_root()
+            fp = Path(root) / f"factors_{str(market).lower()}.pkl"
+            try:
+                fac_mtime_ns = int(fp.stat().st_mtime_ns)
+            except Exception:
+                fac_mtime_ns = -1
+            if fac_mtime_ns > 0:
+                try:
+                    from apps.crypto_screener.app import series_source as ss  # noqa: E402
+
+                    repo_root = _repo_root()
+                    swap_dir, spot_dir = ss._default_merge_dirs(repo_root)
+                    dc_swap_dir, dc_spot_dir = ss._default_data_center_dirs(repo_root)
+                    is_swap = str(market).lower() == "swap"
+                    base = swap_dir if is_swap else spot_dir
+                    dc_base = dc_swap_dir if is_swap else dc_spot_dir
+                    csv_path, _picked = ss._pick_existing_csv([base, dc_base], str(symbol or "").strip(), tail_hint=720)
+                    if csv_path is not None:
+                        try:
+                            csv_mtime_ns = int(csv_path.stat().st_mtime_ns)
+                        except Exception:
+                            csv_mtime_ns = -1
+                        if csv_mtime_ns > 0 and csv_mtime_ns > fac_mtime_ns:
+                            lock = _metrics_lock()
+                            with lock:
+                                _factor_metrics["misses"] = int(_factor_metrics.get("misses") or 0) + 1
+                                ms = _factor_metrics.get("miss_symbols")
+                                if not isinstance(ms, dict):
+                                    ms = {}
+                                    _factor_metrics["miss_symbols"] = ms
+                                k = str(symbol).upper()
+                                ms[k] = int(ms.get(k) or 0) + 1
+                            return None
+                except Exception:
+                    pass
+    except Exception:
+        pass
+    payload = _load_factor_payload(market=str(market).lower())
+    mp = payload.get("factors") if isinstance(payload, dict) else None
+    if not isinstance(mp, dict):
+        lock = _metrics_lock()
+        with lock:
+            _factor_metrics["misses"] = int(_factor_metrics.get("misses") or 0) + 1
+        return None
+    for s in _symbol_candidates(symbol):
+        rec = mp.get(str(s).upper())
+        if isinstance(rec, dict):
+            lock = _metrics_lock()
+            with lock:
+                _factor_metrics["hits"] = int(_factor_metrics.get("hits") or 0) + 1
+            return rec
+    lock = _metrics_lock()
+    with lock:
+        _factor_metrics["misses"] = int(_factor_metrics.get("misses") or 0) + 1
+        ms = _factor_metrics.get("miss_symbols")
+        if not isinstance(ms, dict):
+            ms = {}
+            _factor_metrics["miss_symbols"] = ms
+        k = str(symbol).upper()
+        ms[k] = int(ms.get(k) or 0) + 1
+    return None
+
+
+def _mark_factor_key_used(key: str) -> None:
+    if not key:
+        return
+    lock = _metrics_lock()
+    with lock:
+        mp = _factor_metrics.get("used_keys")
+        if not isinstance(mp, dict):
+            mp = {}
+            _factor_metrics["used_keys"] = mp
+        mp[str(key)] = int(mp.get(str(key)) or 0) + 1
+
+
 def get_series(row: dict, name: str) -> list:
     s = (row or {}).get("series") or {}
     v = s.get(name)
@@ -648,8 +1044,7 @@ def eval_ast(node: dict, ctx: dict) -> dict:
 
 
 def eval_expression(expr: str, row: dict) -> float | None:
-    tokens = tokenize_expr(expr)
-    ast = parse_expr_tokens(tokens)
+    ast = _compile_expr(expr)
     series = {
         "open": get_series(row, "open"),
         "high": get_series(row, "high"),
@@ -663,8 +1058,13 @@ def eval_expression(expr: str, row: dict) -> float | None:
         c = row.get("close")
         latest_close = float(c) if _is_num(c) else None
     ctx = {"series": series, "latest": {"close": latest_close}}
-    v = eval_ast(ast, ctx)
-    return _scalar_from(v)
+    try:
+        t, v = _eval_expr_scalar(ast, ctx)
+    except Exception:
+        t, v = ("scalar", None)
+    if t == "series":
+        return _last_series_value(v if isinstance(v, list) else [])
+    return float(v) if _is_num(v) else None
 
 
 def compare(v: float | None, cmp: str, thr: float) -> bool:
@@ -688,13 +1088,27 @@ def compare(v: float | None, cmp: str, thr: float) -> bool:
 def compute_builtins(row: dict, params: dict) -> dict:
     closes = get_series(row, "close")
     out: dict[str, float | None] = {}
+    market0 = str((row or {}).get("market") or (params or {}).get("market") or "").strip().lower()
+    if market0 == "all":
+        market0 = str((row or {}).get("market") or "").strip().lower()
+    fc = _get_cached_factors(market=market0, symbol=str((row or {}).get("symbol") or "")) if market0 else None
     ps = [params.get("maPeriodClose"), params.get("maFast"), params.get("maSlow")]
     for p in ps:
         if _is_num(p) and int(float(p)) > 0:
-            out[f"ma_{int(float(p))}"] = sma(closes, int(float(p)))
+            k = f"ma_{int(float(p))}"
+            if isinstance(fc, dict) and k in fc:
+                out[k] = fc.get(k)
+                _mark_factor_key_used(k)
+            else:
+                out[k] = sma(closes, int(float(p)))
     rp = params.get("rsiPeriod")
     if _is_num(rp) and int(float(rp)) > 0:
-        out[f"rsi_{int(float(rp))}"] = rsi(closes, int(float(rp)))
+        k = f"rsi_{int(float(rp))}"
+        if isinstance(fc, dict) and k in fc:
+            out[k] = fc.get(k)
+            _mark_factor_key_used(k)
+        else:
+            out[k] = rsi(closes, int(float(rp)))
     return out
 
 
@@ -741,6 +1155,8 @@ def apply_all_filters(rows: list, config: dict) -> dict:
         lows = get_series(r, "low")
         volumes = get_series(r, "volume")
         last_close = float(r.get("close") or 0.0)
+        market0 = str((r or {}).get("market") or "").strip().lower()
+        fc = _get_cached_factors(market=market0, symbol=sym0) if market0 else None
 
         if toggles.get("condCloseMa"):
             ma_v = r["_builtins"].get(f"ma_{int(params.get('maPeriodClose') or 0)}")
@@ -763,57 +1179,136 @@ def apply_all_filters(rows: list, config: dict) -> dict:
                 continue
 
         if toggles.get("condEma"):
-            ev = ema(closes, int(params.get("emaPeriod") or 0))
+            ep = int(params.get("emaPeriod") or 0)
+            ev = (fc.get(f"ema_{ep}") if isinstance(fc, dict) else None) if ep > 0 else None
+            if ev is None:
+                ev = ema(closes, ep)
+            else:
+                _mark_factor_key_used(f"ema_{ep}")
+            r["_builtins"]["ema"] = ev
             if ev is None or not (last_close > float(ev)):
                 filtered_out += 1
                 continue
 
         if toggles.get("condBollUp"):
-            ma0 = sma(closes, int(params.get("bollPeriod") or 0))
-            std0 = rolling_std(closes, int(params.get("bollPeriod") or 0))
+            bp = int(params.get("bollPeriod") or 0)
+            ma0 = (fc.get(f"ma_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
+            std0 = (fc.get(f"std_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
+            if ma0 is None:
+                ma0 = sma(closes, bp)
+            else:
+                _mark_factor_key_used(f"ma_{bp}")
+            if std0 is None:
+                std0 = rolling_std(closes, bp)
+            else:
+                _mark_factor_key_used(f"std_{bp}")
             if ma0 is None or std0 is None:
                 filtered_out += 1
                 continue
-            if not _is_num(params.get("bollStd")) or not (last_close > float(ma0) + float(params.get("bollStd")) * float(std0)):
+            if not _is_num(params.get("bollStd")):
+                filtered_out += 1
+                continue
+            boll_up = float(ma0) + float(params.get("bollStd")) * float(std0)
+            r["_builtins"]["boll_up"] = boll_up
+            if not (last_close > boll_up):
                 filtered_out += 1
                 continue
 
         if toggles.get("condBollDown"):
-            ma0 = sma(closes, int(params.get("bollDownPeriod") or 0))
-            std0 = rolling_std(closes, int(params.get("bollDownPeriod") or 0))
+            bp = int(params.get("bollDownPeriod") or 0)
+            ma0 = (fc.get(f"ma_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
+            std0 = (fc.get(f"std_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
+            if ma0 is None:
+                ma0 = sma(closes, bp)
+            else:
+                _mark_factor_key_used(f"ma_{bp}")
+            if std0 is None:
+                std0 = rolling_std(closes, bp)
+            else:
+                _mark_factor_key_used(f"std_{bp}")
             if ma0 is None or std0 is None:
                 filtered_out += 1
                 continue
-            if not _is_num(params.get("bollDownStd")) or not (last_close < float(ma0) - float(params.get("bollDownStd")) * float(std0)):
+            if not _is_num(params.get("bollDownStd")):
+                filtered_out += 1
+                continue
+            boll_down = float(ma0) - float(params.get("bollDownStd")) * float(std0)
+            r["_builtins"]["boll_down"] = boll_down
+            if not (last_close < boll_down):
                 filtered_out += 1
                 continue
 
         if toggles.get("condSuper"):
-            st = supertrend(highs, lows, closes, int(params.get("superAtrPeriod") or 0), float(params.get("superMult") or 0.0))
+            ap = int(params.get("superAtrPeriod") or 0)
+            mult = float(params.get("superMult") or 0.0)
+            st = None
+            if isinstance(fc, dict) and ap == 10 and mult == 3.0:
+                st = fc.get("supertrend")
+            if st is None:
+                st = supertrend(highs, lows, closes, ap, mult)
+            else:
+                _mark_factor_key_used("supertrend")
+            r["_builtins"]["supertrend"] = st
             if st is None or not (last_close > float(st)):
                 filtered_out += 1
                 continue
 
         if toggles.get("condKdj"):
-            out = kdj(highs, lows, closes, int(params.get("kdjN") or 0), int(params.get("kdjM1") or 0), int(params.get("kdjM2") or 0))
+            kn = int(params.get("kdjN") or 0)
+            km1 = int(params.get("kdjM1") or 0)
+            km2 = int(params.get("kdjM2") or 0)
+            out = None
+            if isinstance(fc, dict) and kn == 9 and km1 == 3 and km2 == 3:
+                out = {"k": fc.get("kdj_k"), "d": fc.get("kdj_d"), "j": fc.get("kdj_j")}
+            if not isinstance(out, dict):
+                out = kdj(highs, lows, closes, kn, km1, km2)
+            else:
+                _mark_factor_key_used("kdj_k")
+                _mark_factor_key_used("kdj_d")
             k0 = out.get("k")
             d0 = out.get("d")
+            r["_builtins"]["kdj_k"] = k0
+            r["_builtins"]["kdj_d"] = d0
+            r["_builtins"]["kdj_j"] = out.get("j")
             if k0 is None or d0 is None or not (float(k0) > float(d0)):
                 filtered_out += 1
                 continue
 
         if toggles.get("condObv"):
-            out = obv_with_ma(closes, volumes, int(params.get("obvMaPeriod") or 0))
+            op = int(params.get("obvMaPeriod") or 0)
+            out = None
+            if isinstance(fc, dict) and op == 20:
+                out = {"obv": fc.get("obv"), "ma": fc.get("obv_ma")}
+            if not isinstance(out, dict):
+                out = obv_with_ma(closes, volumes, op)
+            else:
+                _mark_factor_key_used("obv")
+                _mark_factor_key_used("obv_ma")
             ov = out.get("obv")
             om = out.get("ma")
+            r["_builtins"]["obv"] = ov
+            r["_builtins"]["obv_ma"] = om
             if ov is None or om is None or not (float(ov) > float(om)):
                 filtered_out += 1
                 continue
 
         if toggles.get("condStochRsi"):
-            out = stoch_rsi(closes, int(params.get("stochRsiP") or 0), int(params.get("stochRsiK") or 0), int(params.get("stochRsiSmK") or 0), int(params.get("stochRsiSmD") or 0))
+            sp = int(params.get("stochRsiP") or 0)
+            sk = int(params.get("stochRsiK") or 0)
+            ssk = int(params.get("stochRsiSmK") or 0)
+            ssd = int(params.get("stochRsiSmD") or 0)
+            out = None
+            if isinstance(fc, dict) and sp == 14 and sk == 14 and ssk == 3 and ssd == 3:
+                out = {"k": fc.get("stoch_rsi_k"), "d": fc.get("stoch_rsi_d")}
+            if not isinstance(out, dict):
+                out = stoch_rsi(closes, sp, sk, ssk, ssd)
+            else:
+                _mark_factor_key_used("stoch_rsi_k")
+                _mark_factor_key_used("stoch_rsi_d")
             k0 = out.get("k")
             d0 = out.get("d")
+            r["_builtins"]["stoch_rsi_k"] = k0
+            r["_builtins"]["stoch_rsi_d"] = d0
             if k0 is None or d0 is None or not (float(k0) > float(d0)):
                 filtered_out += 1
                 continue
@@ -863,21 +1358,78 @@ def sort_rows(rows: list[dict], config: dict) -> tuple[list[dict], str]:
         if key.startswith("ma_") or key.startswith("rsi_"):
             return r.get("_builtins", {}).get(key)
         if key == "ema":
-            return ema(get_series(r, "close"), int(params.get("emaPeriod") or 0))
+            b = (r.get("_builtins") or {}) if isinstance(r.get("_builtins"), dict) else {}
+            if "ema" in b:
+                return b.get("ema")
+            ep = int(params.get("emaPeriod") or 0)
+            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or ""))
+            v = (fc.get(f"ema_{ep}") if isinstance(fc, dict) else None) if ep > 0 else None
+            if v is None:
+                v = ema(get_series(r, "close"), ep)
+            else:
+                _mark_factor_key_used(f"ema_{ep}")
+            b["ema"] = v
+            r["_builtins"] = b
+            return v
         if key == "boll_up":
-            ma0 = sma(get_series(r, "close"), int(params.get("bollPeriod") or 0))
-            std0 = rolling_std(get_series(r, "close"), int(params.get("bollPeriod") or 0))
+            b = (r.get("_builtins") or {}) if isinstance(r.get("_builtins"), dict) else {}
+            if "boll_up" in b:
+                return b.get("boll_up")
+            bp = int(params.get("bollPeriod") or 0)
+            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or ""))
+            ma0 = (fc.get(f"ma_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
+            std0 = (fc.get(f"std_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
+            if ma0 is None:
+                ma0 = sma(get_series(r, "close"), bp)
+            else:
+                _mark_factor_key_used(f"ma_{bp}")
+            if std0 is None:
+                std0 = rolling_std(get_series(r, "close"), bp)
+            else:
+                _mark_factor_key_used(f"std_{bp}")
             if ma0 is None or std0 is None or not _is_num(params.get("bollStd")):
                 return None
-            return float(ma0) + float(params.get("bollStd")) * float(std0)
+            v = float(ma0) + float(params.get("bollStd")) * float(std0)
+            b["boll_up"] = v
+            r["_builtins"] = b
+            return v
         if key == "boll_down":
-            ma0 = sma(get_series(r, "close"), int(params.get("bollDownPeriod") or 0))
-            std0 = rolling_std(get_series(r, "close"), int(params.get("bollDownPeriod") or 0))
+            b = (r.get("_builtins") or {}) if isinstance(r.get("_builtins"), dict) else {}
+            if "boll_down" in b:
+                return b.get("boll_down")
+            bp = int(params.get("bollDownPeriod") or 0)
+            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or ""))
+            ma0 = (fc.get(f"ma_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
+            std0 = (fc.get(f"std_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
+            if ma0 is None:
+                ma0 = sma(get_series(r, "close"), bp)
+            else:
+                _mark_factor_key_used(f"ma_{bp}")
+            if std0 is None:
+                std0 = rolling_std(get_series(r, "close"), bp)
+            else:
+                _mark_factor_key_used(f"std_{bp}")
             if ma0 is None or std0 is None or not _is_num(params.get("bollDownStd")):
                 return None
-            return float(ma0) - float(params.get("bollDownStd")) * float(std0)
+            v = float(ma0) - float(params.get("bollDownStd")) * float(std0)
+            b["boll_down"] = v
+            r["_builtins"] = b
+            return v
         if key == "supertrend":
-            return supertrend(get_series(r, "high"), get_series(r, "low"), get_series(r, "close"), int(params.get("superAtrPeriod") or 0), float(params.get("superMult") or 0.0))
+            b = (r.get("_builtins") or {}) if isinstance(r.get("_builtins"), dict) else {}
+            if "supertrend" in b:
+                return b.get("supertrend")
+            ap = int(params.get("superAtrPeriod") or 0)
+            mult = float(params.get("superMult") or 0.0)
+            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or ""))
+            v = (fc.get("supertrend") if isinstance(fc, dict) and ap == 10 and mult == 3.0 else None)
+            if v is None:
+                v = supertrend(get_series(r, "high"), get_series(r, "low"), get_series(r, "close"), ap, mult)
+            else:
+                _mark_factor_key_used("supertrend")
+            b["supertrend"] = v
+            r["_builtins"] = b
+            return v
         if key.startswith("expr_"):
             fid = key[len("expr_") :]
             return (r.get("_expr") or {}).get(fid)
@@ -907,6 +1459,18 @@ def assign_rank(rows: list[dict], sort_key: str, config: dict) -> None:
             return float(v) if _is_num(v) else None
         if sort_key.startswith("ma_") or sort_key.startswith("rsi_"):
             return r.get("_builtins", {}).get(sort_key)
+        if sort_key == "ema":
+            b = (r.get("_builtins") or {}) if isinstance(r.get("_builtins"), dict) else {}
+            if "ema" in b:
+                return b.get("ema")
+            ep = int(params.get("emaPeriod") or 0)
+            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or ""))
+            v = (fc.get(f"ema_{ep}") if isinstance(fc, dict) else None) if ep > 0 else None
+            if v is None:
+                v = ema(get_series(r, "close"), ep)
+            b["ema"] = v
+            r["_builtins"] = b
+            return v
         if sort_key == "ema":
             return ema(get_series(r, "close"), int(params.get("emaPeriod") or 0))
         if sort_key.startswith("expr_"):

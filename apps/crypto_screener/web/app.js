@@ -18,6 +18,12 @@ const state = {
   baseConfig: null,
   strategyGroups: [],
   strategyDraft: null,
+  enrichRerenderTimer: null,
+  enrichInFlight: false,
+  enrichInFlightSig: "",
+  enrichToken: 0,
+  enrichCache: {}, // { sig: { rows: { [rowKey]: { _builtins, _expr } }, done: boolean, total: number, ts: number } }
+  enrichCacheOrder: [],
 };
 
 const storageKey = "crypto_screener_custom_factors_v1";
@@ -40,9 +46,10 @@ function loadBaseConfig() {
     const bl = Array.isArray(j.blacklist) ? j.blacklist : defaultBlacklist.slice();
     const market0 = String(j.market || "all");
     const market = market0 === "spot" || market0 === "swap" || market0 === "all" ? market0 : "all";
-    return { whitelist: wl, blacklist: bl, market };
+    const highlightNew = j.highlightNew === undefined ? false : !!j.highlightNew;
+    return { whitelist: wl, blacklist: bl, market, highlightNew };
   } catch {
-    return { whitelist: [], blacklist: defaultBlacklist.slice(), market: "all" };
+    return { whitelist: [], blacklist: defaultBlacklist.slice(), market: "all", highlightNew: false };
   }
 }
 
@@ -53,7 +60,8 @@ function saveBaseConfig(cfg) {
     const bl = Array.isArray(c.blacklist) ? c.blacklist : defaultBlacklist.slice();
     const market0 = String(c.market || "all");
     const market = market0 === "spot" || market0 === "swap" || market0 === "all" ? market0 : "all";
-    localStorage.setItem(baseConfigStorageKey, JSON.stringify({ whitelist: wl, blacklist: bl, market }));
+    const highlightNew = c.highlightNew === undefined ? false : !!c.highlightNew;
+    localStorage.setItem(baseConfigStorageKey, JSON.stringify({ whitelist: wl, blacklist: bl, market, highlightNew }));
   } catch {}
 }
 
@@ -72,6 +80,19 @@ function setSelectedMarket(market) {
   state.baseConfig = cfg;
   saveBaseConfig(cfg);
   if ($("baseMarketSelect")) $("baseMarketSelect").value = v;
+}
+
+function getHighlightNewOnList() {
+  const cfg = state.baseConfig || loadBaseConfig();
+  return !!(cfg && cfg.highlightNew);
+}
+
+function setHighlightNewOnList(enabled) {
+  const cfg0 = state.baseConfig || loadBaseConfig();
+  const cfg = { ...(cfg0 || {}), highlightNew: !!enabled };
+  state.baseConfig = cfg;
+  saveBaseConfig(cfg);
+  if ($("baseNewOnList")) $("baseNewOnList").checked = !!enabled;
 }
 
 function loadBaseCfgPane() {
@@ -150,6 +171,68 @@ function saveLastPicks(rows, latestSummary) {
     };
     localStorage.setItem(lastPicksStorageKey, JSON.stringify(out));
   } catch {}
+}
+
+const picksByHourStorageKey = "crypto_screener_picks_by_hour_v1";
+
+function loadPicksByHour() {
+  try {
+    const raw = localStorage.getItem(picksByHourStorageKey);
+    const j = raw ? JSON.parse(raw) : {};
+    return j && typeof j === "object" ? j : {};
+  } catch {
+    return {};
+  }
+}
+
+function savePicksByHour(obj) {
+  try {
+    localStorage.setItem(picksByHourStorageKey, JSON.stringify(obj && typeof obj === "object" ? obj : {}));
+  } catch {}
+}
+
+function hourKeyFromIso(iso) {
+  const d = new Date(String(iso || ""));
+  if (Number.isNaN(d.getTime())) return "";
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(d.getUTCDate()).padStart(2, "0");
+  const hh = String(d.getUTCHours()).padStart(2, "0");
+  return `${y}${m}${dd}${hh}`;
+}
+
+function shiftHourKey(hourKey, deltaHours) {
+  const s = String(hourKey || "");
+  if (s.length !== 10) return "";
+  const y = Number(s.slice(0, 4));
+  const m = Number(s.slice(4, 6));
+  const d = Number(s.slice(6, 8));
+  const h = Number(s.slice(8, 10));
+  const dt = Date.UTC(y, m - 1, d, h, 0, 0);
+  if (!Number.isFinite(dt)) return "";
+  const d2 = new Date(dt + Number(deltaHours || 0) * 3600 * 1000);
+  return hourKeyFromIso(d2.toISOString());
+}
+
+function markNewOnListRows(rows, hourKey) {
+  const hk = String(hourKey || "");
+  if (!hk) return;
+  const store = loadPicksByHour();
+  const prevKey = shiftHourKey(hk, -1);
+  const prevArr = Array.isArray(store[prevKey]) ? store[prevKey] : [];
+  const prev = new Set(prevArr.map((x) => String(x)));
+  const curKeys = [];
+  for (const r of rows) {
+    const k = rowKey(r);
+    curKeys.push(k);
+    r._new_on_list = prev.size > 0 && !prev.has(k);
+  }
+  store[hk] = curKeys.slice(0, 2000);
+  const keys = Object.keys(store).sort();
+  if (keys.length > 72) {
+    for (let i = 0; i < keys.length - 72; i++) delete store[keys[i]];
+  }
+  savePicksByHour(store);
 }
 
 function deepCopy(x) {
@@ -538,6 +621,74 @@ function rowKey(r) {
   const m = String(r && r.market ? r.market : "");
   const s = String(r && r.symbol ? r.symbol : "");
   return `${m}|${s}`;
+}
+
+function hashStr(s) {
+  let h = 2166136261;
+  const x = String(s || "");
+  for (let i = 0; i < x.length; i++) {
+    h ^= x.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(16);
+}
+
+function enrichSig({ mode, params, toggles, customFactors, tail, meta, latest, symbols }) {
+  const cf = (Array.isArray(customFactors) ? customFactors : []).map((f) => ({
+    id: String(f && f.id ? f.id : ""),
+    template: String(f && (f.template || f.expr || "") ? (f.template || f.expr || "") : ""),
+    params: Array.isArray(f && f.params) ? f.params : [],
+    enabled: !!(f && f.enabled),
+    show: !!(f && f.show),
+    thresholdEnabled: !!(f && f.thresholdEnabled),
+    cmp: String(f && f.cmp ? f.cmp : ""),
+    threshold: (f && f.threshold !== undefined ? f.threshold : null),
+  })).filter((x) => x.id).sort((a, b) => a.id.localeCompare(b.id));
+  const sym = Array.isArray(symbols) ? symbols.map((x) => `${String(x && x.market ? x.market : "")}|${String(x && x.symbol ? x.symbol : "")}`).sort() : [];
+  const snap = (latest && latest.summary && (latest.summary.latest_dt_close || latest.summary.latest_dt_display))
+    ? String(latest.summary.latest_dt_close || latest.summary.latest_dt_display)
+    : (meta && meta.updated_at ? String(meta.updated_at) : "");
+  const obj = {
+    mode: String(mode || ""),
+    tail: Number(tail || 0),
+    snap,
+    params: params && typeof params === "object" ? params : {},
+    toggles: toggles && typeof toggles === "object" ? toggles : {},
+    factors: cf,
+    symbols: sym,
+  };
+  return hashStr(JSON.stringify(obj));
+}
+
+function cacheTouch(sig) {
+  if (!sig) return;
+  const order = Array.isArray(state.enrichCacheOrder) ? state.enrichCacheOrder : [];
+  const idx = order.indexOf(sig);
+  if (idx !== -1) order.splice(idx, 1);
+  order.push(sig);
+  while (order.length > 4) {
+    const drop = order.shift();
+    if (drop && state.enrichCache && state.enrichCache[drop]) delete state.enrichCache[drop];
+  }
+  state.enrichCacheOrder = order;
+}
+
+function cacheApply(sig, rows) {
+  const c = state.enrichCache && sig ? state.enrichCache[sig] : null;
+  if (!c || !c.rows) return { applied: 0, done: false };
+  let applied = 0;
+  for (const r of Array.isArray(rows) ? rows : []) {
+    const k = rowKey(r);
+    const v = c.rows[k];
+    if (!v) continue;
+    if (v._builtins) r._builtins = v._builtins;
+    if (v._expr) r._expr = v._expr;
+    applied += 1;
+  }
+  cacheTouch(sig);
+  const total = Number(c.total || 0);
+  const done = !!c.done && total > 0 && applied >= Math.min(total, (Array.isArray(rows) ? rows.length : 0));
+  return { applied, done };
 }
 
 function syncSelectedRowFrom(rows) {
@@ -1801,6 +1952,7 @@ function renderTable(rows, fields) {
     const tr = document.createElement("tr");
     const rk = rowKey(r);
     tr.setAttribute("data-rk", rk);
+    tr.classList.toggle("new-on-list", !!r._new_on_list);
     tr.addEventListener("click", () => {
       state.selectedKey = rk;
       state.selectedRow = r;
@@ -1858,6 +2010,94 @@ function updateSummary(summary) {
   $("summary").textContent = `生成：${gen} ｜ 最新：${lat}`;
 }
 
+const factorLibraryItems = [
+  { folder: "量价", name: "成交额偏离(20)", template: "quotevolume/quotevolume.ma(n1)", params: [20], desc: "成交额相对均线的强弱：>1 放量，<1 缩量" },
+  { folder: "量价", name: "成交量偏离(20)", template: "volume/volume.ma(n1)", params: [20], desc: "成交量相对均线的强弱" },
+  { folder: "动量", name: "1h收益率", template: "close/close.shift(n1)-1", params: [1], desc: "最近 n1 小时收益率" },
+  { folder: "动量", name: "24h收益率", template: "close/close.shift(n1)-1", params: [24], desc: "最近 24 小时收益率" },
+  { folder: "动量", name: "动量比(5/20)", template: "close.ma(n1)/close.ma(n2)-1", params: [5, 20], desc: "短均线相对长均线的强弱" },
+  { folder: "动量", name: "均线乖离(20)", template: "close/close.ma(n1)-1", params: [20], desc: "价格相对均线偏离" },
+  { folder: "动量", name: "RSI(14)", template: "close.rsi(n1)", params: [14], desc: "相对强弱指标" },
+  { folder: "动量", name: "RSI偏离(14)", template: "close.rsi(n1)-50", params: [14], desc: "RSI 相对 50 的偏移" },
+  { folder: "波动", name: "波动率(20)", template: "close.std(n1)/close.ma(n1)", params: [20], desc: "标准差/均线，刻画相对波动" },
+  { folder: "波动", name: "波动Z分数(20)", template: "(close-close.ma(n1))/close.std(n1)", params: [20], desc: "价格相对均值的标准化偏离" },
+  { folder: "波动", name: "真实波幅(1h)", template: "(high-low)/(close+eps)", params: [], desc: "单根K线振幅（近似）" },
+  { folder: "波动", name: "实体涨跌幅", template: "(close-open)/(open+eps)", params: [], desc: "K线实体相对开盘价" },
+  { folder: "波动", name: "上影线比例", template: "(high-close)/(close+eps)", params: [], desc: "上影线长度相对收盘价" },
+  { folder: "波动", name: "下影线比例", template: "(close-low)/(close+eps)", params: [], desc: "下影线长度相对收盘价" },
+  { folder: "量价", name: "量变化(1h)", template: "volume/(volume.shift(n1)+eps)-1", params: [1], desc: "成交量的相对变化" },
+  { folder: "量价", name: "额变化(1h)", template: "quotevolume/(quotevolume.shift(n1)+eps)-1", params: [1], desc: "成交额的相对变化" },
+  { folder: "量价", name: "价量相关(20)", template: "close.corr(volume,n1)", params: [20], desc: "滚动相关：价格 vs 成交量" },
+  { folder: "量价", name: "价额相关(20)", template: "close.corr(quotevolume,n1)", params: [20], desc: "滚动相关：价格 vs 成交额" },
+  { folder: "量价", name: "量价背离(20)", template: "(close/close.shift(n1)-1) - (quotevolume/(quotevolume.shift(n1)+eps)-1)", params: [20], desc: "价格动量 - 成交额动量（近似背离）" },
+  { folder: "趋势", name: "EMA乖离(20)", template: "close/(close.ema(n1)+eps)-1", params: [20], desc: "价格相对 EMA 的偏离" },
+  { folder: "趋势", name: "EMA差(10-20)", template: "close.ema(n1)-close.ema(n2)", params: [10, 20], desc: "短 EMA - 长 EMA（差值）" },
+  { folder: "趋势", name: "MA差(10-20)", template: "close.ma(n1)-close.ma(n2)", params: [10, 20], desc: "短 MA - 长 MA（差值）" },
+  { folder: "趋势", name: "MA差占比(10-20)", template: "(close.ma(n1)-close.ma(n2))/(close+eps)", params: [10, 20], desc: "短长均线差值相对价格" },
+  { folder: "趋势", name: "趋势强度(20)", template: "(close-close.shift(n1))/(close.std(n1)+eps)", params: [20], desc: "趋势变化相对波动的强弱" },
+  { folder: "Alpha", name: "Alpha001", template: "(close-open)/(high-low+eps)", params: [], desc: "K线位置（实体/振幅）" },
+  { folder: "Alpha", name: "Alpha002", template: "abs(close/close.shift(n1)-1)", params: [1], desc: "绝对收益率" },
+  { folder: "Alpha", name: "Alpha003", template: "close.corr(open,n1)", params: [20], desc: "滚动相关：收盘 vs 开盘" },
+  { folder: "Alpha", name: "Alpha004", template: "(volume-volume.ma(n1))/(volume.std(n1)+eps)", params: [20], desc: "量的Z分数" },
+  { folder: "Alpha", name: "Alpha005", template: "(quotevolume-quotevolume.ma(n1))/(quotevolume.std(n1)+eps)", params: [20], desc: "额的Z分数" },
+  { folder: "Alpha", name: "Alpha006", template: "(close-close.ma(n1))/(close.ma(n1)+eps)", params: [60], desc: "长周期乖离（近似均值回归）" },
+  { folder: "结构", name: "收盘位置", template: "(close-low)/(high-low+eps)", params: [], desc: "收盘在区间的位置：接近1偏强" },
+  { folder: "结构", name: "开盘缺口", template: "open/(close.shift(n1)+eps)-1", params: [1], desc: "当前开盘相对上根收盘的跳空" },
+  { folder: "结构", name: "高低点扩张", template: "(high-low)/(high.shift(n1)-low.shift(n1)+eps)-1", params: [1], desc: "区间扩张程度（近似）" },
+];
+
+function renderFactorLibrary() {
+  const host = $("factorLibList");
+  if (!host) return;
+  host.innerHTML = "";
+  const q = String(($("factorLibQuery") && $("factorLibQuery").value) || "").trim().toLowerCase();
+  const list = factorLibraryItems.filter((it) => {
+    if (!q) return true;
+    const s = `${it.folder}|${it.name}|${it.template}|${it.desc}`.toLowerCase();
+    return s.includes(q);
+  });
+  for (const it of list) {
+    const row = document.createElement("div");
+    row.className = "factor-lib-item";
+    const expr = document.createElement("div");
+    expr.className = "factor-lib-expr";
+    expr.textContent = expandTemplate(it.template, it.params || []);
+    const desc = document.createElement("div");
+    desc.className = "factor-lib-desc";
+    desc.textContent = `[${it.folder}] ${it.name}\n${it.desc || ""}`.trim();
+    const btn = document.createElement("button");
+    btn.className = "btn btn-secondary mini";
+    btn.type = "button";
+    btn.textContent = "添加";
+    btn.addEventListener("click", () => {
+      const f = {
+        id: newId(),
+        folder: it.folder || "默认",
+        name: it.name || "expr",
+        template: String(it.template || ""),
+        expr: expandTemplate(it.template, it.params || []),
+        params: Array.isArray(it.params) ? it.params.slice() : [],
+        enabled: true,
+        thresholdEnabled: false,
+        cmp: ">=",
+        threshold: 0,
+        show: true,
+      };
+      state.customFactors = Array.isArray(state.customFactors) ? state.customFactors.slice() : [];
+      state.customFactors.push(f);
+      saveCustomFactors(state.customFactors);
+      syncCustomFactorsToServer(state.customFactors);
+      renderFolderConditions();
+      renderCustomFactorList();
+      refreshFactors();
+    });
+    row.appendChild(expr);
+    row.appendChild(desc);
+    row.appendChild(btn);
+    host.appendChild(row);
+  }
+}
+
 function getParams() {
   const market = getSelectedMarket();
   const symbolQuery = String(state.symbolQuery || "").trim();
@@ -1881,10 +2121,14 @@ function getParams() {
   const kdjM1 = parseIntInput($("kdjM1"));
   const kdjM2 = parseIntInput($("kdjM2"));
   const obvMaPeriod = parseIntInput($("obvMaPeriod"));
-  const stochRsiP = parseIntInput($("stochRsiP"));
-  const stochRsiK = parseIntInput($("stochRsiK"));
-  const stochRsiSmK = parseIntInput($("stochRsiSmK"));
-  const stochRsiSmD = parseIntInput($("stochRsiSmD"));
+  let stochRsiP = parseIntInput($("stochRsiP"));
+  let stochRsiK = parseIntInput($("stochRsiK"));
+  let stochRsiSmK = parseIntInput($("stochRsiSmK"));
+  let stochRsiSmD = parseIntInput($("stochRsiSmD"));
+  if (!Number.isFinite(stochRsiP) || stochRsiP <= 0) stochRsiP = 14;
+  if (!Number.isFinite(stochRsiK) || stochRsiK <= 0) stochRsiK = 14;
+  if (!Number.isFinite(stochRsiSmK) || stochRsiSmK <= 0) stochRsiSmK = 3;
+  if (!Number.isFinite(stochRsiSmD) || stochRsiSmD <= 0) stochRsiSmD = 3;
 
   return {
     market, symbolQuery, maPeriodClose, maFast, maSlow, rsiPeriod, rsiThreshold,
@@ -1912,7 +2156,8 @@ function computeBuiltins(row, params) {
   return out;
 }
 
-function applyAllFilters(rows, params, customFactors) {
+function applyAllFilters(rows, params, customFactors, opts = {}) {
+  const deferEnrichedFilters = !!(opts && opts.deferEnrichedFilters);
   let hasSeries = false;
   for (const r of rows || []) {
     if (r && r.series) { hasSeries = true; break; }
@@ -2002,13 +2247,13 @@ function applyAllFilters(rows, params, customFactors) {
       }
     }
 
-    if (enabledEma) {
+    if (!deferEnrichedFilters && enabledEma) {
       const ev = (r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "ema")) ? r._builtins.ema : (hasSeries ? ema(closes, params.emaPeriod) : null);
       if (ev === null || ev === undefined || !Number.isFinite(Number(ev))) missingBuiltins++;
       else if (!(lastClose > Number(ev))) { filteredOut++; continue; }
     }
 
-    if (enabledBollUp) {
+    if (!deferEnrichedFilters && enabledBollUp) {
       const bv = (r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "boll_up")) ? r._builtins.boll_up : null;
       if (bv === null || bv === undefined || !Number.isFinite(Number(bv))) {
         if (hasSeries) {
@@ -2020,7 +2265,7 @@ function applyAllFilters(rows, params, customFactors) {
       } else if (!(lastClose > Number(bv))) { filteredOut++; continue; }
     }
 
-    if (enabledBollDown) {
+    if (!deferEnrichedFilters && enabledBollDown) {
       const bv = (r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "boll_down")) ? r._builtins.boll_down : null;
       if (bv === null || bv === undefined || !Number.isFinite(Number(bv))) {
         if (hasSeries) {
@@ -2032,13 +2277,13 @@ function applyAllFilters(rows, params, customFactors) {
       } else if (!(lastClose < Number(bv))) { filteredOut++; continue; }
     }
 
-    if (enabledSuper) {
+    if (!deferEnrichedFilters && enabledSuper) {
       const stv = (r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "supertrend")) ? r._builtins.supertrend : (hasSeries ? supertrend(highs, lows, closes, params.superAtrPeriod, params.superMult) : null);
       if (stv === null || stv === undefined || !Number.isFinite(Number(stv))) missingBuiltins++;
       else if (!(lastClose > Number(stv))) { filteredOut++; continue; }
     }
 
-    if (enabledKdj) {
+    if (!deferEnrichedFilters && enabledKdj) {
       const kv = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "kdj_k") ? r._builtins.kdj_k : null;
       const dv = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "kdj_d") ? r._builtins.kdj_d : null;
       if (kv === null || dv === null || kv === undefined || dv === undefined || !Number.isFinite(Number(kv)) || !Number.isFinite(Number(dv))) {
@@ -2050,7 +2295,7 @@ function applyAllFilters(rows, params, customFactors) {
       } else if (!(Number(kv) > Number(dv))) { filteredOut++; continue; }
     }
 
-    if (enabledObv) {
+    if (!deferEnrichedFilters && enabledObv) {
       const ov = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "obv") ? r._builtins.obv : null;
       const om = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "obv_ma") ? r._builtins.obv_ma : null;
       if (ov === null || om === null || ov === undefined || om === undefined || !Number.isFinite(Number(ov)) || !Number.isFinite(Number(om))) {
@@ -2062,7 +2307,7 @@ function applyAllFilters(rows, params, customFactors) {
       } else if (!(Number(ov) > Number(om))) { filteredOut++; continue; }
     }
 
-    if (enabledStochRsi) {
+    if (!deferEnrichedFilters && enabledStochRsi) {
       const kv = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "stoch_rsi_k") ? r._builtins.stoch_rsi_k : null;
       const dv = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "stoch_rsi_d") ? r._builtins.stoch_rsi_d : null;
       if (kv === null || dv === null || kv === undefined || dv === undefined || !Number.isFinite(Number(kv)) || !Number.isFinite(Number(dv))) {
@@ -2078,15 +2323,17 @@ function applyAllFilters(rows, params, customFactors) {
     for (const f of customFactors) {
       try {
         let v = null;
-        if (hasSeries) {
+        const hasExprValue = r._expr && Object.prototype.hasOwnProperty.call(r._expr, f.id);
+        if (!deferEnrichedFilters && hasSeries) {
           const template = f.template || f.expr || "";
           const expr = expandTemplate(template, f.params || []);
           v = evalExpression(expr, r);
           r._expr[f.id] = v;
         } else {
+          if (!hasExprValue) continue;
           v = r._expr ? r._expr[f.id] : null;
         }
-        if (!f.enabled) continue;
+        if (!f.enabled || deferEnrichedFilters) continue;
         if (v === null || v === undefined || !Number.isFinite(Number(v))) {
           exprMissing++;
           continue;
@@ -2587,6 +2834,7 @@ async function openBaseConfigModal() {
   if ($("whitelistText")) $("whitelistText").value = (cfg.whitelist || []).join(",");
   if ($("blacklistText")) $("blacklistText").value = (cfg.blacklist || []).join(",");
   if ($("baseMarketSelect")) $("baseMarketSelect").value = getSelectedMarket();
+  if ($("baseNewOnList")) $("baseNewOnList").checked = !!cfg.highlightNew;
   if ($("sendEmailTo")) {
     try {
       const raw = localStorage.getItem("crypto_screener_send_email_to_v1");
@@ -2611,8 +2859,19 @@ async function openBaseConfigModal() {
   setModalOpen("wecomModal", true);
 }
 
-async function postJson(url, data) {
-  const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data || {}) });
+async function postJson(url, data, opts = {}) {
+  const t = Math.max(0, Number(opts.timeoutMs || 0));
+  const ctrl = t ? new AbortController() : null;
+  const timer = ctrl ? setTimeout(() => ctrl.abort(), t) : null;
+  let r = null;
+  try {
+    r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data || {}), signal: ctrl ? ctrl.signal : undefined });
+  } catch {
+    r = null;
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+  if (!r) return { r: null, j: null };
   if (r.status === 401) {
     const next = encodeURIComponent(location.pathname + location.search);
     location.href = `./login.html?next=${next}`;
@@ -2621,6 +2880,199 @@ async function postJson(url, data) {
   let j = null;
   try { j = await r.json(); } catch {}
   return { r, j };
+}
+
+function setEnrichProgress(done, total, visible, speedText) {
+  const host = $("enrichProgress");
+  const fill = $("enrichProgressFill");
+  const text = $("enrichProgressText");
+  if (!host || !fill || !text) return;
+  const show = !!visible;
+  host.classList.toggle("hidden", !show);
+  const d = Math.max(0, Number(done || 0));
+  const t = Math.max(1, Number(total || 1));
+  const pct = Math.max(0, Math.min(100, Math.round((d / t) * 100)));
+  fill.style.width = `${pct}%`;
+  const sp = speedText ? String(speedText) : "";
+  text.textContent = sp ? `因子计算中 ${pct}%（${Math.trunc(d)}/${Math.trunc(t)}） ｜ ${sp}` : `因子计算中 ${pct}%（${Math.trunc(d)}/${Math.trunc(t)}）`;
+  if (show && sp) setStatus(`因子计算 ${Math.trunc(d)}/${Math.trunc(t)} ｜ ${sp}`);
+}
+
+function buildEnrichedRequestFields(params, toggles, customFactors) {
+  const out = ["rank", "symbol", "market", "dt_display", "dt_close", "close", "pct_change", "name"];
+  const maCloseP = Number(params && params.maPeriodClose);
+  const maFast = Number(params && params.maFast);
+  const maSlow = Number(params && params.maSlow);
+  const rsiP = Number(params && params.rsiPeriod);
+  for (const p of [maCloseP, maFast, maSlow]) {
+    if (Number.isFinite(p) && p > 0) out.push(`ma_${Math.trunc(p)}`);
+  }
+  if (Number.isFinite(rsiP) && rsiP > 0) out.push(`rsi_${Math.trunc(rsiP)}`);
+  if (toggles && toggles.condEma) out.push("ema");
+  if (toggles && toggles.condBollUp) out.push("boll_up");
+  if (toggles && toggles.condBollDown) out.push("boll_down");
+  if (toggles && toggles.condSuper) out.push("supertrend");
+  if (toggles && toggles.condKdj) out.push("kdj_k", "kdj_d", "kdj_j");
+  if (toggles && toggles.condObv) out.push("obv", "obv_ma");
+  if (toggles && toggles.condStochRsi) out.push("stoch_rsi_k", "stoch_rsi_d");
+  for (const f of (Array.isArray(customFactors) ? customFactors : [])) {
+    if (f && (f.enabled || f.show) && f.id) out.push(`expr_${f.id}`);
+  }
+  return Array.from(new Set(out));
+}
+
+async function loadLatestEnrichedChunked({ customFactors, params, toggles, tail, fields, symbols, onBatch }) {
+  const chunkSizeRaw = Number(localStorage.getItem("crypto_screener_enriched_chunk_size_v1") || 30);
+  let chunkSize = Math.max(10, Math.min(200, Math.trunc(chunkSizeRaw) || 30));
+  const dynamicChunk = localStorage.getItem("crypto_screener_enriched_chunk_dynamic_v1") !== "0";
+  const startedAt = performance.now();
+  let lastAt = startedAt;
+  let lastDone = 0;
+  let offset = 0;
+  let total = 1;
+  const merged = [];
+  let summary = {};
+  let config = {};
+  let retry = 0;
+  let busyRetry = 0;
+  let lastBusyStatusAt = 0;
+  let busyHint = "";
+  while (offset < total) {
+    const payload = {
+      custom_factors: customFactors,
+      params,
+      toggles,
+      tail,
+      chunk_offset: offset,
+      chunk_limit: chunkSize,
+      fields: Array.isArray(fields) ? fields : [],
+      include_debug: false,
+      symbols: Array.isArray(symbols) ? symbols : [],
+    };
+    const t0 = performance.now();
+    const { r, j } = await postJson("./api/latest_enriched", payload, { timeoutMs: Math.max(12000, chunkSize * 150) });
+    if (!r || !r.ok || !j || !j.ok) {
+      const baseMsg = j && (j.message || j.error) ? (j.message || j.error) : "";
+      const stMsg = r ? `status=${r.status}` : "no_response";
+      const isTimeout = stMsg === "no_response" || stMsg === "status=504";
+      const isBusy = stMsg === "status=429" || String(baseMsg || "").toLowerCase() === "enriched_busy" || String(baseMsg || "").toLowerCase() === "busy";
+      if (isBusy && busyRetry < 240) {
+        busyRetry += 1;
+        if (busyRetry <= 3) {
+          chunkSize = Math.min(200, Math.max(chunkSize, 120));
+          try { localStorage.setItem("crypto_screener_enriched_chunk_size_v1", String(chunkSize)); } catch {}
+        }
+        const waitMs = 220 + Math.min(2800, busyRetry * 80);
+        if (busyRetry % 8 === 0 && performance.now() - lastBusyStatusAt > 6000) {
+          lastBusyStatusAt = performance.now();
+          try {
+            const st = await loadStatus();
+            const pklRunning = !!(st && st.pkl && st.pkl.running);
+            busyHint = pklRunning ? "（pkl 构建中）" : "";
+          } catch {}
+        }
+        setEnrichProgress(offset, total, true, `后端忙，排队中… wait=${waitMs}ms chunk=${chunkSize}${busyHint}`);
+        await new Promise((x) => setTimeout(x, waitMs));
+        continue;
+      }
+      if (isTimeout && chunkSize > 10 && retry < 6) {
+        retry += 1;
+        chunkSize = Math.max(10, Math.floor(chunkSize * 0.7));
+        try { localStorage.setItem("crypto_screener_enriched_chunk_size_v1", String(chunkSize)); } catch {}
+        continue;
+      }
+      throw new Error(String(baseMsg || stMsg));
+    }
+    retry = 0;
+    busyRetry = 0;
+    busyHint = "";
+    if (summary && Object.keys(summary).length === 0) summary = j.summary || {};
+    if (config && Object.keys(config).length === 0) config = j.config || {};
+    const arr = Array.isArray(j.results) ? j.results : [];
+    merged.push(...arr);
+    const ch = j.chunk && typeof j.chunk === "object" ? j.chunk : {};
+    const count = Number(ch.count || arr.length || 0);
+    total = Math.max(1, Number(ch.total || total || 1));
+    if (count <= 0) break;
+    offset += count;
+    const now = performance.now();
+    const dt = Math.max(0.001, (now - lastAt) / 1000);
+    const dDone = Math.max(0, offset - lastDone);
+    const curSp = dDone / dt;
+    const avgSp = offset / Math.max(0.001, (now - startedAt) / 1000);
+    const spText = `${curSp.toFixed(1)} 行/s（均值 ${avgSp.toFixed(1)}） chunk=${chunkSize}`;
+    lastAt = now;
+    lastDone = offset;
+    try {
+      if (typeof onBatch === "function") onBatch({ results: arr, offset, total, speedText: spText });
+    } catch {}
+    if (dynamicChunk) {
+      const cost = performance.now() - t0;
+      if (cost > 6500 && chunkSize > 10) chunkSize = Math.max(10, Math.floor(chunkSize * 0.8));
+      else if (cost < 1800 && chunkSize < 200) chunkSize = Math.min(200, chunkSize + 10);
+      try { localStorage.setItem("crypto_screener_enriched_chunk_size_v1", String(chunkSize)); } catch {}
+    }
+    setEnrichProgress(offset, total, true, spText);
+    if (offset < total) await new Promise((x) => setTimeout(x, 120));
+  }
+  return { ok: true, summary, config, results: merged };
+}
+
+async function enrichRowsForDisplay({ rows, params, toggles, customFactors, tail }) {
+  const picks = [];
+  const seen = new Set();
+  for (const r of Array.isArray(rows) ? rows : []) {
+    const m = String(r && r.market ? r.market : "").trim();
+    const s = String(r && r.symbol ? r.symbol : "").trim();
+    if (!m || !s) continue;
+    const k = `${m}|${s}`;
+    if (seen.has(k)) continue;
+    seen.add(k);
+    picks.push({ market: m, symbol: s });
+    if (picks.length >= 500) break;
+  }
+  if (!picks.length) return { ok: true, updated: 0 };
+  const reqFields = buildEnrichedRequestFields(params, toggles, customFactors);
+  const sig = enrichSig({ mode: "display", params, toggles, customFactors, tail, meta: state.meta, latest: state.latest, symbols: picks });
+  if (sig) {
+    if (!state.enrichCache[sig]) state.enrichCache[sig] = { rows: {}, done: false, total: picks.length || 0, ts: Date.now() };
+    cacheTouch(sig);
+    const all = state.latest && Array.isArray(state.latest.results) ? state.latest.results : [];
+    const applied0 = cacheApply(sig, all);
+    if (applied0.done) return { ok: true, updated: applied0.applied };
+  }
+  setEnrichProgress(0, picks.length, true, "");
+  const { ok, results } = await loadLatestEnrichedChunked({ customFactors, params, toggles, tail, fields: reqFields, symbols: picks });
+  if (!ok) return { ok: false, updated: 0 };
+  const map = new Map();
+  const all = state.latest && Array.isArray(state.latest.results) ? state.latest.results : [];
+  for (const r of all) {
+    const k = `${String(r && r.market ? r.market : "")}|${String(r && r.symbol ? r.symbol : "")}`;
+    if (k !== "|") map.set(k, r);
+  }
+  let updated = 0;
+  for (const r2 of Array.isArray(results) ? results : []) {
+    const k = `${String(r2 && r2.market ? r2.market : "")}|${String(r2 && r2.symbol ? r2.symbol : "")}`;
+    const r0 = map.get(k);
+    if (!r0) continue;
+    if (r2 && r2._expr) r0._expr = r2._expr;
+    if (r2 && r2._builtins) r0._builtins = r2._builtins;
+    if (sig) {
+      if (!state.enrichCache[sig]) state.enrichCache[sig] = { rows: {}, done: false, total: picks.length || 0, ts: Date.now() };
+      state.enrichCache[sig].rows[k] = { _builtins: r0._builtins, _expr: r0._expr };
+      state.enrichCache[sig].ts = Date.now();
+      cacheTouch(sig);
+    }
+    updated += 1;
+  }
+  if (sig && state.enrichCache[sig]) {
+    state.enrichCache[sig].done = true;
+    state.enrichCache[sig].total = picks.length || 0;
+    state.enrichCache[sig].ts = Date.now();
+    cacheTouch(sig);
+  }
+  setEnrichProgress(1, 1, false, "");
+  return { ok: true, updated };
 }
 
 function renderExprParams(count) {
@@ -2745,7 +3197,26 @@ function rerenderFromLatest() {
     buildSortOptionsFromFields(displayFields, state.meta && state.meta.default_sort);
     buildTableHeader(displayFields);
     const allRows = Array.isArray(latest.results) ? latest.results : [];
-    const { selected, exprErrors, exprMissing, missingBuiltins } = applyAllFilters(allRows, params, customFactors);
+    const toggles = {
+      condCloseMa: !!($("condCloseMa") && $("condCloseMa").checked),
+      condMa: !!($("condMa") && $("condMa").checked),
+      condRsi: !!($("condRsi") && $("condRsi").checked),
+      condEma: !!($("condEma") && $("condEma").checked),
+      condBollUp: !!($("condBollUp") && $("condBollUp").checked),
+      condBollDown: !!($("condBollDown") && $("condBollDown").checked),
+      condSuper: !!($("condSuper") && $("condSuper").checked),
+      condKdj: !!($("condKdj") && $("condKdj").checked),
+      condObv: !!($("condObv") && $("condObv").checked),
+      condStochRsi: !!($("condStochRsi") && $("condStochRsi").checked),
+    };
+    const dynamicEnabled = toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
+    const cf0 = Array.isArray(state.customFactors) ? state.customFactors : [];
+    const needCustomFilter = cf0.some((f) => f && f.enabled);
+    const fullEnrich = dynamicEnabled || needCustomFilter;
+    const fullSig = fullEnrich ? enrichSig({ mode: "full", params, toggles, customFactors: state.customFactors, tail: 360, meta: state.meta, latest, symbols: [] }) : "";
+    const cached = fullSig && state.enrichCache[fullSig] && state.enrichCache[fullSig].done && Number(state.enrichCache[fullSig].total || 0) === (allRows.length || 0);
+    const deferEnrichedFilters = fullEnrich && !cached;
+    const { selected, exprErrors, exprMissing, missingBuiltins } = applyAllFilters(allRows, params, customFactors, { deferEnrichedFilters });
     const { sorted, sortKey } = sortRows(selected, displayFields);
     assignRank(sorted, sortKey, displayFields);
     state.lastRenderedRows = Array.isArray(sorted) ? sorted.slice() : [];
@@ -2757,7 +3228,14 @@ function rerenderFromLatest() {
     if (exprMissing) parts.push(`因子缺数据：${exprMissing}`);
     const msg = parts.length ? ` ｜ ${parts.join(" ｜ ")}` : "";
     const total = params.market === "all" ? allRows.length : allRows.filter((r) => String(r.market) === String(params.market)).length;
-    $("counts").textContent = `显示：${sorted.length} / ${total}${msg}`;
+    const wl0 = state.baseConfig && Array.isArray(state.baseConfig.whitelist) ? state.baseConfig.whitelist : [];
+    const q0 = String(params.symbolQuery || "").trim();
+    const info = [];
+    if (wl0.length) info.push(`白名单:${wl0.length}`);
+    if (q0) info.push(`搜索:${q0}`);
+    if (deferEnrichedFilters) info.push("因子计算中");
+    const infoText = info.length ? ` ｜ ${info.join(" ｜ ")}` : "";
+    $("counts").textContent = `显示：${sorted.length} / ${total}${msg}${infoText}`;
     updateSummary(latest.summary || {});
   } catch {}
 }
@@ -2768,11 +3246,13 @@ async function refresh(opts = {}) {
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
     const isAuto = !!opts.auto;
-    if (opts.factorCompute) setStatus("计算因子中，请稍等");
+    let degradedReason = "";
+    if (opts.factorCompute) setStatus("");
     else if (isAuto) setStatus(`自动更新中… ${hh}:${mm}`);
     else if (opts.manual) setStatus(`手动刷新… ${hh}:${mm}`);
 
-    showProgress(8, "更新数据...");
+    const overlayEnabled = !(opts.forceEnriched || opts.factorCompute);
+    if (overlayEnabled) showProgress(8, "更新数据...");
     let backendTriggered = false;
     let backendRunning = false;
     const prevMetaUpdatedAt = state.meta && state.meta.updated_at ? String(state.meta.updated_at) : "";
@@ -2800,7 +3280,6 @@ async function refresh(opts = {}) {
       if (backendTriggered || backendRunning || running0) scheduleFollowRefresh(prevMetaUpdatedAt);
     }
 
-    showProgress(18, "读取快照...");
     const params = getParams();
     const toggles = {
       condCloseMa: !!($("condCloseMa") && $("condCloseMa").checked),
@@ -2815,59 +3294,184 @@ async function refresh(opts = {}) {
       condStochRsi: !!($("condStochRsi") && $("condStochRsi").checked),
     };
     const dynamicEnabled = toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
-    const needCustom = (state.customFactors || []).some((f) => f && (f.enabled || f.show));
-    const useEnriched = !!opts.forceEnriched || dynamicEnabled || needCustom;
+    const cf0 = Array.isArray(state.customFactors) ? state.customFactors : [];
+    const needCustomShow = cf0.some((f) => f && f.show);
+    const needCustomFilter = cf0.some((f) => f && f.enabled);
+    const needCustom = needCustomShow || needCustomFilter;
+    const fullEnrich = dynamicEnabled || needCustomFilter;
+    const displayEnrich = !fullEnrich && (needCustomShow || !!opts.forceEnriched || !!opts.factorCompute);
+    const useEnriched = fullEnrich || displayEnrich;
+    if (overlayEnabled) showProgress(18, "读取快照...");
 
     let latest;
-    if (useEnriched) {
-      const { r: rLatest, j: jLatest } = await postJson("./api/latest_enriched", { custom_factors: state.customFactors, params, toggles, tail: 360 });
-      if (!rLatest || !rLatest.ok || !jLatest || !jLatest.ok) {
-        const msg0 = jLatest && (jLatest.message || jLatest.error) ? (jLatest.message || jLatest.error) : "读取失败";
-        throw new Error(String(msg0));
-      }
-      latest = jLatest;
-    } else {
-      latest = await loadJson("./data/latest.json");
-      if (!latest || !latest.results) throw new Error("读取失败");
-    }
+    setEnrichProgress(1, 1, false, "");
+    latest = await loadJson("./data/latest.json");
+    if (!latest || !latest.results) throw new Error("读取失败");
     state.latest = latest;
+    try {
+      state.meta = await loadJson("./data/meta.json");
+      const updatedAt1 = state.meta && state.meta.updated_at ? String(state.meta.updated_at) : "";
+      if (updatedAt1 && updatedAt1 !== String(prevMetaUpdatedAt || "")) {
+        state.klineSeriesCache = {};
+        state.klineSeriesPending = {};
+      }
+    } catch {}
 
-    showProgress(40, "构建列与排序...");
+    if (overlayEnabled) showProgress(40, "构建列与排序...");
     saveParams(params);
     const customFactors = state.customFactors;
     const displayFields = buildDisplayFields(params, customFactors);
     buildSortOptionsFromFields(displayFields, state.meta && state.meta.default_sort);
     buildTableHeader(displayFields);
 
-    showProgress(65, "计算指标与筛选...");
+    if (overlayEnabled) {
+      if (opts.factorCompute || needCustom) showProgress(65, "计算指标与筛选...");
+      else showProgress(65, "计算指标与筛选...");
+    }
     const allRows = Array.isArray(latest.results) ? latest.results : [];
-    const { selected, exprErrors, exprMissing, missingBuiltins, hasSeries } = applyAllFilters(allRows, params, customFactors);
+    const fullSig = fullEnrich ? enrichSig({ mode: "full", params, toggles, customFactors: state.customFactors, tail: 360, meta: state.meta, latest, symbols: [] }) : "";
+    if (fullSig) {
+      if (!state.enrichCache[fullSig]) state.enrichCache[fullSig] = { rows: {}, done: false, total: allRows.length || 0, ts: Date.now() };
+      cacheTouch(fullSig);
+      cacheApply(fullSig, allRows);
+    }
+    const cached0 = fullSig && state.enrichCache[fullSig] && state.enrichCache[fullSig].done && Number(state.enrichCache[fullSig].total || 0) === (allRows.length || 0);
+    const deferEnrichedFilters = fullEnrich && !cached0;
+    const { selected, exprErrors, exprMissing, missingBuiltins, hasSeries } = applyAllFilters(allRows, params, customFactors, { deferEnrichedFilters });
 
-    showProgress(85, "排序与渲染...");
+    if (overlayEnabled) showProgress(85, "排序与渲染...");
     const { sorted, sortKey } = sortRows(selected, displayFields);
     assignRank(sorted, sortKey, displayFields);
+    if (getHighlightNewOnList()) {
+      const iso = (state.meta && state.meta.updated_at) ? state.meta.updated_at : (latest && latest.summary && latest.summary.generated_at ? latest.summary.generated_at : "");
+      const hk = hourKeyFromIso(iso);
+      markNewOnListRows(sorted, hk);
+    } else {
+      for (const r of sorted) r._new_on_list = false;
+    }
     state.lastRenderedRows = Array.isArray(sorted) ? sorted.slice() : [];
     renderTable(sorted, displayFields);
     syncSelectedRowFrom(sorted);
     saveLastPicks(sorted, latest.summary || {});
 
+    if (fullEnrich) {
+      if (cached0) {
+        state.enrichInFlight = false;
+        state.enrichInFlightSig = "";
+        setEnrichProgress(1, 1, false, "");
+      } else {
+      if (state.enrichInFlight) {
+        if (state.enrichInFlightSig && fullSig && state.enrichInFlightSig === fullSig) {
+          setEnrichProgress(0, allRows.length || 1, true, "");
+        } else {
+          setEnrichProgress(0, allRows.length || 1, true, "");
+        }
+      } else {
+      state.enrichInFlight = true;
+      state.enrichInFlightSig = fullSig || "";
+      state.enrichToken = (Number(state.enrichToken || 0) + 1) || 1;
+      const token = state.enrichToken;
+      try { rerenderFromLatest(); } catch {}
+      setEnrichProgress(0, allRows.length || 1, true, "");
+      const rowMap = new Map();
+      for (const r of allRows) {
+        const k = `${String(r && r.market ? r.market : "")}|${String(r && r.symbol ? r.symbol : "")}`;
+        if (k !== "|") rowMap.set(k, r);
+      }
+      const reqFields = buildEnrichedRequestFields(params, toggles, state.customFactors);
+      loadLatestEnrichedChunked({
+        customFactors: state.customFactors,
+        params,
+        toggles,
+        tail: 360,
+        fields: reqFields,
+        onBatch: ({ results, offset, total, speedText }) => {
+          if (token !== state.enrichToken) return;
+          for (const r2 of Array.isArray(results) ? results : []) {
+            const k = `${String(r2 && r2.market ? r2.market : "")}|${String(r2 && r2.symbol ? r2.symbol : "")}`;
+            const r0 = rowMap.get(k);
+            if (!r0) continue;
+            if (r2 && r2._expr) r0._expr = r2._expr;
+            if (r2 && r2._builtins) r0._builtins = r2._builtins;
+            if (fullSig) {
+              if (!state.enrichCache[fullSig]) state.enrichCache[fullSig] = { rows: {}, done: false, total: allRows.length || 0, ts: Date.now() };
+              state.enrichCache[fullSig].rows[k] = { _builtins: r0._builtins, _expr: r0._expr };
+              state.enrichCache[fullSig].ts = Date.now();
+              cacheTouch(fullSig);
+            }
+          }
+          setEnrichProgress(offset, total, true, speedText || "");
+        },
+      }).then(() => {
+        if (token !== state.enrichToken) return;
+        setEnrichProgress(1, 1, false, "");
+        state.enrichInFlight = false;
+        state.enrichInFlightSig = "";
+        if (fullSig && state.enrichCache[fullSig]) {
+          state.enrichCache[fullSig].done = true;
+          state.enrichCache[fullSig].total = allRows.length || 0;
+          state.enrichCache[fullSig].ts = Date.now();
+          cacheTouch(fullSig);
+        }
+        rerenderFromLatest();
+      }).catch((e0) => {
+        if (token !== state.enrichToken) return;
+        const msg0 = String(e0 && e0.message ? e0.message : e0 || "");
+        setEnrichProgress(1, 1, false, "");
+        state.enrichInFlight = false;
+        state.enrichInFlightSig = "";
+        degradedReason = msg0 || "enriched_failed";
+        setStatus(`因子计算失败（${degradedReason}）`);
+      });
+      }
+      }
+    }
+
+    if (!degradedReason && displayEnrich && sorted.length > 0) {
+      if (overlayEnabled) showProgress(92, "计算因子（仅显示行）...");
+      try {
+        const r3 = await enrichRowsForDisplay({ rows: sorted, params, toggles, customFactors: state.customFactors, tail: 360 });
+        if (r3 && r3.ok && r3.updated) {
+          rerenderFromLatest();
+        }
+      } catch (e2) {
+        const msg2 = String(e2 && e2.message ? e2.message : e2 || "");
+        degradedReason = msg2 || "enriched_failed";
+      }
+    }
+
     const parts = [];
-    if (exprErrors) parts.push(`表达式异常：${exprErrors}`);
-    if (exprMissing) parts.push(`因子缺数据：${exprMissing}`);
+    if (degradedReason) parts.push(`因子计算降级：${degradedReason}`);
+    else {
+      if (exprErrors) parts.push(`表达式异常：${exprErrors}`);
+      if (exprMissing) parts.push(`因子缺数据：${exprMissing}`);
+    }
     const msg = parts.length ? ` ｜ ${parts.join(" ｜ ")}` : "";
+    const wl0 = state.baseConfig && Array.isArray(state.baseConfig.whitelist) ? state.baseConfig.whitelist : [];
+    const q0 = String(params.symbolQuery || "").trim();
+    const info = [];
+    if (wl0.length) info.push(`白名单:${wl0.length}`);
+    if (q0) info.push(`搜索:${q0}`);
+    const infoText = info.length ? ` ｜ ${info.join(" ｜ ")}` : "";
     const total = params.market === "all" ? allRows.length : allRows.filter((r) => String(r.market) === String(params.market)).length;
-    $("counts").textContent = `显示：${sorted.length} / ${total}${msg}`;
+    $("counts").textContent = `显示：${sorted.length} / ${total}${msg}${infoText}`;
     updateSummary(latest.summary || {});
 
-    showProgress(100, "完成");
-    setTimeout(() => hideProgress(), 160);
+    if (overlayEnabled) {
+      showProgress(100, "完成");
+      setTimeout(() => hideProgress(), 160);
+    } else {
+      hideProgress();
+    }
 
     const hitText = sorted.length > 0 ? ` ｜ 命中：${sorted.length}` : " ｜ 命中：0";
     if (opts.factorCompute) setStatus(`因子计算完成${hitText}`);
+    else if (degradedReason) setStatus(`已降级快照（${degradedReason}）${hitText}`);
     else if (isAuto) setStatus(`自动更新完成 ${hh}:${mm}${hitText}`);
     else if (opts.manual) setStatus(`${backendTriggered ? "刷新完成" : "静态刷新完成"} ${hh}:${mm}${hitText}`);
     else setStatus(`${hitText.trim()}`);
   } catch (e) {
+    setEnrichProgress(1, 1, false, "");
     hideProgress();
     $("counts").textContent = `刷新失败：${String(e && e.message ? e.message : e)}`;
     if (opts.auto) setStatus("自动更新失败");
@@ -2996,6 +3600,17 @@ function initControls(meta) {
 
   $("exprAdd").addEventListener("click", () => upsertCustomFactor());
   $("exprToggle").addEventListener("click", () => setExprEditorOpen(!state.exprEditorOpen));
+  if ($("factorLibToggle")) {
+    $("factorLibToggle").addEventListener("click", () => {
+      const el = $("factorLib");
+      if (!el) return;
+      const on = el.classList.toggle("hidden");
+      if (!on) renderFactorLibrary();
+    });
+  }
+  if ($("factorLibQuery")) {
+    $("factorLibQuery").addEventListener("input", () => renderFactorLibrary());
+  }
   $("exprEnable").addEventListener("change", () => syncExprThresholdUI());
   $("exprHelp").addEventListener("click", () => setHelpOpen(true));
   $("helpClose").addEventListener("click", () => setHelpOpen(false));
@@ -3141,6 +3756,7 @@ function initControls(meta) {
     $("baseMarketApply").addEventListener("click", async () => {
       const v = ($("baseMarketSelect") && $("baseMarketSelect").value) ? $("baseMarketSelect").value : "all";
       setSelectedMarket(v);
+      setHighlightNewOnList(!!($("baseNewOnList") && $("baseNewOnList").checked));
       if (state.strategyDraft && state.strategyDraft.params) state.strategyDraft.params.market = getSelectedMarket();
       updateWecomSummary(state.strategyDraft);
       setText("wecomResult", "市场已应用");
