@@ -610,7 +610,7 @@ function refreshFactors() {
       condObv: !!($("condObv") && $("condObv").checked),
       condStochRsi: !!($("condStochRsi") && $("condStochRsi").checked),
     };
-    const dynamicEnabled = toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
+    const dynamicEnabled = toggles.condCloseMa || toggles.condMa || toggles.condRsi || toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
     const cf0 = Array.isArray(state.customFactors) ? state.customFactors : [];
     const needCustomFilter = cf0.some((f) => f && f.enabled);
     const fullEnrich = dynamicEnabled || needCustomFilter;
@@ -619,7 +619,7 @@ function refreshFactors() {
       const c = fullSig && state.enrichCache ? state.enrichCache[fullSig] : null;
       const cached = !!(c && c.done && Number(c.total || 0) === (allRows.length || 0));
       if (cached) {
-        rerenderFromLatest();
+        rerenderFromLatestDebounced();
         return Promise.resolve();
       }
     }
@@ -629,6 +629,7 @@ function refreshFactors() {
 
 function cancelFilterWork() {
   state.filterToken = (Number(state.filterToken || 0) + 1) || 1;
+  state.renderToken = (Number(state.renderToken || 0) + 1) || 1;
 }
 
 function rerenderFromLatestDebounced() {
@@ -1931,7 +1932,7 @@ function updateColumnSelector(allFields) {
       cb.addEventListener("change", () => {
         state.columnVisibility[f.key] = cb.checked;
         saveColumnVisibility();
-        rerenderFromLatest();
+        rerenderFromLatestDebounced();
       });
     }
     label.appendChild(cb);
@@ -1989,13 +1990,13 @@ function buildTableHeader(fields) {
       inp.addEventListener("blur", () => {
         state.symbolQuery = inp.value || "";
         inp.classList.toggle("hidden", !String(state.symbolQuery || "").trim());
-        rerenderFromLatest();
+        rerenderFromLatestDebounced();
       });
       inp.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
           state.symbolQuery = inp.value || "";
-          rerenderFromLatest();
+          rerenderFromLatestDebounced();
           inp.blur();
           return;
         }
@@ -2003,7 +2004,7 @@ function buildTableHeader(fields) {
           inp.value = "";
           state.symbolQuery = "";
           inp.classList.add("hidden");
-          rerenderFromLatest();
+          rerenderFromLatestDebounced();
         }
       });
       wrap.appendChild(label);
@@ -2022,6 +2023,8 @@ function buildTableHeader(fields) {
 function renderTableChunked(rows, fields) {
   const tbody = $("tbody");
   tbody.innerHTML = "";
+  state.renderToken = (Number(state.renderToken || 0) + 1) || 1;
+  const token = state.renderToken;
   let i = 0;
   const n = rows.length || 0;
 
@@ -2077,10 +2080,12 @@ function renderTableChunked(rows, fields) {
   }
 
   function run(deadline) {
+    if (state.renderToken !== token) return;
     const frag = document.createDocumentFragment();
     let cnt = 0;
     const hardCap = 120;
     while (i < n && cnt < hardCap && (deadline.didTimeout || deadline.timeRemaining() > 4)) {
+      if (state.renderToken !== token) return;
       frag.appendChild(buildRow(rows[i]));
       i += 1;
       cnt += 1;
@@ -2338,8 +2343,8 @@ async function applyAllFiltersAsync(rows, params, customFactors, opts = {}) {
       const bs0 = r._baseSymU || _baseSymbolUpper(sym0);
       if (whitelist.size && !whitelist.has(sym0) && !whitelist.has(bs0)) continue;
       if (blacklist.size && (blacklist.has(sym0) || blacklist.has(bs0))) continue;
-      if (needBuiltins) r._builtins = computeBuiltins(r, params);
-      else r._builtins = (r && r._builtins && typeof r._builtins === "object") ? r._builtins : {};
+      r._builtins = (r && r._builtins && typeof r._builtins === "object") ? r._builtins : {};
+      if (needBuiltins && hasSeries) r._builtins = computeBuiltins(r, params);
       r._expr = (r && r._expr && typeof r._expr === "object") ? r._expr : {};
 
       const closes = hasSeries ? getSeries(r, "close") : [];
@@ -2350,23 +2355,29 @@ async function applyAllFiltersAsync(rows, params, customFactors, opts = {}) {
 
       if (enabledCloseMa) {
         const k = `ma_${params.maPeriodClose}`;
-        const maV = r._builtins[k];
-        if (maV === null || maV === undefined || !Number.isFinite(Number(maV))) missingBuiltins++;
-        else if (!(lastClose > Number(maV))) { filteredOut++; continue; }
+        if (hasSeries || Object.prototype.hasOwnProperty.call(r._builtins || {}, k)) {
+          const maV = r._builtins[k];
+          if (maV === null || maV === undefined || !Number.isFinite(Number(maV))) missingBuiltins++;
+          else if (!(lastClose > Number(maV))) { filteredOut++; continue; }
+        }
       }
       if (enabledMa) {
         const kf = `ma_${params.maFast}`;
         const ks = `ma_${params.maSlow}`;
-        const maF = r._builtins[kf];
-        const maS = r._builtins[ks];
-        if (maF === null || maS === null || maF === undefined || maS === undefined || !Number.isFinite(Number(maF)) || !Number.isFinite(Number(maS))) missingBuiltins++;
-        else if (!(Number(maF) > Number(maS))) { filteredOut++; continue; }
+        if (hasSeries || (Object.prototype.hasOwnProperty.call(r._builtins || {}, kf) && Object.prototype.hasOwnProperty.call(r._builtins || {}, ks))) {
+          const maF = r._builtins[kf];
+          const maS = r._builtins[ks];
+          if (maF === null || maS === null || maF === undefined || maS === undefined || !Number.isFinite(Number(maF)) || !Number.isFinite(Number(maS))) missingBuiltins++;
+          else if (!(Number(maF) > Number(maS))) { filteredOut++; continue; }
+        }
       }
       if (enabledRsi) {
         const kr = `rsi_${params.rsiPeriod}`;
-        const rv = r._builtins[kr];
-        if (rv === null || rv === undefined || !Number.isFinite(Number(rv))) missingBuiltins++;
-        else if (!(Number(rv) > Number(params.rsiThreshold))) { filteredOut++; continue; }
+        if (hasSeries || Object.prototype.hasOwnProperty.call(r._builtins || {}, kr)) {
+          const rv = r._builtins[kr];
+          if (rv === null || rv === undefined || !Number.isFinite(Number(rv))) missingBuiltins++;
+          else if (!(Number(rv) > Number(params.rsiThreshold))) { filteredOut++; continue; }
+        }
       }
 
       if (!deferEnrichedFilters && enabledEma) {
@@ -2742,7 +2753,7 @@ function renderCustomFactorList() {
       syncCustomFactorsToServer(state.customFactors);
       renderFolderConditions();
       if (cb1.checked) refreshFactors();
-      else rerenderFromLatest();
+        else rerenderFromLatestDebounced();
     });
     row.appendChild(cb1);
 
@@ -2754,7 +2765,7 @@ function renderCustomFactorList() {
       saveCustomFactors(state.customFactors);
       syncCustomFactorsToServer(state.customFactors);
       if (cb2.checked) refreshFactors();
-      else rerenderFromLatest();
+        else rerenderFromLatestDebounced();
     });
     row.appendChild(cb2);
 
@@ -2769,7 +2780,7 @@ function renderCustomFactorList() {
       syncCustomFactorsToServer(state.customFactors);
       renderFolderConditions();
       renderCustomFactorList();
-      rerenderFromLatest();
+      rerenderFromLatestDebounced();
     });
     row.appendChild(del);
 
@@ -2823,7 +2834,7 @@ function renderFolderConditions() {
         syncCustomFactorsToServer(state.customFactors);
         renderFolderConditions();
         if (cb.checked) refreshFactors();
-        else rerenderFromLatest();
+        else rerenderFromLatestDebounced();
       });
       line.appendChild(cb);
 
@@ -2862,7 +2873,7 @@ function renderFolderConditions() {
         syncCustomFactorsToServer(state.customFactors);
         renderFolderConditions();
         renderCustomFactorList();
-        rerenderFromLatest();
+        rerenderFromLatestDebounced();
       });
       line.appendChild(del);
 
@@ -3529,7 +3540,7 @@ async function rerenderFromLatest() {
       condObv: !!($("condObv") && $("condObv").checked),
       condStochRsi: !!($("condStochRsi") && $("condStochRsi").checked),
     };
-    const dynamicEnabled = toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
+    const dynamicEnabled = toggles.condCloseMa || toggles.condMa || toggles.condRsi || toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
     const cf0 = Array.isArray(state.customFactors) ? state.customFactors : [];
     const needCustomFilter = cf0.some((f) => f && f.enabled);
     const fullEnrich = dynamicEnabled || needCustomFilter;
@@ -3613,7 +3624,7 @@ async function refresh(opts = {}) {
       condObv: !!($("condObv") && $("condObv").checked),
       condStochRsi: !!($("condStochRsi") && $("condStochRsi").checked),
     };
-    const dynamicEnabled = toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
+    const dynamicEnabled = toggles.condCloseMa || toggles.condMa || toggles.condRsi || toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
     const cf0 = Array.isArray(state.customFactors) ? state.customFactors : [];
     const needCustomShow = cf0.some((f) => f && f.show);
     const needCustomFilter = cf0.some((f) => f && f.enabled);
@@ -3692,7 +3703,7 @@ async function refresh(opts = {}) {
       state.enrichInFlightSig = fullSig || "";
       state.enrichToken = (Number(state.enrichToken || 0) + 1) || 1;
       const token = state.enrichToken;
-      try { rerenderFromLatest(); } catch {}
+      try { rerenderFromLatestDebounced(); } catch {}
       setEnrichProgress(0, allRows.length || 1, true, "");
       const rowMap = new Map();
       for (const r of allRows) {
@@ -3734,7 +3745,7 @@ async function refresh(opts = {}) {
           state.enrichCache[fullSig].ts = Date.now();
           cacheTouch(fullSig);
         }
-        rerenderFromLatest();
+        rerenderFromLatestDebounced();
       }).catch((e0) => {
         if (token !== state.enrichToken) return;
         const msg0 = String(e0 && e0.message ? e0.message : e0 || "");
@@ -3753,7 +3764,7 @@ async function refresh(opts = {}) {
       try {
         const r3 = await enrichRowsForDisplay({ rows: sorted, params, toggles, customFactors: state.customFactors, tail: 360 });
         if (r3 && r3.ok && r3.updated) {
-          rerenderFromLatest();
+          rerenderFromLatestDebounced();
         }
       } catch (e2) {
         const msg2 = String(e2 && e2.message ? e2.message : e2 || "");
@@ -3907,7 +3918,7 @@ function initControls(meta) {
   for (const id of ids) {
     const el = $(id);
     if (!el) continue;
-    const dyn = new Set(["condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"]);
+    const dyn = new Set(["condCloseMa", "condMa", "condRsi", "condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"]);
     const filterOnly = new Set(["rsiThreshold"]);
     if (dyn.has(id)) {
       el.addEventListener("change", () => (el.checked ? refreshFactorsDebounced() : rerenderFromLatestDebounced()));
@@ -4086,7 +4097,7 @@ function initControls(meta) {
       if (state.strategyDraft && state.strategyDraft.params) state.strategyDraft.params.market = getSelectedMarket();
       updateWecomSummary(state.strategyDraft);
       setText("wecomResult", "市场已应用");
-      rerenderFromLatest();
+      rerenderFromLatestDebounced();
     });
   }
   if ($("strategySelect")) {
