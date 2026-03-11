@@ -1,0 +1,95 @@
+{
+  "ts": "2026-03-11T20:59:42",
+  "endpoint": "http://127.0.0.1:8001/api/latest_enriched",
+  "max_workers": 64,
+  "requests_per_user": 3,
+  "stages": [
+    {
+      "users": 1,
+      "requests_per_user": 3,
+      "total_requests": 3,
+      "concurrency_workers": 3,
+      "elapsed_s": 19.595,
+      "qps": 0.153,
+      "success": 3,
+      "errors": 0,
+      "error_rate": 0.0,
+      "latency_ms": {
+        "avg": 6531.082,
+        "p50": 3.534,
+        "p95": 26.624,
+        "p99": 26.624,
+        "max": 19563.088
+      },
+      "codes": {
+        "200": 3
+      },
+      "resource": {
+        "server_pid": 88044,
+        "proc_cpu_pct": 97.0,
+        "proc_rss_mb": 125.953,
+        "proc_rss_mb_delta": -32.785,
+        "cpu0": 0.0,
+        "rss0": 97693696
+      }
+    },
+    {
+      "users": 10,
+      "requests_per_user": 3,
+      "total_requests": 30,
+      "concurrency_workers": 30,
+      "elapsed_s": 0.051,
+      "qps": 588.019,
+      "success": 30,
+      "errors": 0,
+      "error_rate": 0.0,
+      "latency_ms": {
+        "avg": 14.405,
+        "p50": 14.769,
+        "p95": 18.735,
+        "p99": 19.426,
+        "max": 20.308
+      },
+      "codes": {
+        "200": 30
+      },
+      "resource": {
+        "server_pid": 88044,
+        "proc_cpu_pct": 33.2,
+        "proc_rss_mb": 125.996,
+        "proc_rss_mb_delta": 0.0,
+        "cpu0": 0.0,
+        "rss0": 132116480
+      }
+    },
+    {
+      "users": 50,
+      "requests_per_user": 3,
+      "total_requests": 150,
+      "concurrency_workers": 64,
+      "elapsed_s": 0.252,
+      "qps": 595.782,
+      "success": 150,
+      "errors": 0,
+      "error_rate": 0.0,
+      "latency_ms": {
+        "avg": 45.615,
+        "p50": 45.992,
+        "p95": 70.245,
+        "p99": 71.766,
+        "max": 74.546
+      },
+      "codes": {
+        "200": 150
+      },
+      "resource": {
+        "server_pid": 88044,
+        "proc_cpu_pct": 112.5,
+        "proc_rss_mb": 126.02,
+        "proc_rss_mb_delta": -0.023,
+        "cpu0": 0.0,
+        "rss0": 132116480
+      }
+    }
+  ]
+}

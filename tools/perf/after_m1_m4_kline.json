@@ -1,0 +1,95 @@
+{
+  "ts": "2026-03-11T21:00:21",
+  "endpoint": "http://127.0.0.1:8001/api/kline",
+  "max_workers": 64,
+  "requests_per_user": 5,
+  "stages": [
+    {
+      "users": 1,
+      "requests_per_user": 5,
+      "total_requests": 5,
+      "concurrency_workers": 5,
+      "elapsed_s": 0.252,
+      "qps": 19.836,
+      "success": 5,
+      "errors": 0,
+      "error_rate": 0.0,
+      "latency_ms": {
+        "avg": 50.129,
+        "p50": 8.249,
+        "p95": 24.196,
+        "p99": 24.196,
+        "max": 190.829
+      },
+      "codes": {
+        "200": 5
+      },
+      "resource": {
+        "server_pid": 88044,
+        "proc_cpu_pct": 81.2,
+        "proc_rss_mb": 126.84,
+        "proc_rss_mb_delta": -0.82,
+        "cpu0": 0.0,
+        "rss0": 132141056
+      }
+    },
+    {
+      "users": 10,
+      "requests_per_user": 5,
+      "total_requests": 50,
+      "concurrency_workers": 50,
+      "elapsed_s": 0.607,
+      "qps": 82.349,
+      "success": 50,
+      "errors": 0,
+      "error_rate": 0.0,
+      "latency_ms": {
+        "avg": 50.951,
+        "p50": 21.714,
+        "p95": 31.954,
+        "p99": 515.883,
+        "max": 526.325
+      },
+      "codes": {
+        "200": 50
+      },
+      "resource": {
+        "server_pid": 88044,
+        "proc_cpu_pct": 53.9,
+        "proc_rss_mb": 126.844,
+        "proc_rss_mb_delta": -0.004,
+        "cpu0": 0.0,
+        "rss0": 133001216
+      }
+    },
+    {
+      "users": 50,
+      "requests_per_user": 5,
+      "total_requests": 250,
+      "concurrency_workers": 64,
+      "elapsed_s": 2.712,
+      "qps": 92.172,
+      "success": 250,
+      "errors": 0,
+      "error_rate": 0.0,
+      "latency_ms": {
+        "avg": 272.544,
+        "p50": 31.851,
+        "p95": 1040.886,
+        "p99": 1563.514,
+        "max": 2078.806
+      },
+      "codes": {
+        "200": 250
+      },
+      "resource": {
+        "server_pid": 88044,
+        "proc_cpu_pct": 59.2,
+        "proc_rss_mb": 127.16,
+        "proc_rss_mb_delta": -0.316,
+        "cpu0": 0.0,
+        "rss0": 133005312
+      }
+    }
+  ]
+}

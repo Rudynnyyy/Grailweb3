@@ -15,6 +15,7 @@ _manifest_cache_lock = None
 _manifest_cache: dict[str, Any] = {"root": "", "mtime_ns": -1, "index": {}}
 _pkl_cache_lock = None
 _pkl_cache: dict[str, Any] = {"root": "", "files": {}}
+_pkl_ready_cache: dict[str, Any] = {"root": "", "mtime_ns": -1, "data": None}
 
 
 def _repo_root() -> Path:
@@ -170,10 +171,89 @@ def _to_utc_ts(x) -> Any:
         return None
 
 
+def _read_pkl_ready(root: Path) -> dict[str, Any] | None:
+    p = root / "pkl_ready.json"
+    if not p.exists():
+        return None
+    try:
+        mtime_ns = int(p.stat().st_mtime_ns)
+    except Exception:
+        mtime_ns = -1
+    if _pkl_ready_cache.get("root") == str(root) and int(_pkl_ready_cache.get("mtime_ns") or -1) == mtime_ns:
+        v0 = _pkl_ready_cache.get("data")
+        return v0 if isinstance(v0, dict) else None
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        data = None
+    _pkl_ready_cache["root"] = str(root)
+    _pkl_ready_cache["mtime_ns"] = int(mtime_ns)
+    _pkl_ready_cache["data"] = data if isinstance(data, dict) else None
+    return data if isinstance(data, dict) else None
+
+
+def _pkl_ready_gate_ok(*, repo_root: Path, root: Path, market: str) -> bool:
+    if str(os.environ.get("QC_PKL_REQUIRE_READY") or "1").strip() == "0":
+        return True
+    ready = _read_pkl_ready(root)
+    if not isinstance(ready, dict):
+        return False
+    meta_path = repo_root / "apps" / "crypto_screener" / "web" / "data" / "meta.json"
+    updated_at = ""
+    try:
+        if meta_path.exists():
+            payload = json.loads(meta_path.read_text(encoding="utf-8"))
+            updated_at = str(payload.get("updated_at") or "")
+    except Exception:
+        updated_at = ""
+    snap = str(ready.get("snapshot_updated_at") or "")
+    if not updated_at or not snap or snap != updated_at:
+        return False
+    markets = ready.get("markets")
+    if not isinstance(markets, dict):
+        return False
+    mk = str(market).lower()
+    mk_meta = markets.get(mk)
+    if not isinstance(mk_meta, dict):
+        return False
+    try:
+        found = int(mk_meta.get("symbols_found") or 0)
+        ok = int(mk_meta.get("symbols_ok") or 0)
+    except Exception:
+        found = 0
+        ok = 0
+    try:
+        min_symbols = int(os.environ.get("QC_PKL_READY_MIN_SYMBOLS") or "50")
+    except Exception:
+        min_symbols = 50
+    if found < max(1, min_symbols):
+        return False
+    try:
+        min_ok_ratio = float(os.environ.get("QC_PKL_READY_MIN_OK_RATIO") or "0.985")
+    except Exception:
+        min_ok_ratio = 0.985
+    ratio = (float(ok) / float(found)) if found > 0 else 0.0
+    if ratio < float(min_ok_ratio):
+        return False
+    max_dt = str(mk_meta.get("max_dt") or "")
+    a = _to_utc_ts(max_dt)
+    b = _to_utc_ts(updated_at)
+    try:
+        if a is None or b is None or not bool(pd.notna(a)) or not bool(pd.notna(b)):
+            return False
+        if a < b:
+            return False
+    except Exception:
+        return False
+    return True
+
+
 def _load_series_from_pkl_cache(*, market: str, symbol: str, tail: int, repo_root: Path, return_stale: bool = False) -> tuple[SymbolSeries | None, bool]:
     root = _pkl_series_cache_root(repo_root)
     if not root.exists():
         return (None, False) if return_stale else (None, False)
+    if not _pkl_ready_gate_ok(repo_root=repo_root, root=root, market=market):
+        return (None, True) if return_stale else (None, False)
     pkl_path = root / f"series_{str(market).lower()}.pkl"
     if not pkl_path.exists():
         return (None, False) if return_stale else (None, False)
@@ -280,6 +360,13 @@ def _read_preprocessed_file(path: Path, *, columns: list[str]) -> pd.DataFrame:
     ext = path.suffix.lower()
     if ext == ".pkl":
         df = pd.read_pickle(path)
+        keep = [c for c in columns if c in df.columns]
+        return df[keep].copy() if keep else pd.DataFrame()
+    if ext == ".parquet":
+        try:
+            df = pd.read_parquet(path)
+        except Exception:
+            return pd.DataFrame()
         keep = [c for c in columns if c in df.columns]
         return df[keep].copy() if keep else pd.DataFrame()
     return pd.DataFrame()

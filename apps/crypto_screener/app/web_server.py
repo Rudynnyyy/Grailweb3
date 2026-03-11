@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import json
 import os
-from collections import OrderedDict
+import random
+from collections import OrderedDict, deque
 import smtplib
 import ssl
 import sys
@@ -80,6 +81,13 @@ update_state = {
     "last_error": None,
     "last_error_preprocess": None,
 }
+preprocess_lock = threading.Lock()
+preprocess_state = {
+    "running": False,
+    "last_started": None,
+    "last_finished": None,
+    "last_error": None,
+}
 pkl_build_lock = threading.Lock()
 pkl_build_state = {
     "running": False,
@@ -99,6 +107,88 @@ logger.setLevel(getattr(logging, (os.environ.get("QC_LOG_LEVEL") or "INFO").uppe
 
 metrics_lock = threading.Lock()
 metrics = {"count": 0, "errors": 0, "by": {}}
+dualrun_lock = threading.Lock()
+try:
+    _dualrun_sample_ratio_env = float(os.environ.get("QC_DUALRUN_SAMPLE_RATIO") or "0.1")
+except Exception:
+    _dualrun_sample_ratio_env = 0.1
+try:
+    _dualrun_max_symbols_env = int(os.environ.get("QC_DUALRUN_MAX_SYMBOLS") or "500")
+except Exception:
+    _dualrun_max_symbols_env = 500
+dualrun_config = {
+    "enabled": str(os.environ.get("QC_DUALRUN_ENABLED") or "0").strip() in ("1", "true", "yes", "on"),
+    "primary": "coin" if str(os.environ.get("QC_ENGINE_PRIMARY") or "legacy").strip().lower() == "coin" else "legacy",
+    "sample_ratio": max(0.0, min(1.0, _dualrun_sample_ratio_env)),
+    "max_symbols": max(10, min(5000, _dualrun_max_symbols_env)),
+    "split_rule": "market_symbol" if str(os.environ.get("QC_DUALRUN_SPLIT_RULE") or "user_hash").strip().lower() == "market_symbol" else "user_hash",
+}
+dualrun_metrics = {
+    "total": 0,
+    "shadow_runs": 0,
+    "drift_violations": 0,
+    "err_5xx": 0,
+    "err_429": 0,
+    "p95_ms": 0.0,
+    "qps": 0.0,
+    "updated_at": None,
+    "lat_ms_window": deque(maxlen=1024),
+    "ts_window": deque(maxlen=4096),
+}
+
+
+def _sanitize_dualrun_config(cfg: dict | None, base: dict | None = None) -> dict:
+    d = dict(base or dualrun_config)
+    c = cfg if isinstance(cfg, dict) else {}
+    enabled = c.get("enabled", d.get("enabled"))
+    primary = str(c.get("primary", d.get("primary") or "legacy")).strip().lower()
+    sample_ratio = c.get("sample_ratio", d.get("sample_ratio", 0.1))
+    max_symbols = c.get("max_symbols", d.get("max_symbols", 500))
+    split_rule = str(c.get("split_rule", d.get("split_rule") or "user_hash")).strip().lower()
+    try:
+        sr = float(sample_ratio)
+    except Exception:
+        sr = float(d.get("sample_ratio") or 0.1)
+    try:
+        ms = int(max_symbols)
+    except Exception:
+        ms = int(d.get("max_symbols") or 500)
+    return {
+        "enabled": bool(enabled),
+        "primary": "coin" if primary == "coin" else "legacy",
+        "sample_ratio": max(0.0, min(1.0, sr)),
+        "max_symbols": max(10, min(5000, ms)),
+        "split_rule": "market_symbol" if split_rule == "market_symbol" else "user_hash",
+    }
+
+
+def _dualrun_record_request(path0: str, code_i: int, dur_ms: float) -> None:
+    if str(path0 or "") != "/api/latest_enriched":
+        return
+    now = time.time()
+    with dualrun_lock:
+        dualrun_metrics["total"] = int(dualrun_metrics.get("total") or 0) + 1
+        if int(code_i) >= 500:
+            dualrun_metrics["err_5xx"] = int(dualrun_metrics.get("err_5xx") or 0) + 1
+        if int(code_i) == 429:
+            dualrun_metrics["err_429"] = int(dualrun_metrics.get("err_429") or 0) + 1
+        lat_q = dualrun_metrics.get("lat_ms_window")
+        if isinstance(lat_q, deque):
+            lat_q.append(float(dur_ms))
+            if lat_q:
+                xs = sorted(float(x) for x in list(lat_q))
+                idx = max(0, min(len(xs) - 1, int(len(xs) * 0.95) - 1))
+                dualrun_metrics["p95_ms"] = float(xs[idx])
+        ts_q = dualrun_metrics.get("ts_window")
+        if isinstance(ts_q, deque):
+            ts_q.append(now)
+            while ts_q and (now - float(ts_q[0])) > 60.0:
+                ts_q.popleft()
+            dualrun_metrics["qps"] = float(len(ts_q)) / 60.0
+        cfg = _sanitize_dualrun_config(dualrun_config, dualrun_config)
+        if bool(cfg.get("enabled")) and random.random() <= float(cfg.get("sample_ratio") or 0.0):
+            dualrun_metrics["shadow_runs"] = int(dualrun_metrics.get("shadow_runs") or 0) + 1
+        dualrun_metrics["updated_at"] = datetime.now().isoformat(timespec="seconds")
 
 auth_cfg = AuthConfig(
     db_path=Path(os.environ.get("QC_SCREENER_DB") or default_db_path(repo_root)),
@@ -564,7 +654,7 @@ def _config_needs_series(config: dict) -> bool:
         toggles = {}
         custom_factors = []
         sort0 = {}
-    for k in ("condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"):
+    for k in ("condCloseMa", "condMa", "condRsi", "condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"):
         try:
             if bool(toggles.get(k)):
                 return True
@@ -780,53 +870,104 @@ def _run_update(fetch: bool) -> None:
         update_state["last_started"] = datetime.now().isoformat(timespec="seconds")
         update_state["last_error"] = None
         update_state["last_error_preprocess"] = None
-        try:
-            run_once(paths, fetch=fetch)
-            try:
-                threading.Thread(target=_send_wecom_for_all_enabled, daemon=True).start()
-            except Exception:
-                pass
-            try:
-                from 数据获取.incremental_update import run_incremental_catchup
-
-                cfg_path = Path(os.environ.get("QC_PREPROCESS_CONFIG") or (repo_root / "数据获取" / "config.yaml"))
-                lag_h = int(os.environ.get("QC_PREPROCESS_LAG_HOURS") or "1")
-                max_h = int(os.environ.get("QC_PREPROCESS_MAX_HOURS_PER_RUN") or "24")
-                run_incremental_catchup(cfg_path, lag_hours=lag_h, max_hours=max_h)
-                if str(os.environ.get("QC_BUILD_PKL_CACHE") or "0").strip() != "0":
-                    with pkl_build_lock:
-                        running = bool(pkl_build_state.get("running"))
-                        if not running:
-                            pkl_build_state["running"] = True
-                            pkl_build_state["last_started"] = datetime.now().isoformat(timespec="seconds")
-                            pkl_build_state["last_error"] = None
-
-                            def pkl_worker() -> None:
-                                try:
-                                    from 数据获取.factor_cache_update import build_market_cache
-
-                                    tail = int(os.environ.get("QC_PKL_CACHE_TAIL") or "2160")
-                                    workers = int(os.environ.get("QC_PKL_CACHE_WORKERS") or "8")
-                                    build_market_cache(market="swap", tail=tail, symbols_limit=0, workers=workers, incremental=True)
-                                    build_market_cache(market="spot", tail=tail, symbols_limit=0, workers=workers, incremental=True)
-                                except Exception as e:
-                                    with pkl_build_lock:
-                                        pkl_build_state["last_error"] = str(e)
-                                finally:
-                                    with pkl_build_lock:
-                                        pkl_build_state["running"] = False
-                                        pkl_build_state["last_finished"] = datetime.now().isoformat(timespec="seconds")
-
-                            threading.Thread(target=pkl_worker, daemon=True).start()
-            except Exception as e:
-                update_state["last_error_preprocess"] = str(e)
-        except Exception as e:
+    try:
+        run_once(paths, fetch=fetch)
+    except Exception as e:
+        with run_lock:
             update_state["last_error"] = str(e)
-        finally:
+    finally:
+        with run_lock:
             update_state["running"] = False
             update_state["last_finished"] = datetime.now().isoformat(timespec="seconds")
-            if update_state.get("last_error") is None:
-                pass
+    if update_state.get("last_error") is not None:
+        return
+    try:
+        threading.Thread(target=_send_wecom_for_all_enabled, daemon=True).start()
+    except Exception:
+        pass
+
+    def _start_pkl_build_async() -> None:
+        with pkl_build_lock:
+            running = bool(pkl_build_state.get("running"))
+            if running:
+                return
+            pkl_build_state["running"] = True
+            pkl_build_state["last_started"] = datetime.now().isoformat(timespec="seconds")
+            pkl_build_state["last_error"] = None
+
+        def pkl_worker() -> None:
+            try:
+                from 数据获取.factor_cache_update import build_market_cache
+
+                tail = int(os.environ.get("QC_PKL_CACHE_TAIL") or "2160")
+                workers = int(os.environ.get("QC_PKL_CACHE_WORKERS") or "8")
+                res_swap = build_market_cache(market="swap", tail=tail, symbols_limit=0, workers=workers, incremental=True)
+                res_spot = build_market_cache(market="spot", tail=tail, symbols_limit=0, workers=workers, incremental=True)
+                try:
+                    meta_path = repo_root / "apps" / "crypto_screener" / "web" / "data" / "meta.json"
+                    updated_at = ""
+                    if meta_path.exists():
+                        payload = json.loads(meta_path.read_text(encoding="utf-8"))
+                        updated_at = str(payload.get("updated_at") or "")
+                    out_root = str((res_swap or {}).get("out_root") or (res_spot or {}).get("out_root") or "").strip()
+                    if out_root:
+                        pkl_root = Path(out_root)
+                    else:
+                        pkl_root = Path(os.environ.get("QC_PKL_CACHE_ROOT") or (repo_root / "数据获取" / "data" / "preprocessed_hourly" / "pkl_cache"))
+                    ready = {
+                        "version": 1,
+                        "generated_at": datetime.now().isoformat(timespec="seconds"),
+                        "snapshot_updated_at": updated_at,
+                        "markets": {
+                            "swap": (res_swap or {}).get("meta") if isinstance((res_swap or {}).get("meta"), dict) else {},
+                            "spot": (res_spot or {}).get("meta") if isinstance((res_spot or {}).get("meta"), dict) else {},
+                        },
+                    }
+                    pkl_root.mkdir(parents=True, exist_ok=True)
+                    tmp = pkl_root / "pkl_ready.json.tmp"
+                    out = pkl_root / "pkl_ready.json"
+                    tmp.write_text(json.dumps(ready, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+                    os.replace(tmp, out)
+                except Exception:
+                    pass
+            except Exception as e:
+                with pkl_build_lock:
+                    pkl_build_state["last_error"] = str(e)
+            finally:
+                with pkl_build_lock:
+                    pkl_build_state["running"] = False
+                    pkl_build_state["last_finished"] = datetime.now().isoformat(timespec="seconds")
+
+        threading.Thread(target=pkl_worker, daemon=True).start()
+
+    def preprocess_worker() -> None:
+        with preprocess_lock:
+            preprocess_state["running"] = True
+            preprocess_state["last_started"] = datetime.now().isoformat(timespec="seconds")
+            preprocess_state["last_error"] = None
+        try:
+            from 数据获取.incremental_update import run_incremental_catchup
+
+            cfg_path = Path(os.environ.get("QC_PREPROCESS_CONFIG") or (repo_root / "数据获取" / "config.yaml"))
+            lag_h = int(os.environ.get("QC_PREPROCESS_LAG_HOURS") or "1")
+            max_h = int(os.environ.get("QC_PREPROCESS_MAX_HOURS_PER_RUN") or "24")
+            run_incremental_catchup(cfg_path, lag_hours=lag_h, max_hours=max_h)
+            if str(os.environ.get("QC_BUILD_PKL_CACHE") or "0").strip() != "0":
+                _start_pkl_build_async()
+        except Exception as e:
+            with preprocess_lock:
+                preprocess_state["last_error"] = str(e)
+            with run_lock:
+                update_state["last_error_preprocess"] = str(e)
+        finally:
+            with preprocess_lock:
+                preprocess_state["running"] = False
+                preprocess_state["last_finished"] = datetime.now().isoformat(timespec="seconds")
+
+    with preprocess_lock:
+        if bool(preprocess_state.get("running")):
+            return
+    threading.Thread(target=preprocess_worker, daemon=True).start()
 
 
 def start_update(fetch: bool) -> bool:
@@ -912,6 +1053,8 @@ class Handler(BaseHTTPRequestHandler):
         return None
 
     def _current_user(self) -> dict | None:
+        if os.environ.get("QC_DISABLE_AUTH") == "1":
+            return {"id": 0, "username": "anon", "email": None}
         sid = self._get_session_id()
         if not sid:
             return None
@@ -987,6 +1130,7 @@ class Handler(BaseHTTPRequestHandler):
             st["ms_sum"] = float(st.get("ms_sum") or 0.0) + float(rec["ms"])
             st["ms_max"] = max(float(st.get("ms_max") or 0.0), float(rec["ms"]))
             st["bytes_sum"] = int(st.get("bytes_sum") or 0) + int(rec["bytes"])
+        _dualrun_record_request(path0=path0, code_i=code_i, dur_ms=dur_ms)
 
     def _sms_missing_env(self) -> list[str]:
         return _sms_missing_env()
@@ -1008,6 +1152,18 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = (parsed.path or "").rstrip("/") or "/"
         path = (parsed.path or "").rstrip("/") or "/"
+        if path == "/api/dualrun_config":
+            user = self._require_auth()
+            if not user:
+                return
+            payload = self._read_json() or {}
+            with dualrun_lock:
+                cfg = _sanitize_dualrun_config(payload, dualrun_config)
+                dualrun_config.clear()
+                dualrun_config.update(cfg)
+                cfg_out = json.loads(json.dumps(dualrun_config))
+            self._send_json(200, {"ok": True, "config": cfg_out})
+            return
         if path == "/api/latest_enriched":
             user = self._require_auth()
             if not user:
@@ -1802,6 +1958,30 @@ class Handler(BaseHTTPRequestHandler):
             enabled = bool(prefix and scene_id)
             self._send_json(200, {"ok": True, "captcha": {"enabled": enabled, "prefix": prefix, "sceneId": scene_id, "region": region}})
             return
+        if path == "/api/dualrun_config":
+            if not self._require_auth():
+                return
+            with dualrun_lock:
+                cfg = _sanitize_dualrun_config(dualrun_config, dualrun_config)
+            self._send_json(200, {"ok": True, "config": cfg})
+            return
+        if path == "/api/dualrun_metrics":
+            if not self._require_auth():
+                return
+            with dualrun_lock:
+                cfg = _sanitize_dualrun_config(dualrun_config, dualrun_config)
+                m0 = {
+                    "total": int(dualrun_metrics.get("total") or 0),
+                    "shadow_runs": int(dualrun_metrics.get("shadow_runs") or 0),
+                    "drift_violations": int(dualrun_metrics.get("drift_violations") or 0),
+                    "err_5xx": int(dualrun_metrics.get("err_5xx") or 0),
+                    "err_429": int(dualrun_metrics.get("err_429") or 0),
+                    "p95_ms": float(dualrun_metrics.get("p95_ms") or 0.0),
+                    "qps": float(dualrun_metrics.get("qps") or 0.0),
+                    "updated_at": dualrun_metrics.get("updated_at"),
+                }
+            self._send_json(200, {"ok": True, "config": cfg, "metrics": m0})
+            return
         if path == "/api/check_username":
             qs = parse_qs(parsed.query or "")
             username = (qs.get("username", [""])[0] or "").strip()
@@ -1887,7 +2067,30 @@ class Handler(BaseHTTPRequestHandler):
                 lock_info = None
             with pkl_build_lock:
                 pkl0 = json.loads(json.dumps(pkl_build_state))
-            self._send_json(200, {"ok": True, "server": "v2", "req_raw": self.path, "req_path": parsed.path, "update": update_state, "pkl": pkl0, "lock": lock_info})
+            with preprocess_lock:
+                pre0 = json.loads(json.dumps(preprocess_state))
+            ready0 = None
+            try:
+                pkl_root = Path(os.environ.get("QC_PKL_CACHE_ROOT") or (repo_root / "数据获取" / "data" / "preprocessed_hourly" / "pkl_cache"))
+                ready_path = pkl_root / "pkl_ready.json"
+                if ready_path.exists():
+                    ready0 = json.loads(ready_path.read_text(encoding="utf-8"))
+            except Exception:
+                ready0 = None
+            self._send_json(
+                200,
+                {
+                    "ok": True,
+                    "server": "v2",
+                    "req_raw": self.path,
+                    "req_path": parsed.path,
+                    "update": update_state,
+                    "preprocess": pre0,
+                    "pkl": pkl0,
+                    "pkl_ready": ready0,
+                    "lock": lock_info,
+                },
+            )
             return
         if path == "/api/metrics":
             if not self._require_auth():

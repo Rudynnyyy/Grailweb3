@@ -1,0 +1,25 @@
+preprocess:
+  output_root: "/data/qc/preprocessed_hourly"
+  source_swap_dir: "/home/ubuntu/数据获取/data/swap_lin"
+  source_spot_dir: "/home/ubuntu/数据获取/data/spot_lin"
+  file_format: "parquet"
+  compression: "zstd"
+  include_optional_indicators: true
+
+factor_loader:
+  use_mmap: true
+  max_cache_items: 2048
+
+scheduler:
+  cron: "5 * * * *"
+  timezone: "UTC"
+  trigger_minute: 4
+
+alerts:
+  max_failures: 1
+  max_duration_seconds: 600
+  webhook: ""
+
+monitoring:
+  log_file: "/home/ubuntu/数据获取/logs/incremental_metrics.jsonl"
+  alert_file: "/home/ubuntu/数据获取/logs/incremental_alerts.jsonl"

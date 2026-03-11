@@ -8,5 +8,34 @@
 !linux_deploy/
 !linux_deploy/**
 
+# allow ETL scripts (exclude data outputs)
+!数据获取/
+!数据获取/**/*.py
+!数据获取/**/*.yaml
+数据获取/data/**
+
+# allow perf docs and tooling
+!docs/
+!docs/perf/
+!docs/perf/**
+!docs/route1_技术路线图.md
+!docs/route1_性能优化报告_v2.md
+
+!tools/
+!tools/perf/
+!tools/perf/**
+
+!tests/
+!tests/**
+
+# ignore generated artifacts inside allowed folders
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.pipeline.lock
+linux_deploy/env.sh
+linux_deploy/reports/**
+
 # keep gitignore itself
 !.gitignore

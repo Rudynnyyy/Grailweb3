@@ -593,6 +593,37 @@ function setStatus(text) {
 }
 
 function refreshFactors() {
+  try {
+    const latest = state.latest;
+    const meta = state.meta;
+    const allRows = latest && Array.isArray(latest.results) ? latest.results : [];
+    const params = getParams();
+    const toggles = {
+      condCloseMa: !!($("condCloseMa") && $("condCloseMa").checked),
+      condMa: !!($("condMa") && $("condMa").checked),
+      condRsi: !!($("condRsi") && $("condRsi").checked),
+      condEma: !!($("condEma") && $("condEma").checked),
+      condBollUp: !!($("condBollUp") && $("condBollUp").checked),
+      condBollDown: !!($("condBollDown") && $("condBollDown").checked),
+      condSuper: !!($("condSuper") && $("condSuper").checked),
+      condKdj: !!($("condKdj") && $("condKdj").checked),
+      condObv: !!($("condObv") && $("condObv").checked),
+      condStochRsi: !!($("condStochRsi") && $("condStochRsi").checked),
+    };
+    const dynamicEnabled = toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
+    const cf0 = Array.isArray(state.customFactors) ? state.customFactors : [];
+    const needCustomFilter = cf0.some((f) => f && f.enabled);
+    const fullEnrich = dynamicEnabled || needCustomFilter;
+    if (fullEnrich && allRows.length > 0) {
+      const fullSig = enrichSig({ mode: "full", params, toggles, customFactors: state.customFactors, tail: 360, meta, latest, symbols: [] });
+      const c = fullSig && state.enrichCache ? state.enrichCache[fullSig] : null;
+      const cached = !!(c && c.done && Number(c.total || 0) === (allRows.length || 0));
+      if (cached) {
+        rerenderFromLatest();
+        return Promise.resolve();
+      }
+    }
+  } catch {}
   return refresh({ skipBackend: true, fetchMode: false, factorCompute: true, forceEnriched: true });
 }
 
@@ -634,15 +665,35 @@ function hashStr(s) {
 }
 
 function enrichSig({ mode, params, toggles, customFactors, tail, meta, latest, symbols }) {
+  const p0 = params && typeof params === "object" ? params : {};
+  const computeParams = {
+    market: String(p0.market || "all"),
+    maPeriodClose: Number(p0.maPeriodClose || 0),
+    maFast: Number(p0.maFast || 0),
+    maSlow: Number(p0.maSlow || 0),
+    rsiPeriod: Number(p0.rsiPeriod || 0),
+    emaPeriod: Number(p0.emaPeriod || 0),
+    bollPeriod: Number(p0.bollPeriod || 0),
+    bollStd: Number(p0.bollStd || 0),
+    bollDownPeriod: Number(p0.bollDownPeriod || 0),
+    bollDownStd: Number(p0.bollDownStd || 0),
+    superAtrPeriod: Number(p0.superAtrPeriod || 0),
+    superMult: Number(p0.superMult || 0),
+    kdjN: Number(p0.kdjN || 0),
+    kdjM1: Number(p0.kdjM1 || 0),
+    kdjM2: Number(p0.kdjM2 || 0),
+    obvMaPeriod: Number(p0.obvMaPeriod || 0),
+    stochRsiP: Number(p0.stochRsiP || 0),
+    stochRsiK: Number(p0.stochRsiK || 0),
+    stochRsiSmK: Number(p0.stochRsiSmK || 0),
+    stochRsiSmD: Number(p0.stochRsiSmD || 0),
+  };
   const cf = (Array.isArray(customFactors) ? customFactors : []).map((f) => ({
     id: String(f && f.id ? f.id : ""),
     template: String(f && (f.template || f.expr || "") ? (f.template || f.expr || "") : ""),
     params: Array.isArray(f && f.params) ? f.params : [],
     enabled: !!(f && f.enabled),
     show: !!(f && f.show),
-    thresholdEnabled: !!(f && f.thresholdEnabled),
-    cmp: String(f && f.cmp ? f.cmp : ""),
-    threshold: (f && f.threshold !== undefined ? f.threshold : null),
   })).filter((x) => x.id).sort((a, b) => a.id.localeCompare(b.id));
   const sym = Array.isArray(symbols) ? symbols.map((x) => `${String(x && x.market ? x.market : "")}|${String(x && x.symbol ? x.symbol : "")}`).sort() : [];
   const snap = (latest && latest.summary && (latest.summary.latest_dt_close || latest.summary.latest_dt_display))
@@ -652,7 +703,7 @@ function enrichSig({ mode, params, toggles, customFactors, tail, meta, latest, s
     mode: String(mode || ""),
     tail: Number(tail || 0),
     snap,
-    params: params && typeof params === "object" ? params : {},
+    params: computeParams,
     toggles: toggles && typeof toggles === "object" ? toggles : {},
     factors: cf,
     symbols: sym,
@@ -1905,7 +1956,7 @@ function buildTableHeader(fields) {
       btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h12M6 22h12"/><path d="M8 2v6l4 4 4-4V2"/><path d="M8 22v-6l4-4 4 4v6"/></svg>';
       const inp = document.createElement("input");
       inp.id = "symbolFilter";
-      inp.className = "input th-filter hidden";
+      inp.className = state.symbolQuery ? "input th-filter" : "input th-filter hidden";
       inp.type = "text";
       inp.placeholder = "搜币种…";
       inp.value = String(state.symbolQuery || "");
@@ -1915,6 +1966,7 @@ function buildTableHeader(fields) {
       });
       inp.addEventListener("blur", () => {
         state.symbolQuery = inp.value || "";
+        inp.classList.toggle("hidden", !String(state.symbolQuery || "").trim());
         rerenderFromLatest();
       });
       inp.addEventListener("keydown", (e) => {
@@ -1945,10 +1997,19 @@ function buildTableHeader(fields) {
   thead.appendChild(tr);
 }
 
-function renderTable(rows, fields) {
+function renderTableChunked(rows, fields) {
   const tbody = $("tbody");
   tbody.innerHTML = "";
-  for (const r of rows) {
+  let i = 0;
+  const n = rows.length || 0;
+
+  function schedule(fn) {
+    const ric = window.requestIdleCallback;
+    if (typeof ric === "function") ric(fn, { timeout: 80 });
+    else setTimeout(() => fn({ timeRemaining: () => 0, didTimeout: true }), 0);
+  }
+
+  function buildRow(r) {
     const tr = document.createElement("tr");
     const rk = rowKey(r);
     tr.setAttribute("data-rk", rk);
@@ -1990,8 +2051,27 @@ function renderTable(rows, fields) {
       } else td.textContent = raw === null || raw === undefined ? "" : String(raw);
       tr.appendChild(td);
     }
-    tbody.appendChild(tr);
+    return tr;
   }
+
+  function run(deadline) {
+    const frag = document.createDocumentFragment();
+    let cnt = 0;
+    const hardCap = 120;
+    while (i < n && cnt < hardCap && (deadline.didTimeout || deadline.timeRemaining() > 4)) {
+      frag.appendChild(buildRow(rows[i]));
+      i += 1;
+      cnt += 1;
+    }
+    tbody.appendChild(frag);
+    if (i < n) schedule(run);
+  }
+
+  schedule(run);
+}
+
+function renderTable(rows, fields) {
+  renderTableChunked(rows, fields);
 }
 
 function updateSummary(summary) {
@@ -2893,6 +2973,7 @@ function setEnrichProgress(done, total, visible, speedText) {
   const t = Math.max(1, Number(total || 1));
   const pct = Math.max(0, Math.min(100, Math.round((d / t) * 100)));
   fill.style.width = `${pct}%`;
+  host.setAttribute("aria-valuenow", String(pct));
   const sp = speedText ? String(speedText) : "";
   text.textContent = sp ? `因子计算中 ${pct}%（${Math.trunc(d)}/${Math.trunc(t)}） ｜ ${sp}` : `因子计算中 ${pct}%（${Math.trunc(d)}/${Math.trunc(t)}）`;
   if (show && sp) setStatus(`因子计算 ${Math.trunc(d)}/${Math.trunc(t)} ｜ ${sp}`);
@@ -3587,6 +3668,7 @@ function initControls(meta) {
     const el = $(id);
     if (!el) continue;
     const dyn = new Set(["condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"]);
+    const filterOnly = new Set(["rsiThreshold"]);
     if (dyn.has(id)) {
       el.addEventListener("change", () => (el.checked ? refreshFactors() : rerenderFromLatest()));
       continue;
@@ -3595,7 +3677,8 @@ function initControls(meta) {
       el.addEventListener("change", () => rerenderFromLatest());
       continue;
     }
-    el.addEventListener("change", () => refreshFactors());
+    if (filterOnly.has(id)) el.addEventListener("change", () => rerenderFromLatest());
+    else el.addEventListener("change", () => refreshFactors());
   }
 
   $("exprAdd").addEventListener("click", () => upsertCustomFactor());
@@ -3612,6 +3695,9 @@ function initControls(meta) {
     $("factorLibQuery").addEventListener("input", () => renderFactorLibrary());
   }
   $("exprEnable").addEventListener("change", () => syncExprThresholdUI());
+  $("exprEnable").addEventListener("change", () => rerenderFromLatest());
+  $("exprCmp").addEventListener("change", () => rerenderFromLatest());
+  $("exprThreshold").addEventListener("change", () => rerenderFromLatest());
   $("exprHelp").addEventListener("click", () => setHelpOpen(true));
   $("helpClose").addEventListener("click", () => setHelpOpen(false));
   $("helpModal").addEventListener("click", (e) => {
