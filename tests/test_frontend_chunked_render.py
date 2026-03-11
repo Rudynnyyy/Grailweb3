@@ -15,8 +15,9 @@ class FrontendChunkedRenderTests(unittest.TestCase):
         p = repo_root / "apps" / "crypto_screener" / "web" / "app.js"
         txt = p.read_text(encoding="utf-8", errors="ignore")
         self.assertIn("function renderTableChunked", txt)
+        self.assertIn("async function applyAllFiltersAsync", txt)
+        self.assertIn("async function rerenderFromLatest", txt)
 
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -627,6 +627,28 @@ function refreshFactors() {
   return refresh({ skipBackend: true, fetchMode: false, factorCompute: true, forceEnriched: true });
 }
 
+function cancelFilterWork() {
+  state.filterToken = (Number(state.filterToken || 0) + 1) || 1;
+}
+
+function rerenderFromLatestDebounced() {
+  cancelFilterWork();
+  if (state.rerenderTimer) clearTimeout(state.rerenderTimer);
+  state.rerenderTimer = setTimeout(() => {
+    state.rerenderTimer = null;
+    rerenderFromLatest();
+  }, 60);
+}
+
+function refreshFactorsDebounced() {
+  cancelFilterWork();
+  if (state.refreshFactorsTimer) clearTimeout(state.refreshFactorsTimer);
+  state.refreshFactorsTimer = setTimeout(() => {
+    state.refreshFactorsTimer = null;
+    refreshFactors();
+  }, 120);
+}
+
 function fmtNum(v) {
   if (v === null || v === undefined || Number.isNaN(v)) return "";
   const n = Number(v);
@@ -2236,6 +2258,222 @@ function computeBuiltins(row, params) {
   return out;
 }
 
+function _baseSymbolUpper(sym) {
+  const s = String(sym || "").trim().toUpperCase();
+  if (s.endsWith("-USDT")) return s.slice(0, -5);
+  if (s.endsWith("USDT")) return s.slice(0, -4);
+  if (s.includes("-")) return s.split("-", 1)[0];
+  return s;
+}
+
+function prepareRowsForFilter(rows) {
+  for (const r of rows || []) {
+    if (!r || typeof r !== "object") continue;
+    if (r._symU === undefined) r._symU = String(r.symbol || "").trim().toUpperCase();
+    if (r._baseSymU === undefined) r._baseSymU = _baseSymbolUpper(r._symU);
+    if (r._marketS === undefined) r._marketS = String(r.market || "");
+  }
+}
+
+function _idleYield() {
+  return new Promise((resolve) => {
+    const ric = window.requestIdleCallback;
+    if (typeof ric === "function") ric(() => resolve(), { timeout: 80 });
+    else setTimeout(resolve, 0);
+  });
+}
+
+async function applyAllFiltersAsync(rows, params, customFactors, opts = {}) {
+  const token = (Number(state.filterToken || 0) + 1) || 1;
+  state.filterToken = token;
+  const deferEnrichedFilters = !!(opts && opts.deferEnrichedFilters);
+  const items = Array.isArray(rows) ? rows : [];
+  prepareRowsForFilter(items);
+  const enabledCloseMa = $("condCloseMa").checked;
+  const enabledMa = $("condMa").checked;
+  const enabledRsi = $("condRsi").checked;
+  const enabledEma = $("condEma") && $("condEma").checked;
+  const enabledBollUp = $("condBollUp") && $("condBollUp").checked;
+  const enabledBollDown = $("condBollDown") && $("condBollDown").checked;
+  const enabledSuper = $("condSuper") && $("condSuper").checked;
+  const enabledKdj = $("condKdj") && $("condKdj").checked;
+  const enabledObv = $("condObv") && $("condObv").checked;
+  const enabledStochRsi = $("condStochRsi") && $("condStochRsi").checked;
+  const needBuiltins = enabledCloseMa || enabledMa || enabledRsi || (!deferEnrichedFilters && (enabledEma || enabledBollUp || enabledBollDown || enabledSuper || enabledKdj || enabledObv || enabledStochRsi));
+
+  let hasSeries = false;
+  for (const r of items) {
+    if (r && r.series) { hasSeries = true; break; }
+  }
+
+  const lists0 = state.baseConfig || {};
+  const wl = Array.isArray(lists0.whitelist) ? lists0.whitelist : [];
+  const bl = Array.isArray(lists0.blacklist) ? lists0.blacklist : [];
+  const whitelist = new Set(wl.map((x) => String(x || "").trim().toUpperCase()).filter((x) => x));
+  const blacklist = new Set(bl.map((x) => String(x || "").trim().toUpperCase()).filter((x) => x));
+
+  const selected = [];
+  let filteredOut = 0;
+  let exprErrors = 0;
+  let exprMissing = 0;
+  let missingBuiltins = 0;
+
+  const n = items.length || 0;
+  let i = 0;
+  let lastStatusTs = 0;
+  const CHUNK = 400;
+  while (i < n) {
+    if (state.filterToken !== token) return { selected: [], filteredOut: 0, exprErrors: 0, exprMissing: 0, missingBuiltins: 0, hasSeries };
+    const end = Math.min(n, i + CHUNK);
+    for (; i < end; i++) {
+      const r = items[i];
+      if (!r) continue;
+      if (params.market !== "all" && String(r._marketS || r.market) !== String(params.market)) continue;
+      if (params.symbolQuery) {
+        const q = String(params.symbolQuery || "").toUpperCase();
+        const s = String(r._symU || "").toUpperCase();
+        if (!s.includes(q)) continue;
+      }
+      const sym0 = r._symU || String(r.symbol || "").toUpperCase();
+      const bs0 = r._baseSymU || _baseSymbolUpper(sym0);
+      if (whitelist.size && !whitelist.has(sym0) && !whitelist.has(bs0)) continue;
+      if (blacklist.size && (blacklist.has(sym0) || blacklist.has(bs0))) continue;
+      if (needBuiltins) r._builtins = computeBuiltins(r, params);
+      else r._builtins = (r && r._builtins && typeof r._builtins === "object") ? r._builtins : {};
+      r._expr = (r && r._expr && typeof r._expr === "object") ? r._expr : {};
+
+      const closes = hasSeries ? getSeries(r, "close") : [];
+      const highs = hasSeries ? getSeries(r, "high") : [];
+      const lows = hasSeries ? getSeries(r, "low") : [];
+      const volumes = hasSeries ? getSeries(r, "volume") : [];
+      const lastClose = Number(r.close);
+
+      if (enabledCloseMa) {
+        const k = `ma_${params.maPeriodClose}`;
+        const maV = r._builtins[k];
+        if (maV === null || maV === undefined || !Number.isFinite(Number(maV))) missingBuiltins++;
+        else if (!(lastClose > Number(maV))) { filteredOut++; continue; }
+      }
+      if (enabledMa) {
+        const kf = `ma_${params.maFast}`;
+        const ks = `ma_${params.maSlow}`;
+        const maF = r._builtins[kf];
+        const maS = r._builtins[ks];
+        if (maF === null || maS === null || maF === undefined || maS === undefined || !Number.isFinite(Number(maF)) || !Number.isFinite(Number(maS))) missingBuiltins++;
+        else if (!(Number(maF) > Number(maS))) { filteredOut++; continue; }
+      }
+      if (enabledRsi) {
+        const kr = `rsi_${params.rsiPeriod}`;
+        const rv = r._builtins[kr];
+        if (rv === null || rv === undefined || !Number.isFinite(Number(rv))) missingBuiltins++;
+        else if (!(Number(rv) > Number(params.rsiThreshold))) { filteredOut++; continue; }
+      }
+
+      if (!deferEnrichedFilters && enabledEma) {
+        const ev = (r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "ema")) ? r._builtins.ema : (hasSeries ? ema(closes, params.emaPeriod) : null);
+        if (ev === null || ev === undefined || !Number.isFinite(Number(ev))) missingBuiltins++;
+        else if (!(lastClose > Number(ev))) { filteredOut++; continue; }
+      }
+      if (!deferEnrichedFilters && enabledBollUp) {
+        const bv = (r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "boll_up")) ? r._builtins.boll_up : null;
+        if (bv === null || bv === undefined || !Number.isFinite(Number(bv))) {
+          if (hasSeries) {
+            const ma = sma(closes, params.bollPeriod);
+            const std = rollingStd(closes, params.bollPeriod);
+            if (ma === null || std === null) missingBuiltins++;
+            else if (!(lastClose > (ma + params.bollStd * std))) { filteredOut++; continue; }
+          } else missingBuiltins++;
+        } else if (!(lastClose > Number(bv))) { filteredOut++; continue; }
+      }
+      if (!deferEnrichedFilters && enabledBollDown) {
+        const bv = (r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "boll_down")) ? r._builtins.boll_down : null;
+        if (bv === null || bv === undefined || !Number.isFinite(Number(bv))) {
+          if (hasSeries) {
+            const ma = sma(closes, params.bollDownPeriod);
+            const std = rollingStd(closes, params.bollDownPeriod);
+            if (ma === null || std === null) missingBuiltins++;
+            else if (!(lastClose < (ma - params.bollDownStd * std))) { filteredOut++; continue; }
+          } else missingBuiltins++;
+        } else if (!(lastClose < Number(bv))) { filteredOut++; continue; }
+      }
+      if (!deferEnrichedFilters && enabledSuper) {
+        const stv = (r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "supertrend")) ? r._builtins.supertrend : (hasSeries ? supertrend(highs, lows, closes, params.superAtrPeriod, params.superMult) : null);
+        if (stv === null || stv === undefined || !Number.isFinite(Number(stv))) missingBuiltins++;
+        else if (!(lastClose > Number(stv))) { filteredOut++; continue; }
+      }
+      if (!deferEnrichedFilters && enabledKdj) {
+        const kv = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "kdj_k") ? r._builtins.kdj_k : null;
+        const dv = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "kdj_d") ? r._builtins.kdj_d : null;
+        if (kv === null || dv === null || kv === undefined || dv === undefined || !Number.isFinite(Number(kv)) || !Number.isFinite(Number(dv))) {
+          if (hasSeries) {
+            const { k, d } = kdj(highs, lows, closes, params.kdjN, params.kdjM1, params.kdjM2);
+            if (k === null || d === null) missingBuiltins++;
+            else if (!(k > d)) { filteredOut++; continue; }
+          } else missingBuiltins++;
+        } else if (!(Number(kv) > Number(dv))) { filteredOut++; continue; }
+      }
+      if (!deferEnrichedFilters && enabledObv) {
+        const ov = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "obv") ? r._builtins.obv : null;
+        const om = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "obv_ma") ? r._builtins.obv_ma : null;
+        if (ov === null || om === null || ov === undefined || om === undefined || !Number.isFinite(Number(ov)) || !Number.isFinite(Number(om))) {
+          if (hasSeries) {
+            const x = obvWithMa(closes, volumes, params.obvMaPeriod);
+            if (x.obv === null || x.ma === null) missingBuiltins++;
+            else if (!(x.obv > x.ma)) { filteredOut++; continue; }
+          } else missingBuiltins++;
+        } else if (!(Number(ov) > Number(om))) { filteredOut++; continue; }
+      }
+      if (!deferEnrichedFilters && enabledStochRsi) {
+        const kv = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "stoch_rsi_k") ? r._builtins.stoch_rsi_k : null;
+        const dv = r._builtins && Object.prototype.hasOwnProperty.call(r._builtins, "stoch_rsi_d") ? r._builtins.stoch_rsi_d : null;
+        if (kv === null || dv === null || kv === undefined || dv === undefined || !Number.isFinite(Number(kv)) || !Number.isFinite(Number(dv))) {
+          if (hasSeries) {
+            const x = stochRsi(closes, params.stochRsiP, params.stochRsiK, params.stochRsiSmK, params.stochRsiSmD);
+            if (x.k === null || x.d === null) missingBuiltins++;
+            else if (!(x.k > x.d)) { filteredOut++; continue; }
+          } else missingBuiltins++;
+        } else if (!(Number(kv) > Number(dv))) { filteredOut++; continue; }
+      }
+
+      let exprFail = false;
+      for (const f of customFactors) {
+        try {
+          let v = null;
+          const hasExprValue = r._expr && Object.prototype.hasOwnProperty.call(r._expr, f.id);
+          if (!deferEnrichedFilters && hasSeries) {
+            const template = f.template || f.expr || "";
+            const expr = expandTemplate(template, f.params || []);
+            v = evalExpression(expr, r);
+            r._expr[f.id] = v;
+          } else {
+            if (!hasExprValue) continue;
+            v = r._expr ? r._expr[f.id] : null;
+          }
+          if (!f.enabled || deferEnrichedFilters) continue;
+          if (v === null || v === undefined || !Number.isFinite(Number(v))) { exprMissing++; continue; }
+          if (f.thresholdEnabled) {
+            if (!compare(v, f.cmp, f.threshold)) { exprFail = true; break; }
+          } else {
+            if (Number(v) === 0) { exprFail = true; break; }
+          }
+        } catch {
+          exprErrors++;
+          continue;
+        }
+      }
+      if (exprFail) { filteredOut++; continue; }
+      selected.push(r);
+    }
+    const now = Date.now();
+    if (now - lastStatusTs >= 120) {
+      lastStatusTs = now;
+      setStatus(`筛选中 ${Math.min(i, n)}/${n}`);
+    }
+    await _idleYield();
+  }
+  return { selected, filteredOut, exprErrors, exprMissing, missingBuiltins, hasSeries };
+}
+
 function applyAllFilters(rows, params, customFactors, opts = {}) {
   const deferEnrichedFilters = !!(opts && opts.deferEnrichedFilters);
   let hasSeries = false;
@@ -3268,7 +3506,7 @@ function upsertCustomFactor() {
   refreshFactors();
 }
 
-function rerenderFromLatest() {
+async function rerenderFromLatest() {
   try {
     const latest = state.latest;
     if (!latest) return;
@@ -3278,6 +3516,7 @@ function rerenderFromLatest() {
     buildSortOptionsFromFields(displayFields, state.meta && state.meta.default_sort);
     buildTableHeader(displayFields);
     const allRows = Array.isArray(latest.results) ? latest.results : [];
+    prepareRowsForFilter(allRows);
     const toggles = {
       condCloseMa: !!($("condCloseMa") && $("condCloseMa").checked),
       condMa: !!($("condMa") && $("condMa").checked),
@@ -3297,7 +3536,7 @@ function rerenderFromLatest() {
     const fullSig = fullEnrich ? enrichSig({ mode: "full", params, toggles, customFactors: state.customFactors, tail: 360, meta: state.meta, latest, symbols: [] }) : "";
     const cached = fullSig && state.enrichCache[fullSig] && state.enrichCache[fullSig].done && Number(state.enrichCache[fullSig].total || 0) === (allRows.length || 0);
     const deferEnrichedFilters = fullEnrich && !cached;
-    const { selected, exprErrors, exprMissing, missingBuiltins } = applyAllFilters(allRows, params, customFactors, { deferEnrichedFilters });
+    const { selected, exprErrors, exprMissing, missingBuiltins } = await applyAllFiltersAsync(allRows, params, customFactors, { deferEnrichedFilters });
     const { sorted, sortKey } = sortRows(selected, displayFields);
     assignRank(sorted, sortKey, displayFields);
     state.lastRenderedRows = Array.isArray(sorted) ? sorted.slice() : [];
@@ -3410,6 +3649,7 @@ async function refresh(opts = {}) {
       else showProgress(65, "计算指标与筛选...");
     }
     const allRows = Array.isArray(latest.results) ? latest.results : [];
+    prepareRowsForFilter(allRows);
     const fullSig = fullEnrich ? enrichSig({ mode: "full", params, toggles, customFactors: state.customFactors, tail: 360, meta: state.meta, latest, symbols: [] }) : "";
     if (fullSig) {
       if (!state.enrichCache[fullSig]) state.enrichCache[fullSig] = { rows: {}, done: false, total: allRows.length || 0, ts: Date.now() };
@@ -3418,7 +3658,7 @@ async function refresh(opts = {}) {
     }
     const cached0 = fullSig && state.enrichCache[fullSig] && state.enrichCache[fullSig].done && Number(state.enrichCache[fullSig].total || 0) === (allRows.length || 0);
     const deferEnrichedFilters = fullEnrich && !cached0;
-    const { selected, exprErrors, exprMissing, missingBuiltins, hasSeries } = applyAllFilters(allRows, params, customFactors, { deferEnrichedFilters });
+    const { selected, exprErrors, exprMissing, missingBuiltins, hasSeries } = await applyAllFiltersAsync(allRows, params, customFactors, { deferEnrichedFilters });
 
     if (overlayEnabled) showProgress(85, "排序与渲染...");
     const { sorted, sortKey } = sortRows(selected, displayFields);
@@ -3653,8 +3893,8 @@ function initControls(meta) {
   if ($("stochRsiSmD")) $("stochRsiSmD").value = "3";
 
   $("btnRefresh").addEventListener("click", () => refresh({ manual: true, fetchMode: false }));
-  $("sortKey").addEventListener("change", () => rerenderFromLatest());
-  $("sortOrder").addEventListener("change", () => rerenderFromLatest());
+  $("sortKey").addEventListener("change", () => rerenderFromLatestDebounced());
+  $("sortOrder").addEventListener("change", () => rerenderFromLatestDebounced());
 
   const ids = [
     "maPeriodClose", "maFast", "maSlow", "rsiPeriod", "rsiThreshold",
@@ -3670,15 +3910,15 @@ function initControls(meta) {
     const dyn = new Set(["condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"]);
     const filterOnly = new Set(["rsiThreshold"]);
     if (dyn.has(id)) {
-      el.addEventListener("change", () => (el.checked ? refreshFactors() : rerenderFromLatest()));
+      el.addEventListener("change", () => (el.checked ? refreshFactorsDebounced() : rerenderFromLatestDebounced()));
       continue;
     }
     if (id.startsWith("cond")) {
-      el.addEventListener("change", () => rerenderFromLatest());
+      el.addEventListener("change", () => rerenderFromLatestDebounced());
       continue;
     }
-    if (filterOnly.has(id)) el.addEventListener("change", () => rerenderFromLatest());
-    else el.addEventListener("change", () => refreshFactors());
+    if (filterOnly.has(id)) el.addEventListener("change", () => rerenderFromLatestDebounced());
+    else el.addEventListener("change", () => refreshFactorsDebounced());
   }
 
   $("exprAdd").addEventListener("click", () => upsertCustomFactor());
@@ -3695,9 +3935,9 @@ function initControls(meta) {
     $("factorLibQuery").addEventListener("input", () => renderFactorLibrary());
   }
   $("exprEnable").addEventListener("change", () => syncExprThresholdUI());
-  $("exprEnable").addEventListener("change", () => rerenderFromLatest());
-  $("exprCmp").addEventListener("change", () => rerenderFromLatest());
-  $("exprThreshold").addEventListener("change", () => rerenderFromLatest());
+  $("exprEnable").addEventListener("change", () => rerenderFromLatestDebounced());
+  $("exprCmp").addEventListener("change", () => rerenderFromLatestDebounced());
+  $("exprThreshold").addEventListener("change", () => rerenderFromLatestDebounced());
   $("exprHelp").addEventListener("click", () => setHelpOpen(true));
   $("helpClose").addEventListener("click", () => setHelpOpen(false));
   $("helpModal").addEventListener("click", (e) => {
