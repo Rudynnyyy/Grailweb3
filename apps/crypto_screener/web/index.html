@@ -370,8 +370,21 @@
       </div>
     </div>
   </aside>
+    <main class="content">
+      <div class="watermark">
+        <img class="watermark-logo" src="./grailweb3.png" alt="Grail区块链" />
+        <div class="watermark-text">Grail区块链</div>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead id="thead"></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
 
-  <div id="helpModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+<div id="helpModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
     <div class="modal-card">
       <div class="modal-head">
         <div id="helpTitle" class="modal-title">表达式语法</div>
@@ -403,15 +416,42 @@
   </div>
 
   <div id="tutorialModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width:720px;width:95vw;">
       <div class="modal-head">
-        <div id="tutorialTitle" class="modal-title">教程</div>
+        <div id="tutorialTitle" class="modal-title">使用说明</div>
         <button id="tutorialClose" class="help-close" type="button">×</button>
       </div>
-      <div class="modal-body">
-        <div class="help-line">-</div>
+      <div class="modal-body" style="max-height:75vh;overflow-y:auto;">
+        <div class="help-line"><b style="font-size:15px;">一、首页</b></div>
+        <div class="help-line"><b>1. 左边栏</b></div>
+        <div class="help-line"><b>（1）基础配置</b>（点击右上角头像 → 基础配置）</div>
+        <div class="help-line"><b>· 市场选择：</b>选择全市场 / 现货 / 合约。开启「榜上新币红点提示」后新上架币种会标红点。白名单只展示指定币种，黑名单过滤不需要的品种（逗号/空格/换行分隔）。</div>
+        <div class="help-line"><b>· 策略组：</b>将当前筛选条件保存为策略组，可随时切换应用，方便多策略管理。</div>
+        <div class="help-line"><b>· 消息推送：</b>配置企业微信机器人，每小时筛选完成后自动推送命中结果。</div>
+        <div class="help-line" style="background:rgba(59,130,246,0.08);border-radius:8px;padding:10px 14px;margin:6px 0;"><b>企业微信 Webhook 配置方法：</b><br/>① 在企业微信群中，右键群名 → 添加机器人 → 新建机器人，填写名称后点击添加。<br/>② 复制生成的 Webhook URL（格式：https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxxx）<br/>③ 粘贴到「企业微信机器人 Webhook URL」输入框，勾选「每小时自动推送」，设置推送条数，点击保存配置。<br/>④ 点击「立即发送」测试推送，群内收到消息说明配置成功。</div>
+        <div class="help-line"><b>（2）因子</b></div>
+        <div class="help-line"><b>· 均线趋势：</b>close &gt; MA / MA快线 &gt; MA慢线 / close &gt; EMA / 布林带突破 / SuperTrend多头。</div>
+        <div class="help-line"><b>· 动量：</b>RSI &gt; 阈值（60以上为强势区间）</div>
+        <div class="help-line"><b>· KDJ：</b>K线穿越D线金叉信号</div>
+        <div class="help-line"><b>· OBV：</b>OBV &gt; OBV均线，成交量能量确认</div>
+        <div class="help-line"><b>· StochRSI：</b>随机RSI的K &gt; D金叉</div>
+        <div class="help-line"><b>· 自定义因子（表达式）：</b>支持 open/high/low/close/volume/quotevolume 前缀，示例：</div>
+        <div class="help-line" style="font-family:monospace;font-size:12px;background:rgba(0,0,0,0.2);border-radius:6px;padding:8px 12px;">volume/volume.ma(20)　　← 量比<br/>close/close.ma(20)-1　　← MA偏离度<br/>quotevolume &gt; 1000000　← 成交额过滤</div>
+        <div class="help-line">函数：.ma(n) .ema(n) .sma(n) .shift(n) .std(n) .mean(n) abs(x)　比较符：&gt; &gt;= &lt; &lt;= == !=</div>
+        <div class="help-line">启用阈值可过滤因子值；勾选「显示列」将结果显示在表格中；点击「因子库」浏览预设模板。</div>
+        <div class="help-line"><b>（3）列配置</b></div>
+        <div class="help-line">在「显示列配置」中勾选需要展示的列（close、涨跌幅、RSI、MA、成交量、自定义因子等），配置自动保存到本地。</div>
+        <div class="help-line"><b>2. 右侧面板</b></div>
+        <div class="help-line">· 表格实时展示筛选命中的币种，列头可点击排序，点击任意行查看该币K线图。</div>
+        <div class="help-line">· 顶部显示数据生成时间、最新K线时间和数据源状态（CSV实时 / PKL高速）。</div>
+        <div class="help-line">· <b>CSV实时</b>：每小时更新后3-4分钟内可用；<b>PKL高速</b>：预处理缓存约10分钟后就绪，计算更快。</div>
+        <div class="help-line" style="margin-top:12px;"><b style="font-size:15px;">二、K线界面</b></div>
+        <div class="help-line">· 点击主页表格任意行，右侧自动加载该币K线图。</div>
+        <div class="help-line">· 支持叠加 MA、EMA、布林带、SuperTrend、KDJ、OBV 等指标。</div>
+        <div class="help-line">· 鼠标滚轮缩放，拖拽平移，右上角可全屏查看。</div>
       </div>
     </div>
+  </div>
   </div>
 
   <div id="wecomModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="wecomTitle">
@@ -529,20 +569,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-    <main class="content">
-      <div class="watermark">
-        <img class="watermark-logo" src="./grailweb3.png" alt="Grail区块链" />
-        <div class="watermark-text">Grail区块链</div>
-      </div>
-      <div class="table-wrap">
-        <table class="table">
-          <thead id="thead"></thead>
-          <tbody id="tbody"></tbody>
-        </table>
-      </div>
-    </main>
   </div>
 
   <script src="./app.js?v=20260310_1"></script>

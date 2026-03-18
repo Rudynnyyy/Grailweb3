@@ -1192,6 +1192,7 @@ body.light-theme .th-icon-btn:hover {
 .num {
   text-align: right;
   font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 .column-selector {
