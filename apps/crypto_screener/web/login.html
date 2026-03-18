@@ -258,7 +258,7 @@
         if (el) return el;
         el = document.createElement("div");
         el.id = hintId;
-        el.className = "auth2-hint";
+        el.className = "auth2-hint hidden";
         parent.insertAdjacentElement("afterend", el);
         return el;
       }
@@ -271,6 +271,7 @@
       function setHint(el, text, kind) {
         if (!el) return;
         el.textContent = text || "";
+        el.classList.toggle("hidden", !text);
         el.classList.toggle("ok", kind === "ok");
         el.classList.toggle("err", kind === "err");
       }

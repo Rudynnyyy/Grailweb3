@@ -884,6 +884,28 @@ def _wecom_scheduler_loop() -> None:
             time.sleep(5.0)
 
 
+# SSE 客户端管理
+_sse_clients: list = []
+_sse_lock = threading.Lock()
+
+
+def _sse_broadcast(event: str, data: str) -> None:
+    """向所有SSE客户端广播事件"""
+    msg = f"event: {event}\ndata: {data}\n\n".encode("utf-8")
+    with _sse_lock:
+        dead = []
+        for q in list(_sse_clients):
+            try:
+                q.put_nowait(msg)
+            except Exception:
+                dead.append(q)
+        for q in dead:
+            try:
+                _sse_clients.remove(q)
+            except ValueError:
+                pass
+
+
 def _run_update(fetch: bool) -> None:
     paths = default_paths()
     with run_lock:
@@ -902,6 +924,11 @@ def _run_update(fetch: bool) -> None:
             update_state["last_finished"] = datetime.now().isoformat(timespec="seconds")
     if update_state.get("last_error") is not None:
         return
+    # 广播数据更新事件给所有SSE客户端
+    try:
+        _sse_broadcast("data_updated", json.dumps({"ts": datetime.now().isoformat(timespec="seconds")}))
+    except Exception:
+        pass
     try:
         threading.Thread(target=_send_wecom_for_all_enabled, daemon=True).start()
     except Exception:
@@ -2051,6 +2078,43 @@ class Handler(BaseHTTPRequestHandler):
                     },
                 },
             )
+            return
+        if path == "/api/events":
+            user = self._current_user()
+            if not user:
+                self._send_json(401, {"ok": False, "error": "unauthorized"})
+                return
+            import queue as _queue
+            q = _queue.Queue(maxsize=20)
+            with _sse_lock:
+                _sse_clients.append(q)
+            try:
+                self.send_response(200)
+                self.send_header("Content-Type", "text/event-stream")
+                self.send_header("Cache-Control", "no-cache")
+                self.send_header("X-Accel-Buffering", "no")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                # 发送初始心跳
+                self.wfile.write(b"event: connected\ndata: {}\n\n")
+                self.wfile.flush()
+                while True:
+                    try:
+                        msg = q.get(timeout=30)
+                        self.wfile.write(msg)
+                        self.wfile.flush()
+                    except _queue.Empty:
+                        # 发送心跳保持连接
+                        self.wfile.write(b": heartbeat\n\n")
+                        self.wfile.flush()
+            except Exception:
+                pass
+            finally:
+                with _sse_lock:
+                    try:
+                        _sse_clients.remove(q)
+                    except ValueError:
+                        pass
             return
         if path == "/api/me":
             user = self._current_user()

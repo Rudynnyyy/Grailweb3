@@ -24,7 +24,9 @@
   </div>
 
   <div class="layout">
-    <aside class="sidebar">
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="菜单">☰</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
       <div class="brand">
         <div class="brand-row">
           <button id="profileBtn" class="avatar-btn" type="button" aria-label="用户菜单">
@@ -380,6 +382,20 @@
           <thead id="thead"></thead>
           <tbody id="tbody"></tbody>
         </table>
+      </div>
+      <div class="pagination" id="pagination">
+        <div class="page-info" id="pageInfo"></div>
+        <div class="page-controls">
+          <button class="page-btn" id="pagePrev" type="button">‹</button>
+          <span id="pageNums" class="page-nums"></span>
+          <button class="page-btn" id="pageNext" type="button">›</button>
+        </div>
+        <select class="page-size-select" id="pageSizeSelect">
+          <option value="20">20条/页</option>
+          <option value="30">30条/页</option>
+          <option value="40">40条/页</option>
+          <option value="50">50条/页</option>
+        </select>
       </div>
     </main>
   </div>

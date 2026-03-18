@@ -1983,8 +1983,12 @@ function buildTableHeader(fields) {
   const thead = $("thead");
   thead.innerHTML = "";
   const tr = document.createElement("tr");
+  const colWidths = (() => { try { return JSON.parse(localStorage.getItem('qc_col_widths') || '{}'); } catch { return {}; } })();
+
   for (const f of fields) {
     const th = document.createElement("th");
+    if (colWidths[f.key]) th.style.width = colWidths[f.key];
+
     if (f.key === "symbol") {
       const wrap = document.createElement("div");
       wrap.className = "th-symbol";
@@ -1999,7 +2003,7 @@ function buildTableHeader(fields) {
       inp.id = "symbolFilter";
       inp.className = state.symbolQuery ? "input th-filter" : "input th-filter hidden";
       inp.type = "text";
-      inp.placeholder = "搜币种…";
+      inp.placeholder = "搜索币种";
       inp.value = String(state.symbolQuery || "");
       btn.addEventListener("click", () => {
         inp.classList.toggle("hidden");
@@ -2033,6 +2037,33 @@ function buildTableHeader(fields) {
       th.textContent = f.name || f.key;
     }
     if (f.type === "num") th.className = "num";
+
+    // 列宽拖拽
+    const resizer = document.createElement("div");
+    resizer.className = "th-resizer";
+    resizer.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      const startX = e.clientX;
+      const startW = th.offsetWidth;
+      const onMove = (ev) => {
+        const newW = Math.max(50, startW + ev.clientX - startX);
+        th.style.width = newW + "px";
+      };
+      const onUp = () => {
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onUp);
+        try {
+          const cw = JSON.parse(localStorage.getItem('qc_col_widths') || '{}');
+          cw[f.key] = th.style.width;
+          localStorage.setItem('qc_col_widths', JSON.stringify(cw));
+        } catch {}
+      };
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("mouseup", onUp);
+    });
+    th.style.position = "relative";
+    th.appendChild(resizer);
+
     tr.appendChild(th);
   }
   thead.appendChild(tr);
@@ -2111,8 +2142,129 @@ function renderTableChunked(rows, fields) {
   schedule(run);
 }
 
+// ===== 分页状态 =====
+const _page = {
+  current: 1,
+  size: parseInt(localStorage.getItem('qc_page_size') || '20', 10) || 20,
+  total: 0,
+  rows: [],
+  fields: [],
+};
+
+function _renderPagination() {
+  const totalPages = Math.max(1, Math.ceil(_page.total / _page.size));
+  const info = document.getElementById('pageInfo');
+  const nums = document.getElementById('pageNums');
+  const prev = document.getElementById('pagePrev');
+  const next = document.getElementById('pageNext');
+  const sel = document.getElementById('pageSizeSelect');
+  const pg = document.getElementById('pagination');
+  if (!info || !nums || !prev || !next) return;
+
+  if (_page.total === 0) {
+    if (pg) pg.style.display = 'none';
+    return;
+  }
+  if (pg) pg.style.display = 'flex';
+
+  const start = (_page.current - 1) * _page.size + 1;
+  const end = Math.min(_page.current * _page.size, _page.total);
+  info.textContent = `${start}-${end} / ${_page.total}`;
+
+  prev.disabled = _page.current <= 1;
+  next.disabled = _page.current >= totalPages;
+
+  // 页码按钮（最多显示7个）
+  nums.innerHTML = '';
+  const range = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) range.push(i);
+  } else {
+    range.push(1);
+    let lo = Math.max(2, _page.current - 2);
+    let hi = Math.min(totalPages - 1, _page.current + 2);
+    if (lo > 2) range.push('…');
+    for (let i = lo; i <= hi; i++) range.push(i);
+    if (hi < totalPages - 1) range.push('…');
+    range.push(totalPages);
+  }
+  for (const p of range) {
+    if (p === '…') {
+      const sp = document.createElement('span');
+      sp.textContent = '…';
+      sp.style.cssText = 'color:var(--text-dim);font-size:12px;padding:0 2px;';
+      nums.appendChild(sp);
+    } else {
+      const btn = document.createElement('button');
+      btn.className = 'page-num' + (p === _page.current ? ' active' : '');
+      btn.type = 'button';
+      btn.textContent = String(p);
+      btn.addEventListener('click', () => { _page.current = p; _renderPageRows(); });
+      nums.appendChild(btn);
+    }
+  }
+
+  // 同步每页条数选择
+  if (sel) sel.value = String(_page.size);
+}
+
+function _renderPageRows() {
+  const start = (_page.current - 1) * _page.size;
+  const end = start + _page.size;
+  const pageRows = _page.rows.slice(start, end);
+  renderTableChunked(pageRows, _page.fields);
+  _renderPagination();
+  // 滚动回顶部
+  const tw = document.querySelector('.table-wrap');
+  if (tw) tw.scrollTop = 0;
+}
+
+// 分页控件事件
+(function initPagination() {
+  const prev = document.getElementById('pagePrev');
+  const next = document.getElementById('pageNext');
+  const sel = document.getElementById('pageSizeSelect');
+  if (prev) prev.addEventListener('click', () => {
+    if (_page.current > 1) { _page.current--; _renderPageRows(); }
+  });
+  if (next) next.addEventListener('click', () => {
+    const totalPages = Math.ceil(_page.total / _page.size);
+    if (_page.current < totalPages) { _page.current++; _renderPageRows(); }
+  });
+  if (sel) {
+    sel.value = String(_page.size);
+    sel.addEventListener('change', () => {
+      _page.size = parseInt(sel.value, 10) || 20;
+      _page.current = 1;
+      try { localStorage.setItem('qc_page_size', String(_page.size)); } catch {}
+      _renderPageRows();
+    });
+  }
+})();
+
 function renderTable(rows, fields) {
-  renderTableChunked(rows, fields);
+  const tbody = $("tbody");
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = "";
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = fields.length || 10;
+    td.style.cssText = "text-align:center;padding:48px 16px;color:var(--text-dim);font-size:14px;";
+    td.innerHTML = '<span style="font-size:28px;display:block;margin-bottom:12px;">🔍</span>暫无匹配结果，请放宽筛选条件';
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    const pg = document.getElementById('pagination');
+    if (pg) pg.style.display = 'none';
+    return;
+  }
+  // 更新分页状态
+  _page.rows = rows;
+  _page.fields = fields;
+  _page.total = rows.length;
+  // 若当前页超出范围则归位
+  const totalPages = Math.max(1, Math.ceil(_page.total / _page.size));
+  if (_page.current > totalPages) _page.current = totalPages;
+  _renderPageRows();
 }
 
 function updateSummary(summary) {
@@ -3917,7 +4069,18 @@ function initControls(meta) {
   if ($("stochRsiSmK")) $("stochRsiSmK").value = "3";
   if ($("stochRsiSmD")) $("stochRsiSmD").value = "3";
 
-  $("btnRefresh").addEventListener("click", () => refresh({ manual: true, fetchMode: false }));
+  $('btnRefresh').addEventListener('click', () => {
+    const btn = $('btnRefresh');
+    btn.disabled = true;
+    btn.classList.add('btn-loading');
+    const origText = btn.textContent;
+    btn.textContent = '';
+    refresh({ manual: true, fetchMode: false }).finally(() => {
+      btn.disabled = false;
+      btn.classList.remove('btn-loading');
+      btn.textContent = origText;
+    });
+  });
   $("sortKey").addEventListener("change", () => rerenderFromLatestDebounced());
   $("sortOrder").addEventListener("change", () => rerenderFromLatestDebounced());
 
@@ -4408,7 +4571,6 @@ function startDataSourceWatcher() {
   state.dataSourceCheckTimer = setInterval(async () => {
     await _checkDataSourceStatus();
     const s = state.dataSourceStatus;
-    // PKL已就绪后降低检查频率
     if (s && s.pkl_ready) {
       clearInterval(state.dataSourceCheckTimer);
       state.dataSourceCheckTimer = setInterval(_checkDataSourceStatus, 5 * 60 * 1000);
@@ -4416,7 +4578,59 @@ function startDataSourceWatcher() {
   }, 30 * 1000);
 }
 
+function startSSEWatcher() {
+  if (typeof EventSource === "undefined") return;
+  let retryDelay = 3000;
+  function connect() {
+    const es = new EventSource("./api/events");
+    es.addEventListener("connected", () => { retryDelay = 3000; });
+    es.addEventListener("data_updated", () => {
+      // 数据更新时自动刷新，不触发后端重新获取
+      refresh({ skipBackend: true, auto: true });
+      _checkDataSourceStatus();
+    });
+    es.onerror = () => {
+      es.close();
+      // 断线重连，指数退避最大60秒
+      setTimeout(() => {
+        retryDelay = Math.min(retryDelay * 2, 60000);
+        connect();
+      }, retryDelay);
+    };
+    state._sseSource = es;
+  }
+  connect();
+}
 const pageMode = (document.body && document.body.dataset && document.body.dataset.page) ? document.body.dataset.page : "main";
+
+// ===== 移动端侧边栏 =====
+(function initMobileSidebar() {
+  const toggle = document.getElementById("sidebarToggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+  if (!toggle || !sidebar || !overlay) return;
+  function openSidebar() {
+    sidebar.classList.add("open");
+    overlay.classList.add("open");
+    toggle.textContent = "✕";
+  }
+  function closeSidebar() {
+    sidebar.classList.remove("open");
+    overlay.classList.remove("open");
+    toggle.textContent = "☰";
+  }
+  toggle.addEventListener("click", () => sidebar.classList.contains("open") ? closeSidebar() : openSidebar());
+  overlay.addEventListener("click", closeSidebar);
+  // 点击侧边栏内按钮后自动关闭（移动端）
+  sidebar.addEventListener("click", (e) => {
+    if (window.innerWidth > 768) return;
+    const target = e.target;
+    if (target && (target.classList.contains("btn") || target.classList.contains("check"))) {
+      setTimeout(closeSidebar, 200);
+    }
+  });
+})();
+
 if (pageMode === "main") {
   boot().catch((e) => {
     hideBootOverlay();
@@ -4424,4 +4638,6 @@ if (pageMode === "main") {
     const el = $("summary");
     if (el) el.textContent = String(e && e.message ? e.message : e);
   });
+  // SSE推送：数据更新后自动刷新
+  startSSEWatcher();
 }
