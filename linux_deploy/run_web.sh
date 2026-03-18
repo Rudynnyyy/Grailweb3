@@ -54,8 +54,13 @@ fi
 mkdir -p "$ROOT_DIR/数据获取/data/swap_lin" "$ROOT_DIR/数据获取/data/spot_lin"
 
 cd "$ROOT_DIR"
+
+# 两阶段数据流启动
+# 第一阶段：生成CSV快照（前端立即可用）
 if [ ! -f "$ROOT_DIR/apps/crypto_screener/web/data/latest.json" ]; then
   echo "[run_web] latest.json not found; generating snapshot once..."
   "$QC_GAMMA_PYTHON" -c "import sys; sys.path.insert(0, r'$ROOT_DIR'); from apps.crypto_screener.app.pipeline import run_once, default_paths; run_once(default_paths(), fetch=False)"
 fi
+
+# 启动Web服务器（使用两阶段数据流）
 exec "$QC_GAMMA_PYTHON" apps/crypto_screener/app/web_server.py

@@ -24,6 +24,14 @@ const state = {
   enrichToken: 0,
   enrichCache: {}, // { sig: { rows: { [rowKey]: { _builtins, _expr } }, done: boolean, total: number, ts: number } }
   enrichCacheOrder: [],
+  // 两阶段数据流状态
+  dataSourceStatus: {
+    current_source: "csv", // "csv" 或 "pkl"
+    pkl_ready: false,
+    csv_ready: true,
+    timestamp: null,
+  },
+  dataSourceCheckTimer: null,
 };
 
 const storageKey = "crypto_screener_custom_factors_v1";
@@ -610,7 +618,7 @@ function refreshFactors() {
       condObv: !!($("condObv") && $("condObv").checked),
       condStochRsi: !!($("condStochRsi") && $("condStochRsi").checked),
     };
-    const dynamicEnabled = toggles.condCloseMa || toggles.condMa || toggles.condRsi || toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
+    const dynamicEnabled = toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
     const cf0 = Array.isArray(state.customFactors) ? state.customFactors : [];
     const needCustomFilter = cf0.some((f) => f && f.enabled);
     const fullEnrich = dynamicEnabled || needCustomFilter;
@@ -619,7 +627,7 @@ function refreshFactors() {
       const c = fullSig && state.enrichCache ? state.enrichCache[fullSig] : null;
       const cached = !!(c && c.done && Number(c.total || 0) === (allRows.length || 0));
       if (cached) {
-        rerenderFromLatestDebounced();
+        rerenderFromLatest();
         return Promise.resolve();
       }
     }
@@ -629,7 +637,6 @@ function refreshFactors() {
 
 function cancelFilterWork() {
   state.filterToken = (Number(state.filterToken || 0) + 1) || 1;
-  state.renderToken = (Number(state.renderToken || 0) + 1) || 1;
 }
 
 function rerenderFromLatestDebounced() {
@@ -978,7 +985,18 @@ function renderKline(row) {
 
 async function loadJson(url) {
   const u = `${url}?t=${Date.now()}`;
-  const res = await fetch(u, { cache: "no-store" });
+  let res;
+  try {
+    res = await fetch(u, { cache: "no-store" });
+  } catch (e) {
+    const proto = String(location && location.protocol ? location.protocol : "");
+    if (proto === "file:") {
+      throw new Error("检测到使用 file:// 打开页面，浏览器会拦截 fetch 导致因子计算失败。请启动后端再访问：Linux 用 ./linux_deploy/run_web.sh；或本地运行 python apps/crypto_screener/app/web_server.py，然后打开 http://127.0.0.1:8001/");
+    }
+    let abs = String(url || "");
+    try { abs = String(new URL(String(url || ""), location.href)); } catch {}
+    throw new Error(`网络请求失败，无法访问：${abs}。请确认后端服务已启动且同源可达（默认端口 8001），并检查反向代理/HTTPS 混合内容。`);
+  }
   if (res.status === 401) {
     const next = encodeURIComponent(location.pathname + location.search);
     location.href = `./login.html?next=${next}`;
@@ -1932,7 +1950,7 @@ function updateColumnSelector(allFields) {
       cb.addEventListener("change", () => {
         state.columnVisibility[f.key] = cb.checked;
         saveColumnVisibility();
-        rerenderFromLatestDebounced();
+        rerenderFromLatest();
       });
     }
     label.appendChild(cb);
@@ -1990,13 +2008,13 @@ function buildTableHeader(fields) {
       inp.addEventListener("blur", () => {
         state.symbolQuery = inp.value || "";
         inp.classList.toggle("hidden", !String(state.symbolQuery || "").trim());
-        rerenderFromLatestDebounced();
+        rerenderFromLatest();
       });
       inp.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
           state.symbolQuery = inp.value || "";
-          rerenderFromLatestDebounced();
+          rerenderFromLatest();
           inp.blur();
           return;
         }
@@ -2004,7 +2022,7 @@ function buildTableHeader(fields) {
           inp.value = "";
           state.symbolQuery = "";
           inp.classList.add("hidden");
-          rerenderFromLatestDebounced();
+          rerenderFromLatest();
         }
       });
       wrap.appendChild(label);
@@ -2023,8 +2041,6 @@ function buildTableHeader(fields) {
 function renderTableChunked(rows, fields) {
   const tbody = $("tbody");
   tbody.innerHTML = "";
-  state.renderToken = (Number(state.renderToken || 0) + 1) || 1;
-  const token = state.renderToken;
   let i = 0;
   const n = rows.length || 0;
 
@@ -2080,12 +2096,10 @@ function renderTableChunked(rows, fields) {
   }
 
   function run(deadline) {
-    if (state.renderToken !== token) return;
     const frag = document.createDocumentFragment();
     let cnt = 0;
     const hardCap = 120;
     while (i < n && cnt < hardCap && (deadline.didTimeout || deadline.timeRemaining() > 4)) {
-      if (state.renderToken !== token) return;
       frag.appendChild(buildRow(rows[i]));
       i += 1;
       cnt += 1;
@@ -2343,8 +2357,8 @@ async function applyAllFiltersAsync(rows, params, customFactors, opts = {}) {
       const bs0 = r._baseSymU || _baseSymbolUpper(sym0);
       if (whitelist.size && !whitelist.has(sym0) && !whitelist.has(bs0)) continue;
       if (blacklist.size && (blacklist.has(sym0) || blacklist.has(bs0))) continue;
-      r._builtins = (r && r._builtins && typeof r._builtins === "object") ? r._builtins : {};
-      if (needBuiltins && hasSeries) r._builtins = computeBuiltins(r, params);
+      if (needBuiltins) r._builtins = computeBuiltins(r, params);
+      else r._builtins = (r && r._builtins && typeof r._builtins === "object") ? r._builtins : {};
       r._expr = (r && r._expr && typeof r._expr === "object") ? r._expr : {};
 
       const closes = hasSeries ? getSeries(r, "close") : [];
@@ -2355,29 +2369,23 @@ async function applyAllFiltersAsync(rows, params, customFactors, opts = {}) {
 
       if (enabledCloseMa) {
         const k = `ma_${params.maPeriodClose}`;
-        if (hasSeries || Object.prototype.hasOwnProperty.call(r._builtins || {}, k)) {
-          const maV = r._builtins[k];
-          if (maV === null || maV === undefined || !Number.isFinite(Number(maV))) missingBuiltins++;
-          else if (!(lastClose > Number(maV))) { filteredOut++; continue; }
-        }
+        const maV = r._builtins[k];
+        if (maV === null || maV === undefined || !Number.isFinite(Number(maV))) missingBuiltins++;
+        else if (!(lastClose > Number(maV))) { filteredOut++; continue; }
       }
       if (enabledMa) {
         const kf = `ma_${params.maFast}`;
         const ks = `ma_${params.maSlow}`;
-        if (hasSeries || (Object.prototype.hasOwnProperty.call(r._builtins || {}, kf) && Object.prototype.hasOwnProperty.call(r._builtins || {}, ks))) {
-          const maF = r._builtins[kf];
-          const maS = r._builtins[ks];
-          if (maF === null || maS === null || maF === undefined || maS === undefined || !Number.isFinite(Number(maF)) || !Number.isFinite(Number(maS))) missingBuiltins++;
-          else if (!(Number(maF) > Number(maS))) { filteredOut++; continue; }
-        }
+        const maF = r._builtins[kf];
+        const maS = r._builtins[ks];
+        if (maF === null || maS === null || maF === undefined || maS === undefined || !Number.isFinite(Number(maF)) || !Number.isFinite(Number(maS))) missingBuiltins++;
+        else if (!(Number(maF) > Number(maS))) { filteredOut++; continue; }
       }
       if (enabledRsi) {
         const kr = `rsi_${params.rsiPeriod}`;
-        if (hasSeries || Object.prototype.hasOwnProperty.call(r._builtins || {}, kr)) {
-          const rv = r._builtins[kr];
-          if (rv === null || rv === undefined || !Number.isFinite(Number(rv))) missingBuiltins++;
-          else if (!(Number(rv) > Number(params.rsiThreshold))) { filteredOut++; continue; }
-        }
+        const rv = r._builtins[kr];
+        if (rv === null || rv === undefined || !Number.isFinite(Number(rv))) missingBuiltins++;
+        else if (!(Number(rv) > Number(params.rsiThreshold))) { filteredOut++; continue; }
       }
 
       if (!deferEnrichedFilters && enabledEma) {
@@ -2753,7 +2761,7 @@ function renderCustomFactorList() {
       syncCustomFactorsToServer(state.customFactors);
       renderFolderConditions();
       if (cb1.checked) refreshFactors();
-        else rerenderFromLatestDebounced();
+      else rerenderFromLatest();
     });
     row.appendChild(cb1);
 
@@ -2765,7 +2773,7 @@ function renderCustomFactorList() {
       saveCustomFactors(state.customFactors);
       syncCustomFactorsToServer(state.customFactors);
       if (cb2.checked) refreshFactors();
-        else rerenderFromLatestDebounced();
+      else rerenderFromLatest();
     });
     row.appendChild(cb2);
 
@@ -2780,7 +2788,7 @@ function renderCustomFactorList() {
       syncCustomFactorsToServer(state.customFactors);
       renderFolderConditions();
       renderCustomFactorList();
-      rerenderFromLatestDebounced();
+      rerenderFromLatest();
     });
     row.appendChild(del);
 
@@ -2834,7 +2842,7 @@ function renderFolderConditions() {
         syncCustomFactorsToServer(state.customFactors);
         renderFolderConditions();
         if (cb.checked) refreshFactors();
-        else rerenderFromLatestDebounced();
+        else rerenderFromLatest();
       });
       line.appendChild(cb);
 
@@ -2873,7 +2881,7 @@ function renderFolderConditions() {
         syncCustomFactorsToServer(state.customFactors);
         renderFolderConditions();
         renderCustomFactorList();
-        rerenderFromLatestDebounced();
+        rerenderFromLatest();
       });
       line.appendChild(del);
 
@@ -3195,8 +3203,14 @@ async function postJson(url, data, opts = {}) {
   let r = null;
   try {
     r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data || {}), signal: ctrl ? ctrl.signal : undefined });
-  } catch {
-    r = null;
+  } catch (e) {
+    const proto = String(location && location.protocol ? location.protocol : "");
+    if (proto === "file:") {
+      return { r: null, j: { ok: false, error: "fetch_failed", message: "检测到使用 file:// 打开页面，浏览器会拦截 fetch。请启动后端后通过 http://127.0.0.1:8001/ 访问。" } };
+    }
+    let abs = String(url || "");
+    try { abs = String(new URL(String(url || ""), location.href)); } catch {}
+    return { r: null, j: { ok: false, error: "fetch_failed", message: `网络请求失败，无法访问：${abs}。请确认后端服务已启动且同源可达（默认端口 8001）。` } };
   } finally {
     if (timer) clearTimeout(timer);
   }
@@ -3540,7 +3554,7 @@ async function rerenderFromLatest() {
       condObv: !!($("condObv") && $("condObv").checked),
       condStochRsi: !!($("condStochRsi") && $("condStochRsi").checked),
     };
-    const dynamicEnabled = toggles.condCloseMa || toggles.condMa || toggles.condRsi || toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
+    const dynamicEnabled = toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
     const cf0 = Array.isArray(state.customFactors) ? state.customFactors : [];
     const needCustomFilter = cf0.some((f) => f && f.enabled);
     const fullEnrich = dynamicEnabled || needCustomFilter;
@@ -3624,7 +3638,7 @@ async function refresh(opts = {}) {
       condObv: !!($("condObv") && $("condObv").checked),
       condStochRsi: !!($("condStochRsi") && $("condStochRsi").checked),
     };
-    const dynamicEnabled = toggles.condCloseMa || toggles.condMa || toggles.condRsi || toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
+    const dynamicEnabled = toggles.condEma || toggles.condBollUp || toggles.condBollDown || toggles.condSuper || toggles.condKdj || toggles.condObv || toggles.condStochRsi;
     const cf0 = Array.isArray(state.customFactors) ? state.customFactors : [];
     const needCustomShow = cf0.some((f) => f && f.show);
     const needCustomFilter = cf0.some((f) => f && f.enabled);
@@ -3703,7 +3717,7 @@ async function refresh(opts = {}) {
       state.enrichInFlightSig = fullSig || "";
       state.enrichToken = (Number(state.enrichToken || 0) + 1) || 1;
       const token = state.enrichToken;
-      try { rerenderFromLatestDebounced(); } catch {}
+      try { rerenderFromLatest(); } catch {}
       setEnrichProgress(0, allRows.length || 1, true, "");
       const rowMap = new Map();
       for (const r of allRows) {
@@ -3745,7 +3759,7 @@ async function refresh(opts = {}) {
           state.enrichCache[fullSig].ts = Date.now();
           cacheTouch(fullSig);
         }
-        rerenderFromLatestDebounced();
+        rerenderFromLatest();
       }).catch((e0) => {
         if (token !== state.enrichToken) return;
         const msg0 = String(e0 && e0.message ? e0.message : e0 || "");
@@ -3764,7 +3778,7 @@ async function refresh(opts = {}) {
       try {
         const r3 = await enrichRowsForDisplay({ rows: sorted, params, toggles, customFactors: state.customFactors, tail: 360 });
         if (r3 && r3.ok && r3.updated) {
-          rerenderFromLatestDebounced();
+          rerenderFromLatest();
         }
       } catch (e2) {
         const msg2 = String(e2 && e2.message ? e2.message : e2 || "");
@@ -3918,7 +3932,7 @@ function initControls(meta) {
   for (const id of ids) {
     const el = $(id);
     if (!el) continue;
-    const dyn = new Set(["condCloseMa", "condMa", "condRsi", "condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"]);
+    const dyn = new Set(["condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"]);
     const filterOnly = new Set(["rsiThreshold"]);
     if (dyn.has(id)) {
       el.addEventListener("change", () => (el.checked ? refreshFactorsDebounced() : rerenderFromLatestDebounced()));
@@ -4097,7 +4111,7 @@ function initControls(meta) {
       if (state.strategyDraft && state.strategyDraft.params) state.strategyDraft.params.market = getSelectedMarket();
       updateWecomSummary(state.strategyDraft);
       setText("wecomResult", "市场已应用");
-      rerenderFromLatestDebounced();
+      rerenderFromLatest();
     });
   }
   if ($("strategySelect")) {
@@ -4275,6 +4289,12 @@ function initControls(meta) {
 
 async function boot() {
   hideBootOverlay();
+  if (String(location && location.protocol ? location.protocol : "") === "file:") {
+    hideProgress();
+    const el = $("summary");
+    if (el) el.textContent = "当前以 file:// 打开页面，浏览器会阻止数据请求与因子计算。请启动后端后通过 http://127.0.0.1:8001/ 访问（Linux：./linux_deploy/run_web.sh；或本地运行 python apps/crypto_screener/app/web_server.py）。";
+    return;
+  }
   showProgress(8, "加载配置...");
   const meta = await loadJson("./data/meta.json");
   state.meta = meta;
@@ -4294,6 +4314,7 @@ async function boot() {
   showProgress(35, "初始化界面...");
   initControls(meta);
   scheduleHourlyAutoUpdate();
+  startDataSourceWatcher();
   try {
     const u = await loadMe();
     const email = u && u.email ? String(u.email) : "";
@@ -4317,6 +4338,82 @@ async function boot() {
     } catch {}
   } catch {}
   await refresh({ skipBackend: true });
+}
+
+// ===== 两阶段数据源监控 =====
+
+function _renderDataSourceBadge(status) {
+  let badge = $("dataSourceBadge");
+  if (!badge) {
+    badge = document.createElement("span");
+    badge.id = "dataSourceBadge";
+    badge.style.cssText = [
+      "display:inline-block",
+      "margin-left:8px",
+      "padding:2px 8px",
+      "border-radius:10px",
+      "font-size:11px",
+      "font-weight:600",
+      "vertical-align:middle",
+      "cursor:default",
+      "transition:all 0.4s ease",
+    ].join(";");
+    // 插入到页面标题或summary旁
+    const summary = $("summary");
+    if (summary && summary.parentNode) {
+      summary.parentNode.insertBefore(badge, summary.nextSibling);
+    }
+  }
+  const isPkl = status && status.current_source === "pkl" && status.pkl_ready;
+  if (isPkl) {
+    badge.textContent = "⚡ PKL高速";
+    badge.style.background = "#1a7f37";
+    badge.style.color = "#fff";
+    badge.title = "数据源：PKL预处理数据（高速）";
+  } else {
+    badge.textContent = "📊 CSV实时";
+    badge.style.background = "#b45309";
+    badge.style.color = "#fff";
+    badge.title = "数据源：CSV原始数据（PKL生成中...）";
+  }
+}
+
+async function _checkDataSourceStatus() {
+  try {
+    const resp = await fetch("./api/data_source_status");
+    if (!resp.ok) return;
+    const status = await resp.json();
+    const prev = state.dataSourceStatus || {};
+    state.dataSourceStatus = status;
+    _renderDataSourceBadge(status);
+    // 如果从CSV切换到PKL，自动刷新数据
+    if (
+      prev.current_source === "csv" &&
+      status.current_source === "pkl" &&
+      status.pkl_ready
+    ) {
+      console.log("[DataSource] PKL就绪，自动刷新数据...");
+      // 清空series缓存
+      state.klineSeriesCache = {};
+      state.klineSeriesPending = {};
+      await refresh({ skipBackend: true });
+    }
+  } catch {}
+}
+
+function startDataSourceWatcher() {
+  // 立即检查一次
+  _checkDataSourceStatus();
+  // 每30秒检查一次（PKL生成阶段），就绪后改为每5分钟
+  state.dataSourceCheckTimer = setInterval(async () => {
+    await _checkDataSourceStatus();
+    const s = state.dataSourceStatus;
+    // PKL已就绪后降低检查频率
+    if (s && s.pkl_ready) {
+      clearInterval(state.dataSourceCheckTimer);
+      state.dataSourceCheckTimer = setInterval(_checkDataSourceStatus, 5 * 60 * 1000);
+    }
+  }, 30 * 1000);
 }
 
 const pageMode = (document.body && document.body.dataset && document.body.dataset.page) ? document.body.dataset.page : "main";

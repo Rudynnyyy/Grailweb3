@@ -11,7 +11,8 @@ import threading
 import time
 import gzip
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from email import policy
 from email.message import EmailMessage
 from email.utils import parseaddr
@@ -686,22 +687,24 @@ def _attach_series_to_rows(*, rows: list[dict], config: dict, tail: int, force: 
     except Exception:
         t = 720
     t = max(60, min(3650, t))
-    out: list[dict] = []
-    for r in rows:
-        if not isinstance(r, dict):
-            continue
+    workers_env = (os.environ.get("QC_WECOM_SERIES_WORKERS") or "").strip()
+    try:
+        workers = int(workers_env) if workers_env else 16
+    except Exception:
+        workers = 16
+    workers = max(1, min(64, int(workers)))
+
+    def one(idx: int, r: dict) -> tuple[int, dict]:
         m = str(r.get("market") or "").lower()
         s = str(r.get("symbol") or "")
         if not m or not s:
-            out.append(r)
-            continue
+            return idx, r
         try:
             ctx = _get_series_cached(market=m, symbol=s, tail=t)
         except Exception:
             ctx = None
         if not isinstance(ctx, dict):
-            out.append(r)
-            continue
+            return idx, r
         series0 = ctx.get("series")
         dt0 = ctx.get("dt")
         latest0 = ctx.get("latest") if isinstance(ctx.get("latest"), dict) else {}
@@ -726,8 +729,26 @@ def _attach_series_to_rows(*, rows: list[dict], config: dict, tail: int, force: 
                 r2["dt_close"] = str(dt0[-1])
         except Exception:
             pass
-        out.append(r2)
-    return out
+        return idx, r2
+
+    items: list[tuple[int, dict]] = [(i, r) for i, r in enumerate(rows) if isinstance(r, dict)]
+    if not items:
+        return rows
+    if workers <= 1 or len(items) <= 20:
+        out: list[dict] = []
+        for i, r in items:
+            out.append(one(i, r)[1])
+        return out
+    out_map: dict[int, dict] = {}
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        futs = [ex.submit(one, i, r) for i, r in items]
+        for fut in as_completed(futs):
+            try:
+                i2, r2 = fut.result()
+                out_map[int(i2)] = r2
+            except Exception:
+                continue
+    return [out_map.get(i, r) for i, r in items]
 
 
 def _build_wecom_markdown(*, latest: dict | None, rows: list[dict], top_n: int) -> str:
@@ -784,7 +805,7 @@ def _pick_series_tail_for_filters(*, latest: dict | None, config: dict, fallback
     if toggles.get("condStochRsi"):
         need = max(need, _int0(params.get("stochRsiP")) + _int0(params.get("stochRsiK")) + 10)
 
-    tail = max(base, 360, need * 4)
+    tail = max(base, need * 4)
     return max(80, min(2160, int(tail)))
 
 
@@ -804,7 +825,7 @@ def _send_wecom_for_all_enabled() -> None:
                 webhook_url = str(c.get("webhook_url") or "").strip()
                 top_n = max(1, int(c.get("top_n") or 20))
                 config = c.get("config") if isinstance(c.get("config"), dict) else {}
-                tail0 = _pick_series_tail_for_filters(latest=latest, config=config, fallback=720)
+                tail0 = _pick_series_tail_for_filters(latest=latest, config=config, fallback=120)
                 rows0 = _attach_series_to_rows(rows=all_rows, config=config, tail=tail0)
                 r = apply_all_filters(rows0, config)
                 selected = r.get("selected") if isinstance(r, dict) else []
@@ -946,6 +967,8 @@ def _run_update(fetch: bool) -> None:
             preprocess_state["last_started"] = datetime.now().isoformat(timespec="seconds")
             preprocess_state["last_error"] = None
         try:
+            if str(os.environ.get("QC_PREPROCESS_EXTERNAL") or "0").strip() != "0":
+                return
             from 数据获取.incremental_update import run_incremental_catchup
 
             cfg_path = Path(os.environ.get("QC_PREPROCESS_CONFIG") or (repo_root / "数据获取" / "config.yaml"))
@@ -982,14 +1005,18 @@ def start_update(fetch: bool) -> bool:
 
 
 def _scheduler_loop() -> None:
+    # 计算第一个整点
+    now = datetime.now()
+    next_hour = (now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1))
     while True:
         now = datetime.now()
-        next_hour = (now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1))
         seconds = max(1.0, (next_hour - now).total_seconds())
         time.sleep(min(60.0, seconds))
         if datetime.now() < next_hour:
             continue
         start_update(fetch=True)
+        # 计算下一个整点
+        next_hour = next_hour + timedelta(hours=1)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -1747,7 +1774,7 @@ class Handler(BaseHTTPRequestHandler):
             if not all_rows:
                 self._send_json(500, {"ok": False, "error": "no_snapshot", "message": "快照不存在，请先运行一次更新/生成快照"})
                 return
-            tail0 = _pick_series_tail_for_filters(latest=latest, config=config, fallback=720)
+            tail0 = _pick_series_tail_for_filters(latest=latest, config=config, fallback=120)
             rows0 = _attach_series_to_rows(rows=all_rows, config=config, tail=tail0)
             r = apply_all_filters(rows0, config)
             selected = r.get("selected") if isinstance(r, dict) else []
@@ -2091,6 +2118,32 @@ class Handler(BaseHTTPRequestHandler):
                     "lock": lock_info,
                 },
             )
+            return
+        if path == "/api/data_source_status":
+            """获取当前数据源状态：CSV或PKL"""
+            try:
+                from apps.crypto_screener.app import series_source as ss  # noqa: E402
+                current_source = ss.get_data_source_priority(repo_root)
+                pkl_ready = ss.is_pkl_ready(repo_root)
+                csv_ready_marker = Path(repo_root) / "apps" / "crypto_screener" / "web" / "data" / ".csv_ready"
+                csv_ready = csv_ready_marker.exists()
+                
+                status = {
+                    "ok": True,
+                    "current_source": current_source,
+                    "pkl_ready": pkl_ready,
+                    "csv_ready": csv_ready,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }
+            except Exception as e:
+                status = {
+                    "ok": False,
+                    "error": str(e),
+                    "current_source": "csv",
+                    "pkl_ready": False,
+                    "csv_ready": False,
+                }
+            self._send_json(200, status)
             return
         if path == "/api/metrics":
             if not self._require_auth():

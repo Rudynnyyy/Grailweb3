@@ -7,7 +7,7 @@ warnings.filterwarnings("ignore")
 
 
 def run_script(script_name):
-    script_directory = Path("utils")  # 请替换为你的脚本所在的实际目录
+    script_directory = Path(__file__).resolve().parent / "utils"  # 使用绝对路径，兼容PM2等任意cwd
     script_path = script_directory / script_name  # 使用pathlib构建完整路径
     return subprocess.Popen([sys.executable, str(script_path)])
 
@@ -20,5 +20,8 @@ if __name__ == '__main__':
     # 等待两个进程都完成
     process1.wait()
     process2.wait()
+
+    if int(process1.returncode or 0) != 0 or int(process2.returncode or 0) != 0:
+        raise SystemExit(int(process1.returncode or process2.returncode or 1))
 
     print("两个脚本都已完成执行。")

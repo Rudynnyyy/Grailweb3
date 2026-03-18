@@ -1,5 +1,6 @@
 
 import os.path
+import traceback
 from config import *
 import os
 import shutil
@@ -78,7 +79,9 @@ def run():
             os.path.join(root_path, 'data_job'), file_type='.py', filters=['__init__', '数据任务模版'], drop_type=True
         )
         # 执行下载任务
-        exec_jobs(job_files, method='download', param=run_time)
+        wrong_signal = exec_jobs(job_files, method='download', param=run_time)
+        if wrong_signal:
+            raise SystemExit(int(wrong_signal))
 
         # 本次循环结束
         print('数据更新完毕')

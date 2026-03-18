@@ -18,6 +18,8 @@ chmod +x linux_deploy/*.sh
 
 `http://<服务器IP>:8001/`
 
+不要用 `file://` 直接打开 `apps/crypto_screener/web/index.html`，浏览器会拦截前端的 `fetch()`，导致快照读取与因子计算报 `Failed to fetch`。
+
 ## 只跑一次数据更新（不启动网页）
 
 ```bash

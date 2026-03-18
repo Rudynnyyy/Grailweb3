@@ -232,14 +232,30 @@ def build_latest_snapshot_from_data_center(
         cfg = ScreenerRuleConfig(tail_len=int(tail_val))
     repo_root = _repo_root()
     data_center_root = data_center_root or default_data_center_root(repo_root)
-    if os.name == "nt":
-        _swap0 = r"D:\量化交易\数据\swap_lin"
-        _spot0 = r"D:\量化交易\数据\spot_lin"
+    env_swap = (os.environ.get("QC_MERGE_SWAP_PATH") or os.environ.get("QC_SCREENER_FALLBACK_SWAP_DIR") or "").strip()
+    env_spot = (os.environ.get("QC_MERGE_SPOT_PATH") or os.environ.get("QC_SCREENER_FALLBACK_SPOT_DIR") or "").strip()
+    repo_swap = repo_root / "数据获取" / "data" / "swap_lin"
+    repo_spot = repo_root / "数据获取" / "data" / "spot_lin"
+    win_swap = Path(r"D:\量化交易\数据\swap_lin")
+    win_spot = Path(r"D:\量化交易\数据\spot_lin")
+    if env_swap:
+        swap0 = Path(env_swap)
+    elif repo_swap.exists():
+        swap0 = repo_swap
+    elif os.name == "nt" and win_swap.exists():
+        swap0 = win_swap
     else:
-        _swap0 = str(repo_root / "数据获取" / "data" / "swap_lin")
-        _spot0 = str(repo_root / "数据获取" / "data" / "spot_lin")
-    fallback_swap_dir = fallback_swap_dir or Path(os.environ.get("QC_SCREENER_FALLBACK_SWAP_DIR") or _swap0)
-    fallback_spot_dir = fallback_spot_dir or Path(os.environ.get("QC_SCREENER_FALLBACK_SPOT_DIR") or _spot0)
+        swap0 = repo_swap
+    if env_spot:
+        spot0 = Path(env_spot)
+    elif repo_spot.exists():
+        spot0 = repo_spot
+    elif os.name == "nt" and win_spot.exists():
+        spot0 = win_spot
+    else:
+        spot0 = repo_spot
+    fallback_swap_dir = fallback_swap_dir or swap0
+    fallback_spot_dir = fallback_spot_dir or spot0
 
     rows: list[dict[str, Any]] = []
 

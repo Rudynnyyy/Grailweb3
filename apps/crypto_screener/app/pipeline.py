@@ -4,7 +4,7 @@ import os
 import subprocess
 import time
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 
@@ -151,6 +151,42 @@ def run_once(paths: PipelinePaths, *, fetch: bool = True) -> None:
         run_snapshot(paths)
 
 
+def run_once_two_stage(paths: PipelinePaths, *, fetch: bool = True) -> None:
+    """
+    两阶段数据流：
+    1. 获取CSV数据 + 生成快照（3-4分钟）
+    2. 后台生成PKL预处理数据（8-9分钟）
+    
+    前端先展示CSV数据，PKL生成完成后自动切换
+    """
+    with PipelineLock(paths.lock_file):
+        if fetch:
+            run_data_fetch(paths.repo_root, paths.gamma_python)
+        # 第一阶段：生成CSV快照，前端立即可用
+        run_snapshot(paths)
+        # 标记CSV快照已就绪
+        csv_ready_marker = paths.snapshot_out_dir / ".csv_ready"
+        csv_ready_marker.write_text(datetime.now(timezone.utc).isoformat())
+
+
+def run_pkl_build_background(repo_root: Path, gamma_python: str) -> None:
+    """后台生成PKL预处理数据"""
+    try:
+        data_fetch_dir = repo_root / "数据获取"
+        run_python(
+            gamma_python,
+            data_fetch_dir / "factor_cache_update.py",
+            data_fetch_dir,
+            extra_args=["--market", "all", "--tail", "2160"]
+        )
+        # 标记PKL已就绪
+        pkl_ready_marker = repo_root / "apps" / "crypto_screener" / "web" / "data" / ".pkl_ready"
+        pkl_ready_marker.write_text(datetime.now(timezone.utc).isoformat())
+    except Exception as e:
+        import sys
+        print(f"[PKL BUILD ERROR] {e}", file=sys.stderr)
+
+
 def sleep_until_next_hour() -> None:
     now = datetime.now()
     next_hour = (now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1))
@@ -159,6 +195,19 @@ def sleep_until_next_hour() -> None:
 
 
 def run_forever(paths: PipelinePaths, *, fetch: bool = True) -> None:
+    """持续运行，支持两阶段数据流"""
+    import threading
+    
     while True:
-        run_once(paths, fetch=fetch)
+        # 第一阶段：获取CSV数据并生成快照
+        run_once_two_stage(paths, fetch=fetch)
+        
+        # 第二阶段：后台生成PKL数据（不阻塞主循环）
+        pkl_thread = threading.Thread(
+            target=run_pkl_build_background,
+            args=(paths.repo_root, paths.gamma_python),
+            daemon=True
+        )
+        pkl_thread.start()
+        
         sleep_until_next_hour()

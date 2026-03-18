@@ -442,6 +442,8 @@ def main() -> None:
         else:
             res = run_incremental_catchup(config_path, lag_hours=int(args.lag_hours), max_hours=int(args.max_hours))
         print(json.dumps({"ok": res.ok, "rows": res.row_count, "files": res.file_count, "duration": res.duration_seconds, "details": res.details}, ensure_ascii=False))
+        if not bool(res.ok):
+            raise SystemExit(2)
         return
     run_scheduler_forever(config_path, lag_hours=int(args.lag_hours), max_hours=int(args.max_hours))
 

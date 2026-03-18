@@ -32,12 +32,28 @@ def _decode_bytes(raw: bytes) -> str:
 
 
 def _default_merge_dirs(repo_root: Path) -> tuple[Path, Path]:
-    if os.name == "nt":
-        swap0 = Path(os.environ.get("QC_MERGE_SWAP_PATH") or os.environ.get("QC_SCREENER_FALLBACK_SWAP_DIR") or r"D:\量化交易\数据\swap_lin")
-        spot0 = Path(os.environ.get("QC_MERGE_SPOT_PATH") or os.environ.get("QC_SCREENER_FALLBACK_SPOT_DIR") or r"D:\量化交易\数据\spot_lin")
-        return swap0, spot0
-    swap0 = Path(os.environ.get("QC_MERGE_SWAP_PATH") or os.environ.get("QC_SCREENER_FALLBACK_SWAP_DIR") or str(repo_root / "数据获取" / "data" / "swap_lin"))
-    spot0 = Path(os.environ.get("QC_MERGE_SPOT_PATH") or os.environ.get("QC_SCREENER_FALLBACK_SPOT_DIR") or str(repo_root / "数据获取" / "data" / "spot_lin"))
+    env_swap = (os.environ.get("QC_MERGE_SWAP_PATH") or os.environ.get("QC_SCREENER_FALLBACK_SWAP_DIR") or "").strip()
+    env_spot = (os.environ.get("QC_MERGE_SPOT_PATH") or os.environ.get("QC_SCREENER_FALLBACK_SPOT_DIR") or "").strip()
+    repo_swap = repo_root / "数据获取" / "data" / "swap_lin"
+    repo_spot = repo_root / "数据获取" / "data" / "spot_lin"
+    win_swap = Path(r"D:\量化交易\数据\swap_lin")
+    win_spot = Path(r"D:\量化交易\数据\spot_lin")
+    if env_swap:
+        swap0 = Path(env_swap)
+    elif repo_swap.exists():
+        swap0 = repo_swap
+    elif os.name == "nt" and win_swap.exists():
+        swap0 = win_swap
+    else:
+        swap0 = repo_swap
+    if env_spot:
+        spot0 = Path(env_spot)
+    elif repo_spot.exists():
+        spot0 = repo_spot
+    elif os.name == "nt" and win_spot.exists():
+        spot0 = win_spot
+    else:
+        spot0 = repo_spot
     return swap0, spot0
 
 
@@ -79,6 +95,49 @@ def _preprocessed_enabled() -> bool:
 
 def _pkl_series_cache_enabled() -> bool:
     return str(os.environ.get("QC_USE_PKL_SERIES_CACHE", "1")).strip() != "0"
+
+
+def is_pkl_ready(repo_root: Path) -> bool:
+    """检查PKL预处理数据是否已就绪，复用pkl_ready.json机制"""
+    import time
+    # 优先检查 .pkl_ready 标记文件（由pipeline写入）
+    pkl_ready_marker = repo_root / "apps" / "crypto_screener" / "web" / "data" / ".pkl_ready"
+    if pkl_ready_marker.exists():
+        try:
+            age_seconds = time.time() - pkl_ready_marker.stat().st_mtime
+            if age_seconds < 23 * 3600:
+                return True
+        except Exception:
+            pass
+    # 回退检查 pkl_cache/pkl_ready.json（由web_server的pkl_worker写入）
+    env_cache_root = (os.environ.get("QC_PKL_CACHE_ROOT") or "").strip()
+    if env_cache_root:
+        pkl_cache_root = Path(env_cache_root)
+    else:
+        env_preprocess = (os.environ.get("QC_PREPROCESS_OUT_ROOT") or "").strip()
+        if env_preprocess:
+            pkl_cache_root = Path(env_preprocess) / "pkl_cache"
+        else:
+            pkl_cache_root = repo_root / "数据获取" / "data" / "preprocessed_hourly" / "pkl_cache"
+    ready_path = pkl_cache_root / "pkl_ready.json"
+    if not ready_path.exists():
+        return False
+    try:
+        age_seconds = time.time() - ready_path.stat().st_mtime
+        return age_seconds < 23 * 3600
+    except Exception:
+        return False
+
+
+def get_data_source_priority(repo_root: Path) -> str:
+    """
+    获取数据源优先级：
+    - 'pkl': PKL预处理数据已就绪，优先使用
+    - 'csv': 使用CSV数据（快速但计算慢）
+    """
+    if is_pkl_ready(repo_root):
+        return 'pkl'
+    return 'csv'
 
 
 def _pkl_series_cache_root(repo_root: Path) -> Path:

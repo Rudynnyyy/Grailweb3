@@ -24,8 +24,19 @@ export QC_MERGE_SPOT_PATH="${QC_MERGE_SPOT_PATH:-$ROOT_DIR/数据获取/data/spo
 mkdir -p "$ROOT_DIR/数据获取/data/swap_lin" "$ROOT_DIR/数据获取/data/spot_lin"
 
 cd "$ROOT_DIR"
-"$QC_GAMMA_PYTHON" -c "from apps.crypto_screener.app.pipeline import default_paths, run_once; run_once(default_paths(), fetch=True)"
+
+# 两阶段数据更新流程
+# 第一阶段：获取CSV数据 + 生成快照（3-4分钟）
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] 第一阶段：获取CSV数据..."
+"$QC_GAMMA_PYTHON" -c "from apps.crypto_screener.app.pipeline import default_paths, run_once_two_stage; run_once_two_stage(default_paths(), fetch=True)"
+
+# 第二阶段：后台生成PKL预处理数据（8-9分钟）
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] 第二阶段：生成PKL预处理数据..."
 "$QC_GAMMA_PYTHON" 数据获取/incremental_update.py --config 数据获取/config.yaml --once --lag-hours "${QC_PREPROCESS_LAG_HOURS:-1}" --max-hours "${QC_PREPROCESS_MAX_HOURS_PER_RUN:-24}"
+
 if [ "${QC_BUILD_PKL_CACHE:-0}" != "0" ]; then
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] 生成PKL缓存..."
   "$QC_GAMMA_PYTHON" 数据获取/factor_cache_update.py --market all --tail "${QC_PKL_CACHE_TAIL:-2160}"
 fi
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] 数据更新完成"
