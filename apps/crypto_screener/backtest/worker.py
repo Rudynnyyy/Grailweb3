@@ -28,17 +28,19 @@ MAX_TASKS_PER_USER = 3
 TASK_TTL_SECONDS = 3600   # 结果保留1小时
 MAX_TIME_RANGE_DAYS = 90  # Pro用户最大回测时长
 MAX_TOP_N = 50
+MAX_CONCURRENT_IPS = 2    # 全局最多同时运行的 IP 数量
 
 
 @dataclass
 class BacktestTask:
     task_id: str
     user: str
-    config: dict
-    status: str = 'pending'   # pending / running / done / failed / cancelled
-    progress: int = 0         # 0-100
+    ip: str = ''
+    config: dict = field(default_factory=dict)
+    status: str = 'pending'   # pending / queued / running / done / failed / cancelled
+    progress: int = 0
     message: str = ''
-    result: Any = None        # BacktestResult
+    result: Any = None
     error: str = ''
     created_at: float = field(default_factory=time.time)
     finished_at: float = 0.0
@@ -46,6 +48,8 @@ class BacktestTask:
 
 _tasks: dict[str, BacktestTask] = {}
 _tasks_lock = threading.Lock()
+_ip_queue: list[str] = []       # 排队 task_id 列表（按提交顺序）
+_ip_queue_lock = threading.Lock()
 
 
 def _cleanup_old_tasks() -> None:
@@ -58,6 +62,31 @@ def _cleanup_old_tasks() -> None:
     ]
     for tid in to_del:
         _tasks.pop(tid, None)
+
+
+def _running_ips() -> set:
+    """返回当前正在运行任务的 IP 集合"""
+    with _tasks_lock:
+        return {t.ip for t in _tasks.values() if t.status == 'running' and t.ip}
+
+
+def _try_dispatch_ip_queue() -> None:
+    """任务结束后尝试启动排队中的下一个"""
+    with _ip_queue_lock:
+        i = 0
+        while i < len(_ip_queue):
+            tid = _ip_queue[i]
+            with _tasks_lock:
+                task = _tasks.get(tid)
+            if not task or task.status in ('cancelled', 'failed'):
+                _ip_queue.pop(i)
+                continue
+            running = _running_ips()
+            if task.ip in running or len(running) < MAX_CONCURRENT_IPS:
+                _ip_queue.pop(i)
+                threading.Thread(target=_run_task, args=(tid,), daemon=True).start()
+                break
+            i += 1
 
 
 def _validate_config(config: dict) -> BacktestConfig:
@@ -163,6 +192,9 @@ def _validate_config(config: dict) -> BacktestConfig:
 
 
 def _run_task(task_id: str) -> None:
+    import os
+    os.environ['QC_PKL_REQUIRE_FRESH'] = '0'
+
     with _tasks_lock:
         task = _tasks.get(task_id)
     if not task:
@@ -203,26 +235,38 @@ def _run_task(task_id: str) -> None:
         task.message = f'失败: {e}'
     finally:
         task.finished_at = time.time()
+        _try_dispatch_ip_queue()
 
 
-def submit_task(user: str, config: dict) -> str:
-    """提交回测任务，返回 task_id。超过并发限制时抛出 RuntimeError"""
+def submit_task(user: str, config: dict, ip: str = '') -> tuple:
+    """提交回测任务，返回 (task_id, queue_position)。
+    queue_position=0 表示立即运行；>=1 表示排队中。
+    """
     task_id = str(uuid.uuid4())
+    client_ip = ip or 'unknown'
 
     with _tasks_lock:
         _cleanup_old_tasks()
-        running_count = sum(
+        active = sum(
             1 for t in _tasks.values()
-            if t.user == user and t.status in ('pending', 'running')
+            if t.user == user and t.status in ('pending', 'running', 'queued')
         )
-        if running_count >= MAX_TASKS_PER_USER:
-            raise RuntimeError(f'任务数超限（最多 {MAX_TASKS_PER_USER} 个并发），请等待已有任务完成')
-        task = BacktestTask(task_id=task_id, user=user, config=config)
+        if active >= MAX_TASKS_PER_USER:
+            raise RuntimeError(f'您已有 {MAX_TASKS_PER_USER} 个进行中的任务，请等待完成后再提交')
+        task = BacktestTask(task_id=task_id, user=user, ip=client_ip, config=config)
         _tasks[task_id] = task
 
-    t = threading.Thread(target=_run_task, args=(task_id,), daemon=True)
-    t.start()
-    return task_id
+    with _ip_queue_lock:
+        running = _running_ips()
+        if client_ip in running or len(running) < MAX_CONCURRENT_IPS:
+            threading.Thread(target=_run_task, args=(task_id,), daemon=True).start()
+            return task_id, 0
+        else:
+            task.status = 'queued'
+            task.message = '排队等待中，请稍候...'
+            _ip_queue.append(task_id)
+            pos = len(_ip_queue)
+            return task_id, pos
 
 
 def get_task_status(task_id: str, user: str) -> dict:
@@ -230,6 +274,13 @@ def get_task_status(task_id: str, user: str) -> dict:
         t = _tasks.get(task_id)
     if not t or t.user != user:
         return {'ok': False, 'error': 'not_found'}
+    queue_pos = 0
+    if t.status == 'queued':
+        with _ip_queue_lock:
+            try:
+                queue_pos = _ip_queue.index(task_id) + 1
+            except ValueError:
+                queue_pos = 0
     return {
         'ok': True,
         'task_id': task_id,
@@ -237,6 +288,7 @@ def get_task_status(task_id: str, user: str) -> dict:
         'progress': t.progress,
         'message': t.message,
         'error': t.error,
+        'queue_position': queue_pos,
     }
 
 

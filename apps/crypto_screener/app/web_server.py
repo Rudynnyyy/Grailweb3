@@ -1262,8 +1262,9 @@ class Handler(BaseHTTPRequestHandler):
                 self._send_json(503, {"ok": False, "error": "backtest_unavailable"})
                 return
             try:
-                task_id = backtest_worker.submit_task(str(user["username"]), payload)
-                self._send_json(200, {"ok": True, "task_id": task_id})
+                client_ip = self.client_address[0] if self.client_address else ''
+                task_id, queue_pos = backtest_worker.submit_task(str(user["username"]), payload, ip=client_ip)
+                self._send_json(200, {"ok": True, "task_id": task_id, "queue_position": queue_pos})
             except RuntimeError as e:
                 self._send_json(429, {"ok": False, "error": str(e)})
             except Exception as e:
@@ -2080,8 +2081,9 @@ class Handler(BaseHTTPRequestHandler):
                 return
             payload = self._read_json() or {}
             try:
-                task_id = backtest_worker.submit_task(str(user["username"]), payload)
-                self._send_json(200, {"ok": True, "task_id": task_id})
+                client_ip = self.client_address[0] if self.client_address else ''
+                task_id, queue_pos = backtest_worker.submit_task(str(user["username"]), payload, ip=client_ip)
+                self._send_json(200, {"ok": True, "task_id": task_id, "queue_position": queue_pos})
             except RuntimeError as e:
                 self._send_json(429, {"ok": False, "error": str(e)})
             except Exception as e:

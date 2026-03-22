@@ -14,8 +14,9 @@
   const btEquityChart=$('btEquityChart'),btSymbolsChart=$('btSymbolsChart');
   const btEquityPlaceholder=$('btEquityPlaceholder'),btSymbolsPlaceholder=$('btSymbolsPlaceholder');
   const btTopnBox=$('btTopnBox'),btTopnSortLabel=$('btTopnSortLabel'),btTopnN=$('btTopnN'),btTopnAllMsg=$('btTopnAllMsg');
-  let currentTaskId=null,pollTimer=null,currentParams={},currentToggles={},currentFactors=[];
+  let currentTaskId=null,pollTimer=null,currentParams={},currentToggles={},currentFactors=[],currentWhitelist=[],currentBlacklist=[];
   const LS_PARAMS='qc_bt_params',LS_TOGGLES='qc_bt_toggles',LS_FACTORS='qc_bt_factors',LS_BT='qc_backtest_ui',LS_RESULT='qc_bt_last_result';
+  const BASE_CFG_KEY='crypto_screener_base_config_v1';
 
   function _saveResult(result){
     try{localStorage.setItem(LS_RESULT,JSON.stringify({ts:Date.now(),taskId:currentTaskId,result}));}catch(e){}
@@ -192,6 +193,7 @@
     const sk=$('btSortKey'),so=$('btSortOrder'),fc=$('btFullCoverage');
     return{
       params:currentParams,toggles:currentToggles,custom_factors:currentFactors,
+      whitelist:currentWhitelist,blacklist:currentBlacklist,
       market:btMarket.value||'swap',start_dt:toISO(btStartDt.value),end_dt:toISO(btEndDt.value),
       hold_hours:Math.max(1,parseInt(btHoldHours.value)||1),
       top_n:Math.max(0,parseInt(btTopN.value)||0),
@@ -227,7 +229,13 @@
       const resp=await fetch('/api/backtest/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)});
       const data=await resp.json();
       if(!data.ok){stopFakeProgress();setRunning(false);showError(data.error||'提交失败');return;}
-      currentTaskId=data.task_id;pollStatus();
+      currentTaskId=data.task_id;
+      if(data.queue_position>0){
+        stopFakeProgress();
+        updateProgress(0,`排队等待中，当前位置：第 ${data.queue_position} 位，请耐心等待...`);
+        const pe=$('btProgressPct');if(pe)pe.textContent='队列中';
+      }
+      pollStatus();
     }catch(e){stopFakeProgress();setRunning(false);showError('请求失败：'+e.message);}
   }
   function pollStatus(){
@@ -243,7 +251,7 @@
         if(data.status==='done'){stopFakeProgress();updateProgress(100,'回测完成！');setTimeout(()=>{setRunning(false);fetchResult();},500);}
         else if(data.status==='failed'){stopFakeProgress();setRunning(false);showError('回测失败：'+(data.error||data.message||'未知错误'));}
         else if(data.status==='cancelled'){stopFakeProgress();setRunning(false);showError('回测已取消');}
-        else pollStatus();
+        else if(data.status==='queued'){const pos=data.queue_position||'?';stopFakeProgress();updateProgress(0,'排队等待中，当前位置：第 '+pos+' 位，前方有其他用户正在回测，请耐心等待...');const pe=document.getElementById('btProgressPct');if(pe)pe.textContent='队列中';pollStatus();}else pollStatus();
       }catch(e){pollStatus();}
     },1200);
   }
@@ -361,3 +369,4 @@
   }
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
 })();
+

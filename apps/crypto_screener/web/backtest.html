@@ -118,6 +118,64 @@
     .bt-config-summary span{color:var(--accent)}
     .bt-hidden{display:none!important}
   </style>
+  <style>
+    /* 使用说明文档 */
+    .bt-docs{margin:28px 32px 60px}
+    .bt-docs-nav{display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:12px}
+    .bt-docs-tab{background:var(--btn-sec);border:1px solid var(--border);border-radius:8px;padding:7px 18px;font-size:13px;font-weight:600;color:var(--text-sub);cursor:pointer;font-family:var(--sans);transition:all .15s}
+    .bt-docs-tab:hover{background:var(--btn-sec-h);color:var(--text)}
+    .bt-docs-tab.active{background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;border-color:transparent;box-shadow:0 2px 12px var(--accent-glow)}
+    .bt-docs-panel{display:none}
+    .bt-docs-panel.active{display:block}
+    .bt-docs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .bt-docs-grid-2{grid-template-columns:repeat(2,1fr)}
+    @media(max-width:900px){.bt-docs-grid,.bt-docs-grid-2{grid-template-columns:1fr}}
+    .bt-docs-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px}
+    .bt-docs-card-hl{border-left:3px solid var(--accent)}
+    .bt-docs-icon{font-size:22px;margin-bottom:8px}
+    .bt-docs-card-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px}
+    .bt-docs-body{font-size:13px;color:var(--text-sub);line-height:1.75}
+    .bt-docs-body p{margin-bottom:7px}
+    .bt-docs-body strong{color:var(--text);font-weight:700}
+    .bt-docs-tip{margin-top:10px;padding:8px 12px;background:rgba(61,139,255,.07);border:1px solid rgba(61,139,255,.18);border-radius:8px;font-size:11.5px;color:var(--badge-c);line-height:1.6}
+    .bt-docs-params{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+    .bt-docs-params span{padding:2px 10px;border-radius:6px;background:var(--badge-bg);color:var(--badge-c);border:1px solid var(--badge-b);font-size:11px;font-weight:600;font-family:var(--mono)}
+    .bt-case-badge{display:inline-block;padding:2px 10px;border-radius:6px;font-size:11px;font-weight:700;margin-bottom:8px}
+    .bt-badge-g{background:rgba(31,212,160,.12);color:var(--green);border:1px solid rgba(31,212,160,.25)}
+    .bt-badge-r{background:rgba(240,92,92,.1);color:var(--red);border:1px solid rgba(240,92,92,.25)}
+    .bt-badge-p{background:rgba(157,124,248,.12);color:var(--purple);border:1px solid rgba(157,124,248,.25)}
+    .bt-badge-y{background:rgba(245,200,66,.08);color:var(--yellow);border:1px solid rgba(245,200,66,.2)}
+    .bt-formula{margin:8px 0;padding:9px 13px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;font-family:var(--mono);font-size:12px;color:var(--accent)}
+  </style>
+  <style>
+    /* ── 使用说明文档区域 ── */
+    .bt-docs{margin:28px 32px 60px;}
+    .bt-docs-nav{display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:12px;}
+    .bt-docs-tab{background:var(--btn-sec);border:1px solid var(--border);border-radius:8px;padding:7px 18px;font-size:13px;font-weight:600;color:var(--text-sub);cursor:pointer;font-family:var(--sans);transition:all .15s;}
+    .bt-docs-tab:hover{background:var(--btn-sec-h);color:var(--text);}
+    .bt-docs-tab.active{background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;border-color:transparent;box-shadow:0 2px 12px var(--accent-glow);}
+    .bt-docs-panel{display:none;}
+    .bt-docs-panel.active{display:block;}
+    .bt-docs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+    .bt-docs-grid-theory{grid-template-columns:repeat(2,1fr);}
+    .bt-docs-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;}
+    .bt-docs-card-accent{border-left:3px solid var(--accent);}
+    .bt-docs-card-icon{font-size:22px;margin-bottom:8px;}
+    .bt-docs-card-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px;letter-spacing:.01em;}
+    .bt-docs-card-body{font-size:13px;color:var(--text-sub);line-height:1.75;}
+    .bt-docs-card-body p{margin-bottom:7px;}
+    .bt-docs-card-body strong{color:var(--text);font-weight:700;}
+    .bt-docs-tip{margin-top:10px;padding:8px 12px;background:rgba(61,139,255,.07);border:1px solid rgba(61,139,255,.18);border-radius:8px;font-size:11.5px;color:var(--badge-c);line-height:1.6;}
+    .bt-docs-params{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+    .bt-docs-params span{padding:2px 10px;border-radius:6px;background:var(--badge-bg);color:var(--badge-c);border:1px solid var(--badge-b);font-size:11px;font-weight:600;font-family:var(--mono);}
+    .bt-docs-case-badge{display:inline-block;padding:2px 10px;border-radius:6px;font-size:11px;font-weight:700;margin-bottom:8px;}
+    .bt-badge-green{background:rgba(31,212,160,.12);color:var(--green);border:1px solid rgba(31,212,160,.25);}
+    .bt-badge-red{background:rgba(240,92,92,.1);color:var(--red);border:1px solid rgba(240,92,92,.25);}
+    .bt-badge-purple{background:rgba(157,124,248,.12);color:var(--purple);border:1px solid rgba(157,124,248,.25);}
+    .bt-badge-yellow{background:rgba(245,200,66,.08);color:var(--yellow);border:1px solid rgba(245,200,66,.2);}
+    .bt-docs-formula{margin:10px 0;padding:10px 14px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.03em;}
+    .bt-docs-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-sub);margin:12px 0 6px;}
+  </style>
 </head>
 <body>
 <nav class="bt-nav">
@@ -254,6 +312,154 @@
   </div>
 </div>
 
+  <!-- 使用说明文档 -->
+  <div class="bt-docs">
+    <div class="bt-docs-nav">
+      <button class="bt-docs-tab active" data-tab="guide">&#128218; 使用指南</button>
+      <button class="bt-docs-tab" data-tab="cases">&#128200; 策略案例</button>
+      <button class="bt-docs-tab" data-tab="theory">&#128161; 资产定价原理</button>
+    </div>
+
+    <!-- 使用指南 -->
+    <div class="bt-docs-panel active" id="tab-guide">
+      <div class="bt-docs-grid">
+        <div class="bt-docs-card">
+          <div class="bt-docs-icon">&#9312;</div>
+          <div class="bt-docs-card-title">第一步：配置筛选条件</div>
+          <div class="bt-docs-body">
+            <p>前往主页面，在「条件」面板启用指标（如 RSI、MA 金叉、超级趋势），调好参数后回到回测页面。</p>
+            <p>点击 <strong>「从主页面同步条件」</strong>，系统读取最新筛选参数并以标签展示。</p>
+            <div class="bt-docs-tip">&#128161; 条件越多越严格，入选币种越少，样本量也会减小。建议先用 1-2 个条件验证。</div>
+          </div>
+        </div>
+        <div class="bt-docs-card">
+          <div class="bt-docs-icon">&#9313;</div>
+          <div class="bt-docs-card-title">第二步：设置回测参数</div>
+          <div class="bt-docs-body">
+            <p><strong>市场：</strong>合约（swap）支持做多/做空；现货（spot）仅支持做多。</p>
+            <p><strong>时间范围：</strong>建议控制在 <strong>30天内</strong>（约720根1h K线），过长会显著增加等待时间。</p>
+            <p><strong>持仓 Bar 数：</strong>1 = 下根K线收盘即平仓，与主程序每小时运行完全对齐。</p>
+            <p><strong>TopN：</strong>每个Bar筛选后按排序字段取前N个持仓；设0则持有全部命中币种。</p>
+            <p><strong>手续费：</strong>默认0.05%，对应币安VIP0费率，高频轮动时影响显著。</p>
+            <div class="bt-docs-tip">&#128161; 杠杆影响盈亏幅度但不影响胜率，建议先用1倍验证策略有效性再提升杠杆。</div>
+          </div>
+        </div>
+        <div class="bt-docs-card">
+          <div class="bt-docs-icon">&#9314;</div>
+          <div class="bt-docs-card-title">第三步：解读回测结果</div>
+          <div class="bt-docs-body">
+            <p><strong>净值曲线：</strong>从1.0起算，整体右上方倾斜表示盈利，注意回撤深度与持续时间。</p>
+            <p><strong>夏普比率：</strong>衡量单位风险超额收益。&gt;1良好，&gt;2优秀，&lt;0不如无风险资产。</p>
+            <p><strong>最大回撤：</strong>历史最大峰谷跌幅。加密市场20%以内属可接受范围。</p>
+            <p><strong>胜率：</strong>盈利交易占比，需结合盈亏比综合判断，高胜率低盈亏比同样不盈利。</p>
+            <p><strong>Top入选频次：</strong>频次极高的币种主导整体收益，需注意集中度风险。</p>
+            <div class="bt-docs-tip">&#128161; 建议对比牛市、熊市、震荡市三个区间，判断策略是否稳健而非区间过拟合。</div>
+          </div>
+        </div>
+        <div class="bt-docs-card">
+          <div class="bt-docs-icon">&#9315;</div>
+          <div class="bt-docs-card-title">常见问题</div>
+          <div class="bt-docs-body">
+            <p><strong>Q：回测时间很长怎么办？</strong><br>逐Bar对全市场计算指标最耗时（约70%时间）。缩短时间范围或减少条件可显著加速。</p>
+            <p><strong>Q：排队等待是什么意思？</strong><br>服务器最多允许2个用户同时运行回测，超出后自动排队，前面任务完成后自动开始。</p>
+            <p><strong>Q：回测盈利实盘亏损？</strong><br>常见原因：①滑点未计入 ②回测区间为牛市 ③过拟合 ④实盘信号延迟。</p>
+            <p><strong>Q：结果缓存多久？</strong><br>服务器保留1小时，超时需重新运行。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 策略案例 -->
+    <div class="bt-docs-panel" id="tab-cases">
+      <div class="bt-docs-grid">
+        <div class="bt-docs-card bt-docs-card-hl">
+          <span class="bt-case-badge bt-badge-g">做多 · 趋势跟踪</span>
+          <div class="bt-docs-card-title">案例一：MA 金叉动量策略</div>
+          <div class="bt-docs-params"><span>合约</span><span>做多</span><span>持仓 1 Bar</span><span>TopN 5</span></div>
+          <div class="bt-docs-body"><p><strong>条件：</strong>MA(10) &gt; MA(20)，按涨跌幅降序取前5个</p><p>每小时筛选均线金叉且涨幅最大的币种，持有1根K线后平仓，追随短期动量。</p><div class="bt-docs-tip">适用单边上涨趋势市；震荡市假突破多，胜率下滑。</div></div>
+        </div>
+        <div class="bt-docs-card bt-docs-card-hl">
+          <span class="bt-case-badge bt-badge-r">做空 · 超买回调</span>
+          <div class="bt-docs-card-title">案例二：RSI 超买做空策略</div>
+          <div class="bt-docs-params"><span>合约</span><span>做空</span><span>持仓 2 Bar</span><span>TopN 3</span></div>
+          <div class="bt-docs-body"><p><strong>条件：</strong>RSI(14) &gt; 75，按RSI降序取最超买的3个做空</p><p>极度超买后往往均值回归，持有2根K线捕捉短期回调。</p><div class="bt-docs-tip">建议叠加 close &lt; MA(20) 避免在上升趋势中逆势做空。</div></div>
+        </div>
+        <div class="bt-docs-card bt-docs-card-hl">
+          <span class="bt-case-badge bt-badge-p">做多 · 量价共振</span>
+          <div class="bt-docs-card-title">案例三：趋势 + OBV 共振策略</div>
+          <div class="bt-docs-params"><span>合约</span><span>做多</span><span>持仓 4 Bar</span><span>TopN 5</span></div>
+          <div class="bt-docs-body"><p><strong>条件：</strong>① close &gt; MA(20) ② OBV &gt; OBV均线，按OBV降序</p><p>价量双重确认，资金持续流入时信号质量更高。</p><div class="bt-docs-tip">持仓4 Bar减少噪音，适合高波动率合约市场。</div></div>
+        </div>
+        <div class="bt-docs-card bt-docs-card-hl">
+          <span class="bt-case-badge bt-badge-y">中性 · 夏普优先</span>
+          <div class="bt-docs-card-title">案例四：三重过滤低波动策略</div>
+          <div class="bt-docs-params"><span>合约</span><span>做多</span><span>持仓 1 Bar</span><span>TopN 10</span></div>
+          <div class="bt-docs-body"><p><strong>条件：</strong>① close &gt; MA(60) ② SuperTrend看多 ③ 50 &lt; RSI(14) &lt; 70</p><p>三重过滤只选趋势强、动量适中的品种，持仓分散到10个降低集中度风险。</p><div class="bt-docs-tip">目标夏普 &gt;1.5，条件过多时可设 TopN=0 保证持仓连续性。</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 资产定价原理 -->
+    <div class="bt-docs-panel" id="tab-theory">
+      <div class="bt-docs-grid bt-docs-grid-2">
+        <div class="bt-docs-card">
+          <div class="bt-docs-icon">&#128200;</div>
+          <div class="bt-docs-card-title">一、动量效应与均值回归</div>
+          <div class="bt-docs-body">
+            <p><strong>动量效应（Momentum）：</strong>短期内涨得多的资产倾向于继续上涨。加密市场散户占比高、情绪化强，动量效应比传统市场更突出。</p>
+            <p><strong>均值回归（Mean Reversion）：</strong>极端偏离均值后价格倾向于回归。RSI超买做空、布林带上轨做空均基于此原理。</p>
+            <div class="bt-formula">截面动量 = Close(t) / Close(t-n) - 1 → 选涨幅最大的 Top K 个</div>
+            <div class="bt-docs-tip">&#128161; 本框架「按涨跌幅排序取TopN」本质上是截面动量策略，每小时在全市场横截面选择动量最强的币种。</div>
+          </div>
+        </div>
+        <div class="bt-docs-card">
+          <div class="bt-docs-icon">&#9878;</div>
+          <div class="bt-docs-card-title">二、技术指标的信号逻辑</div>
+          <div class="bt-docs-body">
+            <p><strong>MA（均线）：</strong>价格的滞后估计，反映趋势方向。金叉捕捉动量初期加速，周期越长信号越稳但越滞后。</p>
+            <p><strong>RSI：</strong>衡量一段时间涨跌幅比值，反映超买超卖。加密市场牛市中RSI可长期维持高位，慎用于做空。</p>
+            <p><strong>SuperTrend：</strong>基于ATR动态计算支撑压力位，自适应波动率，是最推荐的趋势过滤条件。</p>
+            <p><strong>OBV：</strong>累计「上涨日量 - 下跌日量」，OBV上升代表资金净流入，与价格共振时可靠性高。</p>
+            <div class="bt-formula">RSI = 100 - 100/(1 + RS)，RS = 平均涨幅 / 平均跌幅（n期）</div>
+          </div>
+        </div>
+        <div class="bt-docs-card">
+          <div class="bt-docs-icon">&#128184;</div>
+          <div class="bt-docs-card-title">三、加密市场的定价特殊性</div>
+          <div class="bt-docs-body">
+            <p><strong>BTC主导效应：</strong>BTC涨时山寨币跟涨（Beta行情），BTC横盘时山寨币可能轮动，BTC急跌时山寨币往往跌幅更大。回测需注意所选区间的BTC走势背景。</p>
+            <p><strong>流动性溢价：</strong>小市值币点差大、滑点高，回测无法完全反映实际成本。主框架已过滤低流动性品种。</p>
+            <p><strong>24小时连续交易：</strong>无涨跌停板，极端行情下单小时波动可超30%。回测中最大回撤指标需重点关注。</p>
+            <div class="bt-docs-tip">&#128161; 加密市场行情具有高度的区间依赖性，同一策略在牛市夏普可达3+，在熊市可能为负。多区间验证是必要步骤。</div>
+          </div>
+        </div>
+        <div class="bt-docs-card">
+          <div class="bt-docs-icon">&#128202;</div>
+          <div class="bt-docs-card-title">四、回测统计指标详解</div>
+          <div class="bt-docs-body">
+            <p><strong>夏普比率 = (策略收益率 - 无风险利率) / 收益率标准差</strong><br>衡量单位风险的超额回报。加密市场无风险利率通常取0或USDT理财年化。</p>
+            <div class="bt-formula">Sharpe = (R_p - R_f) / σ_p × √(8760 / hold_hours)</div>
+            <p><strong>最大回撤 = (峰值净值 - 谷值净值) / 峰值净值</strong><br>反映策略最坏情况下的亏损幅度，是风险管理的核心指标。</p>
+            <p><strong>盈亏比 = 平均盈利 / 平均亏损</strong><br>盈亏比 &gt; 1 且胜率 &gt; 50% 是策略长期盈利的充分条件，二者需要综合权衡。</p>
+            <div class="bt-docs-tip">&#128161; 期望值 = 胜率 × 平均盈利 - (1 - 胜率) × 平均亏损 &gt; 0 是策略可行的最低标准。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script src="./backtest.js"></script>
+<script>
+  // 文档Tab切换
+  document.querySelectorAll('.bt-docs-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.bt-docs-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.bt-docs-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = document.getElementById('tab-' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+</script>
 </body>
 </html>
