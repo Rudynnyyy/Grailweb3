@@ -193,15 +193,20 @@ def _load_universe(market, repo_root, whitelist, blacklist):
         bl = {s.upper() for s in blacklist if s}
         symbols = [(s,m) for s,m in symbols if s.upper() not in bl and s.split('-')[0].upper() not in bl]
     print(f'[BT engine] loading {len(symbols)} symbols CSV, market={market}', flush=True)
-    from apps.crypto_screener.app.series_source import _default_merge_dirs, read_merge_csv_tail, _pick_existing_csv
+    from apps.crypto_screener.app.series_source import _default_merge_dirs, _default_data_center_dirs, read_merge_csv_tail, _pick_existing_csv
     _sw, _sp = _default_merge_dirs(repo_root)
+    _dc_sw, _dc_sp = _default_data_center_dirs(repo_root)
+    print(f'[BT engine] swap dirs: merge={_sw} dc={_dc_sw}', flush=True)
     import pandas as _pd
     from datetime import timezone as _tz
     all_series: dict[str, SymbolSeries] = {}
     for symbol, mkt in symbols:
         try:
-            base_dir = _sw if str(mkt).lower() == 'swap' else _sp
-            csv_path, picked_sym = _pick_existing_csv([base_dir], str(symbol).strip(), tail_hint=9999)
+            if str(mkt).lower() == 'swap':
+                search_dirs = [_sw, _dc_sw]
+            else:
+                search_dirs = [_sp, _dc_sp]
+            csv_path, picked_sym = _pick_existing_csv(search_dirs, str(symbol).strip(), tail_hint=9999)
             if csv_path is None: continue
             df = read_merge_csv_tail(csv_path, tail=9999)
             if df.empty: continue

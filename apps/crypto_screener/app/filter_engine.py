@@ -1152,7 +1152,7 @@ def apply_all_filters(rows: list, config: dict) -> dict:
         if blacklist and ((sym0.upper() in blacklist) or (bs0 in blacklist)):
             filtered_out += 1
             continue
-        r["_builtins"] = compute_builtins(r, params)
+        r["_builtins"] = compute_builtins(r, {**params, "_disable_pkl": disable_pkl})
         r["_expr"] = {}
 
         closes = get_series(r, "close")
