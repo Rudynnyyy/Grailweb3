@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>监控面板 v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+[data-theme=dark]{--bg:#09090f;--sf:#0f1018;--cd:#13141f;--c2:#171828;--br:#1e2035;--b2:#2a2d4a;--tx:#e8eaf6;--ts:#8b90b8;--td:#4a4f72;--ac:#5c7cfa;--ag:rgba(92,124,250,.18);--gn:#2dd4a0;--rd:#f55f6a;--yw:#fcc419;--bl:#4dabf7;--pu:#9775fa;--or:#ff922b;--cg:rgba(255,255,255,.04);--cl:rgba(255,255,255,.2)}
+[data-theme=light]{--bg:#f2f4fb;--sf:#fff;--cd:#fff;--c2:#f7f8ff;--br:#e2e5f0;--b2:#c9cde0;--tx:#1a1d2e;--ts:#5a6080;--td:#9298b8;--ac:#4263eb;--ag:rgba(66,99,235,.12);--gn:#0ca678;--rd:#e03131;--yw:#e67700;--bl:#1971c2;--pu:#6741d9;--or:#d9480f;--cg:rgba(0,0,0,.05);--cl:rgba(0,0,0,.28)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:'Space Grotesk','PingFang SC',system-ui,sans-serif;min-height:100vh;transition:background .25s,color .25s}
+[data-theme=dark] body{background-image:radial-gradient(ellipse 80% 40% at 50% -5%,rgba(92,124,250,.07),transparent)}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 22px;border-bottom:1px solid var(--br);background:var(--sf);position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,.08)}
+.hdr-l{display:flex;align-items:center;gap:11px}
+.logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--ac),var(--pu));display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo::after{content:'📡'}
+.hdr-title{font-size:15px;font-weight:700}
+.hdr-sub{font-size:11px;color:var(--ts);margin-top:1px}
+.hdr-r{display:flex;align-items:center;gap:9px}
+.sdot{width:7px;height:7px;border-radius:50%;background:var(--td);transition:all .3s}
+.slbl{font-size:11px;color:var(--ts)}
+.abadge{font-size:11px;color:var(--ac);background:var(--ag);border:1px solid rgba(92,124,250,.25);border-radius:20px;padding:2px 9px}
+.btn{background:var(--c2);border:1px solid var(--b2);border-radius:7px;padding:5px 12px;font-size:12px;color:var(--ts);cursor:pointer;font-family:inherit;transition:all .15s}
+.btn:hover{background:var(--b2);color:var(--tx)}
+.tbtn{width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;font-size:14px}
+.tabs{display:flex;gap:1px;padding:0 22px;background:var(--sf);border-bottom:1px solid var(--br)}
+.tab{padding:9px 16px;font-size:13px;font-weight:500;color:var(--ts);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;user-select:none;white-space:nowrap}
+.tab.on{color:var(--ac);border-bottom-color:var(--ac)}
+.pnl{display:none}.pnl.on{display:block}
+.main{padding:18px 22px;max-width:1440px;margin:0 auto}
+.sec{font-size:10px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.12em;margin:18px 0 11px;display:flex;align-items:center;gap:7px}
+.sec::after{content:'';flex:1;height:1px;background:var(--br)}
+.g4{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:11px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:640px){.g2{grid-template-columns:1fr}}
+.card{background:var(--cd);border:1px solid var(--br);border-radius:11px;padding:15px 17px;transition:border-color .2s}
+.card:hover{border-color:var(--b2)}
+.clbl{font-size:10px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.09em;margin-bottom:9px}
+.cval{font-size:27px;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1}
+.cunit{font-size:12px;color:var(--ts);margin-left:2px;font-weight:400;font-family:inherit}
+.csub{font-size:11px;color:var(--ts);margin-top:6px}
+.bw{margin-top:9px;background:var(--br);border-radius:3px;height:4px;overflow:hidden}
+.b{height:100%;border-radius:3px;transition:width .6s,background .3s}
+.ok{color:var(--gn)}.warn{color:var(--yw)}.crit{color:var(--rd)}
+.bok{background:var(--gn)}.bwarn{background:var(--yw)}.bcrit{background:var(--rd)}
+.bbl{background:var(--bl)}.bpu{background:var(--pu)}.bor{background:var(--or)}
+.cc{background:var(--cd);border:1px solid var(--br);border-radius:11px;padding:15px 17px;overflow:hidden}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ct{font-size:10px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.09em}
+.cv{font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--ts)}
+.cw{width:100%;overflow:hidden;line-height:0}
+canvas{display:block}
+.tw{overflow-x:auto;border-radius:9px;border:1px solid var(--br)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{background:var(--c2);padding:8px 11px;text-align:left;font-size:10px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--br)}
+tbody td{padding:8px 11px;border-bottom:1px solid var(--br);color:var(--tx)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--c2)}
+.chip{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600}
+.cg{background:rgba(45,212,160,.12);color:var(--gn)}.cb{background:rgba(77,171,247,.12);color:var(--bl)}.cgr{background:var(--c2);color:var(--ts)}
+.aw{background:var(--cd);border:1px solid var(--br);border-radius:11px;padding:3px 15px;min-height:52px}
+.ar{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--br);font-size:12px}
+.ar:last-child{border-bottom:none}
+.at{color:var(--ts);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;min-width:90px}
+.am{color:var(--tx)}
+.nd{color:var(--ts);font-size:13px;text-align:center;padding:14px 0}
+.eb{background:rgba(224,49,49,.08);border:1px solid rgba(224,49,49,.25);border-radius:7px;padding:8px 13px;margin-bottom:13px;font-size:13px;color:var(--rd);display:none}
+.eb.on{display:block}
+.ld{display:flex;align-items:center;justify-content:center;min-height:90px;color:var(--ts);gap:8px;font-size:13px}
+.sp{width:15px;height:15px;border:2px solid var(--b2);border-top-color:var(--ac);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.ft{text-align:center;padding:22px;font-size:11px;color:var(--td)}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--b2);border-radius:4px}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="logo"></div>
+    <div><div class="hdr-title">服务器监控面板</div><div class="hdr-sub" id="lu">正在连接...</div></div>
+  </div>
+  <div class="hdr-r">
+    <div class="sdot" id="sd"></div><span class="slbl" id="sl">连接中</span>
+    <span class="abadge" id="cd">30s</span>
+    <button class="btn tbtn" id="thm" title="切换主题">🌙</button>
+    <button class="btn" onclick="fetchAll()">立即刷新</button>
+  </div>
+</header>
+<nav class="tabs">
+  <div class="tab on" onclick="sw('overview',this)">概览</div>
+  <div class="tab" onclick="sw('charts',this)">走势图</div>
+  <div class="tab" onclick="sw('users',this)">用户分析</div>
+  <div class="tab" onclick="sw('alerts',this)">告警日志</div>
+</nav>
+<main class="main">
+  <div class="eb" id="eb"></div>
+  <!-- panels -->
+  <!-- 概览 -->
+  <div class="pnl on" id="pnl-overview">
+    <div class="sec">系统指标</div><div class="g4" id="mRow"><div class="ld"><div class="sp"></div>加载中...</div></div>
+    <div class="sec">在线用户</div><div class="g4" id="oRow"><div class="ld"><div class="sp"></div>加载中...</div></div>
+    <div class="sec">网络 IO</div><div class="g4" id="nRow"><div class="ld"><div class="sp"></div>加载中...</div></div>
+  </div>
+  <!-- 走势图 -->
+  <div class="pnl" id="pnl-charts">
+    <div class="sec">CPU / 内存 / 磁盘 / 在线用户（每60s采样，最近48小时）</div>
+    <div class="g2">
+      <div class="cc"><div class="ch"><span class="ct">CPU</span><span class="cv" id="cpuLast">—</span></div><div class="cw"><canvas id="cpuC"></canvas></div></div>
+      <div class="cc"><div class="ch"><span class="ct">内存</span><span class="cv" id="memLast">—</span></div><div class="cw"><canvas id="memC"></canvas></div></div>
+    </div>
+    <div class="g2" style="margin-top:11px">
+      <div class="cc"><div class="ch"><span class="ct">磁盘</span><span class="cv" id="diskLast">—</span></div><div class="cw"><canvas id="diskC"></canvas></div></div>
+      <div class="cc"><div class="ch"><span class="ct">在线用户</span><span class="cv" id="olLast">—</span></div><div class="cw"><canvas id="olC"></canvas></div></div>
+    </div>
+    <div class="sec" style="margin-top:18px">每小时请求数（最近24h）</div>
+    <div class="cc"><div class="ch"><span class="ct">请求量</span><span class="cv" id="rqLast">—</span></div><div class="cw"><canvas id="rqC"></canvas></div></div>
+    <div class="sec" style="margin-top:18px">每小时新注册用户（最近24h）</div>
+    <div class="cc"><div class="ch"><span class="ct">新注册</span><span class="cv" id="rgLast">—</span></div><div class="cw"><canvas id="rgC"></canvas></div></div>
+  </div>
+  <!-- 用户分析 -->
+  <div class="pnl" id="pnl-users">
+    <div class="sec">当前在线用户（5分钟内）</div>
+    <div class="tw" id="onlineTbl"><div class="ld"><div class="sp"></div>加载中...</div></div>
+    <div class="sec">最近24小时新注册用户</div>
+    <div class="tw" id="newUserTbl"><div class="ld"><div class="sp"></div>加载中...</div></div>
+  </div>
+  <!-- 告警日志 -->
+  <div class="pnl" id="pnl-alerts">
+    <div class="sec">告警日志（本次会话，阈值：CPU≥85% / 内存≥90% / 磁盘≥90%）</div>
+    <div class="aw" id="alertWrap"><div class="nd">暂无告警 ✓</div></div>
+  </div>
+</main>
+<footer class="ft">选币器监控面板 · 每30秒自动刷新</footer>
+<script>
+// v2.4
+window.onerror=function(msg,src,line,col,err){
+  // ResizeObserver loop是浏览器良性警告，忽略
+  if(msg&&msg.indexOf('ResizeObserver')!==-1)return true;
+  document.getElementById('eb').textContent='JS\u9519\u8BEF: '+msg+' ('+line+':'+col+')';
+  document.getElementById('eb').classList.add('on');
+  return false;
+};
+(function(){
+'use strict';
+const REFRESH=30000;
+let _alerts=[],_cd=30,_tick=null;
+let _theme=localStorage.getItem('mon_theme')||'dark';
+document.documentElement.setAttribute('data-theme',_theme);
+const thm=document.getElementById('thm');
+thm.textContent=_theme==='dark'?'\u2600\uFE0F':'\uD83C\uDF19';
+thm.onclick=()=>{
+  _theme=_theme==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',_theme);
+  localStorage.setItem('mon_theme',_theme);
+  thm.textContent=_theme==='dark'?'\u2600\uFE0F':'\uD83C\uDF19';
+};
+function sw(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
+  document.getElementById('pnl-'+id).classList.add('on');
+  if(id==='charts'){
+    // 用rAF等待浏览器完成布局重排后再初始化和渲染
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        _initCanvasSizes();
+        if(_lastChartData)renderCharts(_lastChartData.hist,_lastChartData.hrReqs,_lastChartData.rgReqs);
+      });
+    });
+  }
+}
+window.sw=sw;
+function col(p,w,c){
+  if(p>=(c||88))return{cls:'crit',b:'bcrit',h:'#f55f6a'};
+  if(p>=(w||75))return{cls:'warn',b:'bwarn',h:'#fcc419'};
+  return{cls:'ok',b:'bok',h:'#2dd4a0'};
+}
+function fdt(iso){
+  if(!iso)return'';
+  return new Date(iso).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+function setStatus(ok){
+  const d=document.getElementById('sd'),l=document.getElementById('sl');
+  d.style.background=ok?'var(--gn)':'var(--rd)';
+  d.style.boxShadow=ok?'0 0 7px var(--gn)':'0 0 7px var(--rd)';
+  d.style.animation=ok?'pulse 2s infinite':'none';
+  l.textContent=ok?'\u6B63\u5E38':'\u5931\u8054';
+}
+function showErr(m){const b=document.getElementById('eb');b.textContent=m;b.classList.add('on');}
+function hideErr(){document.getElementById('eb').classList.remove('on');}
+function mkCard(lbl,val,unit,sub,bp,co){
+  const bw=bp!=null?Math.min(100,Math.max(0,bp)):null;
+  const bar=bw!=null?('<div class="bw"><div class="b '+co.b+'" style="width:'+bw+'%"></div></div>'):'';
+  return '<div class="card"><div class="clbl">'+lbl+'</div><div class="cval '+co.cls+'">'+val+'<span class="cunit">'+unit+'</span></div><div class="csub">'+sub+'</div>'+bar+'</div>';
+}
+function renderMetrics(m){
+  const r=document.getElementById('mRow');
+  if(!m||m.error){r.innerHTML='<div style="color:var(--rd);padding:14px;font-size:13px">'+(m&&m.error||'\u6570\u636e\u5F02\u5E38')+'</div>';return;}
+  const nc={cls:'',b:'bbl',h:'#4dabf7'};
+  r.innerHTML=[
+    mkCard('CPU',((m.cpu_pct||0).toFixed(1)),'%',m.load_avg?('\u8D1F\u8F7D '+m.load_avg.join(' ')):' ',m.cpu_pct||0,col(m.cpu_pct||0)),
+    mkCard('\u5185\u5B58',((m.mem_pct||0).toFixed(1)),'%',(m.mem_used_gb||'-')+' / '+(m.mem_total_gb||'-')+' GB',m.mem_pct||0,col(m.mem_pct||0)),
+    mkCard('\u78C1\u76D8',((m.disk_pct||0).toFixed(1)),'%','\u5269\u4F59 '+(m.disk_free_gb||'-')+' GB',m.disk_pct||0,col(m.disk_pct||0)),
+    mkCard('\u8FD0\u884C\u65F6\u957F',m.uptime_h!=null?Math.floor(m.uptime_h):'-','h','\u8FDB\u7A0B\u6570 '+(m.proc_count||'-'),null,nc),
+  ].join('');
+}
+function renderOnline(o){
+  const r=document.getElementById('oRow');
+  const nc={cls:'',b:'bbl',h:'#4dabf7'},pc={cls:'',b:'bpu',h:'#9775fa'};
+  const chips=(o.online_users||[]).map(function(u){return '<span class="chip cb">'+u+'</span>';}).join(' ');
+  r.innerHTML=[
+    '<div class="card"><div class="clbl">\u5728\u7EBF\u4EBA\u6570\uff085\u5206\u949F\uff09</div><div class="cval" style="color:var(--bl)">'+(o.online_count||0)+'</div><div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:5px">'+(chips||'<span style="color:var(--td);font-size:11px">\u6682\u65E0\u7528\u6237</span>')+'</div></div>',
+    mkCard('\u8FD15\u5206\u949F\u8BF7\u6C42',(o.requests_5m||0),'\u6B21','\u8FD11\u5C0F\u65F6 '+(o.requests_1h||0)+' \u6B21',null,nc),
+    mkCard('\u8FD124\u5C0F\u65F6\u8BF7\u6C42',(o.requests_24h||0),'\u6B21','QPS '+(o.qps_1m||0),null,pc),
+  ].join('');
+}
+function renderNet(net){
+  const r=document.getElementById('nRow');
+  if(!net||!Object.keys(net).length){r.innerHTML='<div class="nd">\u7F51\u7EDC\u6570\u636E\u4E0D\u53EF\u7528</div>';return;}
+  const nc={cls:'',b:'bor',h:'#ff922b'};
+  r.innerHTML=[
+    mkCard('\u53D1\u9001\u603B\u91CF',(net.bytes_sent_gb||0),'GB','\u5305 '+((net.packets_sent||0).toLocaleString()),null,nc),
+    mkCard('\u63A5\u6536\u603B\u91CF',(net.bytes_recv_gb||0),'GB','\u5305 '+((net.packets_recv||0).toLocaleString()),null,nc),
+  ].join('');
+}
+function getCSSVar(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+// Canvas尺寸管理：用.cw wrapper的clientWidth测量，精确锁定canvas像素和CSS尺寸
+var _ro=null;
+var _canvasIds=['cpuC','memC','diskC','olC','rqC','rgC'];
+var _canvasH={'cpuC':100,'memC':100,'diskC':100,'olC':100,'rqC':80,'rgC':80};
+var _lastChartData=null; // 缓存最近一次图表数据，切换tab时重渲染
+function _initCanvasSizes(){
+  // 临时让pnl-charts可见以读取正确宽度
+  var pnl=document.getElementById('pnl-charts');
+  var hidden=pnl&&!pnl.classList.contains('on');
+  if(hidden){pnl.style.visibility='hidden';pnl.style.position='absolute';pnl.style.display='block';}
+  _canvasIds.forEach(function(id){
+    var cv=document.getElementById(id);if(!cv)return;
+    var H=_canvasH[id]||100;
+    var dpr=window.devicePixelRatio||1;
+    var cw=cv.parentElement; // .cw div
+    var W=cw?cw.clientWidth:0;
+    if(W<10)return;
+    // 锁定像素buffer
+    cv.width=Math.round(W*dpr);
+    cv.height=Math.round(H*dpr);
+    // 锁定CSS显示尺寸，完全不依赖任何CSS规则
+    cv.style.width=W+'px';
+    cv.style.height=H+'px';
+    cv._W=W;cv._H=H;cv._dpr=dpr;
+  });
+  if(hidden){pnl.style.display='';pnl.style.visibility='';pnl.style.position='';}
+}
+function _setupResizeObserver(){
+  if(!window.ResizeObserver)return;
+  var main=document.querySelector('.main');
+  if(!main)return;
+  var _t=null;
+  _ro=new ResizeObserver(function(){
+    clearTimeout(_t);
+    _t=setTimeout(_initCanvasSizes,200);
+  });
+  _ro.observe(main);
+}
+function drawLine(id,data,color,maxY,isBar,labels){
+  var cv=document.getElementById(id);if(!cv)return;
+  if(!cv._W)_initCanvasSizes();
+  var W=cv._W,H=cv._H,dpr=cv._dpr;
+  if(!W||W<10)return; // 面板不可见，跳过
+  var ctx=cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,W,H);
+  if(!data||!data.length)return;
+  if(!isBar&&data.length<2){
+    ctx.fillStyle=getCSSVar('--ts');ctx.font='12px Space Grotesk,sans-serif';ctx.textAlign='center';
+    ctx.fillText('\u6570\u636E\u79EF\u7D2F\u4E2D... (\u73B0\u6709'+data.length+'\u70B9\uFF0C\u6BCF60s\u65B0\u589E)',W/2,H/2);
+    return;
+  }
+  var pad={l:28,r:6,t:8,b:22},gw=W-pad.l-pad.r,gh=H-pad.t-pad.b;
+  var mx=maxY||Math.max(1,Math.max.apply(null,data)),mn=0,range=mx-mn||1;
+  var cg=getCSSVar('--cg'),cl=getCSSVar('--cl');
+  ctx.strokeStyle=cg;ctx.lineWidth=1;
+  [0.25,0.5,0.75,1].forEach(function(f){var y=pad.t+(1-f)*gh;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+gw,y);ctx.stroke();});
+  ctx.fillStyle=cl;ctx.font='8px JetBrains Mono,monospace';ctx.textAlign='left';
+  [0.25,0.5,0.75,1].forEach(function(f){var y=pad.t+(1-f)*gh;ctx.fillText(Math.round(mx*f),1,y+3);});
+  if(isBar){
+    var bw=Math.max(2,gw/data.length-2);
+    data.forEach(function(v,i){
+      var x=pad.l+i*(gw/data.length);
+      var bh=(v-mn)/range*gh;
+      ctx.fillStyle=color+'cc';ctx.fillRect(x,pad.t+gh-bh,bw,bh);
+      if(labels&&i%(Math.ceil(data.length/6))===0){
+        ctx.fillStyle=cl;ctx.font='8px JetBrains Mono,monospace';ctx.textAlign='center';
+        ctx.fillText(labels[i]||'',x+bw/2,H-3);
+      }
+    });
+  } else {
+    var pts=data.map(function(v,i){return{x:pad.l+(i/(Math.max(data.length-1,1)))*gw,y:pad.t+(1-(v-mn)/range)*gh};});
+    var grad=ctx.createLinearGradient(0,pad.t,0,pad.t+gh);
+    grad.addColorStop(0,color+'55');grad.addColorStop(1,color+'00');
+    ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+    pts.slice(1).forEach(function(p){ctx.lineTo(p.x,p.y);});
+    ctx.lineTo(pts[pts.length-1].x,pad.t+gh);ctx.lineTo(pts[0].x,pad.t+gh);
+    ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+    ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+    pts.slice(1).forEach(function(p){ctx.lineTo(p.x,p.y);});
+    ctx.strokeStyle=color;ctx.lineWidth=2;ctx.lineJoin='round';ctx.stroke();
+    var lp=pts[pts.length-1];ctx.beginPath();ctx.arc(lp.x,lp.y,3,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+    if(labels&&labels.length){
+      ctx.fillStyle=cl;ctx.font='8px JetBrains Mono,monospace';ctx.textAlign='center';
+      var step=Math.ceil(pts.length/6);
+      pts.forEach(function(p,i){if(i%step===0||i===pts.length-1){ctx.fillText(labels[i]||'',p.x,H-3);}});
+    }
+  }
+}
+function renderCharts(hist,hrReqs,rgReqs){
+  _lastChartData={hist:hist,hrReqs:hrReqs,rgReqs:rgReqs};
+  // 如果canvas未初始化（面板不可见），跳过绘制
+  var cpuCv=document.getElementById('cpuC');
+  if(!cpuCv||!cpuCv._W)return;
+  if(hist&&hist.length){
+    var labels=hist.map(function(h){return h.ts||'';});
+    drawLine('cpuC',hist.map(function(h){return h.cpu||0;}),'#5c7cfa',100,false,labels);
+    drawLine('memC',hist.map(function(h){return h.mem||0;}),'#2dd4a0',100,false,labels);
+    drawLine('diskC',hist.map(function(h){return h.disk||0;}),'#fcc419',100,false,labels);
+    drawLine('olC',hist.map(function(h){return h.online||0;}),'#4dabf7',null,false,labels);
+    var last=hist[hist.length-1]||{};
+    document.getElementById('cpuLast').textContent=(last.cpu||0).toFixed(1)+'%';
+    document.getElementById('memLast').textContent=(last.mem||0).toFixed(1)+'%';
+    document.getElementById('diskLast').textContent=(last.disk||0).toFixed(1)+'%';
+    document.getElementById('olLast').textContent=last.online||0;
+  }
+  var now=new Date(),hrLabels=[];
+  for(var i=23;i>=0;i--){
+    var hh=new Date(now.getTime()-i*3600000);
+    hrLabels.push(hh.getHours().toString().padStart(2,'0')+':00');
+  }
+  if(hrReqs&&hrReqs.length){drawLine('rqC',hrReqs,'#9775fa',null,true,hrLabels);document.getElementById('rqLast').textContent='\u8FD11h: '+(hrReqs[hrReqs.length-1]||0);}
+  if(rgReqs&&rgReqs.length){drawLine('rgC',rgReqs,'#ff922b',null,true,hrLabels);document.getElementById('rgLast').textContent='\u8BA1 '+rgReqs.reduce(function(a,b){return a+b;},0)+' \u4EBA';}
+}
+function renderOnlineTbl(users){
+  var el=document.getElementById('onlineTbl');
+  if(!users||!users.length){el.innerHTML='<div class="nd">\u6682\u65E0\u5728\u7EBF\u7528\u6237</div>';return;}
+  var rows=users.map(function(u){
+    return '<tr><td>'+u.name+'</td><td>'+fdt(u.last_time)+'</td><td style="color:var(--ts);font-family:monospace">'+u.last_path+'</td></tr>';
+  }).join('');
+  el.innerHTML='<table><thead><tr><th>\u7528\u6237</th><th>\u6700\u540E\u8BF7\u6C42\u65F6\u95F4</th><th>\u6700\u540E\u8BF7\u6C42\u8DEF\u5F84</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+function renderNewUsers(users){
+  var el=document.getElementById('newUserTbl');
+  if(!users||!users.length){el.innerHTML='<div class="nd">\u6682\u65E0\u65B0\u6CE8\u518C\u7528\u6237</div>';return;}
+  if(users[0]&&users[0].error){el.innerHTML='<div class="nd" style="color:var(--rd)">'+users[0].error+'</div>';return;}
+  var rows=users.map(function(u){
+    return '<tr><td>'+u.username+'</td><td>'+(u.email||'-')+'</td><td>'+fdt(u.created_at)+'</td></tr>';
+  }).join('');
+  el.innerHTML='<table><thead><tr><th>\u7528\u6237\u540D</th><th>\u90AE\u7B71</th><th>\u6CE8\u518C\u65F6\u95F4</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+function addAlert(msg,level){
+  var now=new Date().toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  var icon=level==='crit'?'\uD83D\uDD34':level==='warn'?'\uD83D\DFE1':'\u2139\uFE0F';
+  _alerts.unshift({t:now,m:msg,i:icon});
+  if(_alerts.length>60)_alerts.pop();
+  var w=document.getElementById('alertWrap');
+  w.innerHTML=_alerts.map(function(a){
+    return '<div class="ar"><span class="at">'+a.t+'</span><span>'+a.i+'</span><span class="am">'+a.m+'</span></div>';
+  }).join('');
+}
+function checkLocalAlerts(m){
+  if(!m||m.error)return;
+  if((m.cpu_pct||0)>=88)addAlert('CPU '+m.cpu_pct+'% \u8D85\u8FC7\u9608\u503C 88%','crit');
+  else if((m.cpu_pct||0)>=75)addAlert('CPU '+m.cpu_pct+'% \u504F\u9AD8','warn');
+  if((m.mem_pct||0)>=90)addAlert('\u5185\u5B58 '+m.mem_pct+'% \u8D85\u8FC7\u9608\u503C 90%','crit');
+  else if((m.mem_pct||0)>=80)addAlert('\u5185\u5B58 '+m.mem_pct+'% \u504F\u9AD8','warn');
+  if((m.disk_pct||0)>=90)addAlert('\u78C1\u76D8 '+m.disk_pct+'% \u8D85\u8FC7\u9608\u503C 90%','crit');
+}
+async function fetchMain(){
+  try{
+    var r=await fetch('/api/monitor',{credentials:'include'});
+    if(r.status===401){showErr('\u8BF7\u5148\u767B\u5F55');setStatus(false);return;}
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    var d=await r.json();
+    if(!d.ok)throw new Error(d.error||'error');
+    setStatus(true);hideErr();
+    var m=d.metrics||{},o=d.online||{};
+    renderMetrics(m);renderOnline(o);renderNet(m.net||{});
+    checkLocalAlerts(m);
+    document.getElementById('lu').textContent='\u6700\u540E\u66F4\u65B0\uFF1A'+fdt(m.ts||new Date().toISOString());
+    _cd=REFRESH/1000;
+  }catch(e){setStatus(false);showErr('\u4E3B\u6570\u636E\u83B7\u53D6\u5931\u8D25\uFF1A'+e.message);}
+}
+async function fetchHistory(){
+  try{
+    var ctrl=new AbortController();
+    var tid=setTimeout(function(){ctrl.abort();},8000);
+    var r=await fetch('/api/monitor/history',{credentials:'include',signal:ctrl.signal});
+    clearTimeout(tid);
+    if(!r.ok)return;
+    var d=await r.json();
+    if(!d.ok)return;
+    var hist=d.history||[];
+    if(!hist.length){
+      _canvasIds.forEach(function(id){
+        var cv=document.getElementById(id);if(!cv||!cv._W)return;
+        var W=cv._W,H=cv._H,dpr=cv._dpr;
+        var ctx=cv.getContext('2d');
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+        ctx.clearRect(0,0,W,H);
+        ctx.fillStyle=getCSSVar('--ts');ctx.font='12px Space Grotesk,sans-serif';ctx.textAlign='center';
+        ctx.fillText('\u670D\u52A1\u5668\u521A\u542F\u52A8\uFF0C\u5386\u53F2\u6570\u636E\u79EF\u7D2F\u4E2D...',W/2,H/2);
+      });
+    } else {
+      // 如果走势图tab当前可见，直接渲染；否则只缓存，等切换tab时渲染
+      var pnlVisible=document.getElementById('pnl-charts').classList.contains('on');
+      if(pnlVisible){
+        requestAnimationFrame(function(){requestAnimationFrame(function(){
+          _initCanvasSizes();
+          renderCharts(hist,d.hourly_reqs||[],d.reg_hourly||[]);
+        });});
+      } else {
+        _lastChartData={hist:hist,hrReqs:d.hourly_reqs||[],rgReqs:d.reg_hourly||[]};
+      }
+    }
+    renderNewUsers(d.new_users_24h||[]);
+  }catch(e){
+    if(e.name==='AbortError'){
+      document.getElementById('newUserTbl').innerHTML='<div class="nd" style="color:var(--rd)">\u8BF7\u6C42\u8D85\u65F6\uFF0C\u8BF7\u5C1D\u8BD5\u5237\u65B0</div>';
+    }
+  }
+}
+async function fetchOnlineUsers(){
+  try{
+    var r=await fetch('/api/monitor',{credentials:'include'});
+    if(!r.ok)return;
+    var d=await r.json();
+    if(!d.ok)return;
+    renderOnlineTbl((d.online||{}).user_detail||[]);
+  }catch(e){}
+}
+async function fetchAll(){
+  await fetchMain();
+  fetchHistory();
+  fetchOnlineUsers();
+}
+function startTick(){
+  if(_tick)clearInterval(_tick);
+  _tick=setInterval(function(){
+    _cd--;
+    document.getElementById('cd').textContent=_cd+'s';
+    if(_cd<=0){_cd=REFRESH/1000;fetchAll();}
+  },1000);
+}
+_initCanvasSizes();
+_setupResizeObserver();
+fetchAll();
+startTick();
+window.fetchAll=fetchAll;
+})();
+</script>
+</body>
+</html>

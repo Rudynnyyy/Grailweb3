@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>历史回测 — 选币器</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#070c18;--surface:#0c1221;--card:#101726;--border:#1c2a45;--border2:#28405a;
+      --text:#eef2ff;--text-sub:#96b4d8;--text-dim:#6a84a8;
+      --accent:#3d8bff;--accent-h:#2b7aff;--accent-glow:rgba(61,139,255,.16);
+      --green:#1fd4a0;--red:#f05c5c;--yellow:#f5c842;--purple:#9d7cf8;
+      --badge-bg:#0d1e3a;--badge-c:#6aadff;--badge-b:#1a3060;
+      --input-bg:#090e1b;--btn-sec:#111a2c;--btn-sec-h:#18243c;
+      --shadow:0 8px 32px rgba(0,0,0,.55);--radius:14px;
+      --mono:'JetBrains Mono',Consolas,monospace;
+      --sans:'Sora','PingFang SC',system-ui,sans-serif;
+    }
+    html.light {
+      --bg:#eef2fa;--surface:#e4eaf6;--card:#ffffff;--border:#ccd5ed;--border2:#b0bee0;
+      --text:#182038;--text-sub:#455580;--text-dim:#9aaac8;
+      --accent:#2563eb;--accent-h:#1d4ed8;--accent-glow:rgba(37,99,235,.11);
+      --green:#10b981;--red:#ef4444;--yellow:#d97706;--purple:#7c3aed;
+      --badge-bg:#eff6ff;--badge-c:#1d4ed8;--badge-b:#bfdbfe;
+      --input-bg:#f8faff;--btn-sec:#edf0f8;--btn-sec-h:#e0e5f5;
+      --shadow:0 4px 24px rgba(0,0,0,.1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.6}
+    .bt-nav{position:sticky;top:0;z-index:200;background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:54px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px rgba(0,0,0,.35)}
+    .bt-nav-left{display:flex;align-items:center;gap:16px}
+    .bt-back{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--accent);text-decoration:none;padding:5px 13px;border-radius:8px;border:1px solid var(--border);background:var(--card);transition:all .15s}
+    .bt-back:hover{background:var(--btn-sec-h);border-color:var(--border2)}
+    .bt-nav-title{font-size:15px;font-weight:800;letter-spacing:.03em}
+    .bt-nav-sub{font-size:10px;color:var(--text-sub);margin-top:1px}
+    .bt-theme-btn{cursor:pointer;background:var(--btn-sec);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--text-sub);display:flex;align-items:center;gap:5px;transition:all .15s;font-family:var(--sans)}
+    .bt-theme-btn:hover{background:var(--btn-sec-h)}
+    .bt-wrap{padding:24px 32px 60px}
+    .bt-cols{display:grid;grid-template-columns:430px 1fr;gap:22px;align-items:start}
+    @media(max-width:1080px){.bt-cols{grid-template-columns:1fr}}
+    .bt-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+    .bt-card+.bt-card{margin-top:16px}
+    .bt-card-title{font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.12em;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .bt-card-title-dot{width:3px;height:14px;background:linear-gradient(180deg,var(--accent),var(--purple));border-radius:2px}
+    .bt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .bt-field{display:flex;flex-direction:column;gap:5px}
+    .bt-field label{font-size:11px;color:var(--text-sub);font-weight:600}
+    .bt-field input,.bt-field select{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:var(--input-bg);color:var(--text);outline:none;font-family:var(--sans);transition:border-color .15s,box-shadow .15s}
+    .bt-field input:focus,.bt-field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+    .bt-field select option{background:var(--card)}
+    .bt-field-full{grid-column:1/-1}
+    /* TopN说明框 */
+    .bt-topn-box{margin-top:10px;padding:11px 14px;background:var(--badge-bg);border:1px solid var(--badge-b);border-radius:10px;font-size:11.5px;color:var(--badge-c);line-height:1.8;display:none;font-family:var(--mono)}
+    .bt-topn-box.visible{display:block}
+    .bt-topn-box strong{color:var(--accent)}
+    .bt-topn-badge{display:inline-block;padding:1px 8px;border-radius:6px;background:rgba(61,139,255,.14);color:var(--accent);border:1px solid rgba(61,139,255,.3);font-size:10.5px;font-weight:700;margin:0 2px}
+    .bt-topn-sort{display:inline-block;padding:1px 8px;border-radius:6px;background:rgba(157,124,248,.12);color:var(--purple);border:1px solid rgba(157,124,248,.28);font-size:10.5px;font-weight:700;margin:0 2px}
+    .bt-topn-all{margin-top:8px;font-size:11px;color:var(--yellow);padding:7px 11px;border-radius:7px;background:rgba(245,200,66,.07);border:1px solid rgba(245,200,66,.18);display:none}
+    .bt-topn-all.visible{display:block}
+    /* 筛选条件 */
+    .bt-cond-section{margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+    .bt-cond-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .bt-cond-label{font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.1em}
+    .bt-cond-count{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--badge-bg);color:var(--badge-c);border:1px solid var(--badge-b)}
+    .bt-cond-tags{display:flex;flex-wrap:wrap;gap:6px}
+    .bt-tag{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:7px;font-size:11.5px;font-weight:600;background:var(--badge-bg);color:var(--badge-c);border:1px solid var(--badge-b);font-family:var(--mono);letter-spacing:.02em}
+    .bt-tag.factor{background:rgba(31,212,160,.07);color:var(--green);border-color:rgba(31,212,160,.22)}
+    .bt-cond-empty{font-size:12px;color:var(--text-dim)}
+    .bt-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+    .bt-btn{padding:9px 20px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:all .15s;letter-spacing:.02em}
+    .bt-btn:active{transform:scale(.97)}
+    .bt-btn:disabled{opacity:.38;cursor:not-allowed}
+    .bt-btn-primary{background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;box-shadow:0 2px 14px var(--accent-glow)}
+    .bt-btn-primary:hover:not(:disabled){background:linear-gradient(135deg,var(--accent-h),#8b68f0);box-shadow:0 4px 20px var(--accent-glow)}
+    .bt-btn-secondary{background:var(--btn-sec);color:var(--text);border:1px solid var(--border)}
+    .bt-btn-secondary:hover:not(:disabled){background:var(--btn-sec-h)}
+    .bt-btn-danger{background:rgba(240,92,92,.1);color:var(--red);border:1px solid rgba(240,92,92,.25)}
+    .bt-btn-danger:hover:not(:disabled){background:rgba(240,92,92,.18)}
+    /* 进度 */
+    @keyframes bt-spin{to{transform:rotate(360deg)}}
+    .bt-progress-wrap{display:none;margin-top:18px}
+    .bt-progress-wrap.active{display:block}
+    .bt-steps{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+    .bt-step{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-sub);padding:8px 12px;border-radius:9px;background:transparent;border:1px solid transparent;transition:all .25s}
+    .bt-step.active{color:var(--text);background:var(--badge-bg);border-color:var(--badge-b)}
+    .bt-step.done{color:var(--green)}
+    .bt-step-icon{font-size:15px;width:22px;text-align:center;flex-shrink:0}
+    .bt-step-body{flex:1}
+    .bt-step-name{font-weight:700;font-size:12px}
+    .bt-step-desc{font-size:10.5px;color:var(--text-sub);margin-top:1px}
+    .bt-step.active .bt-step-desc{color:var(--text-sub)}
+    .bt-step.done .bt-step-desc{color:rgba(31,212,160,.65)}
+    .bt-step-right{display:flex;align-items:center;gap:6px}
+    .bt-step-badge{font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(31,212,160,.12);color:var(--green);border:1px solid rgba(31,212,160,.25);display:none}
+    .bt-step.done .bt-step-badge{display:inline-block}
+    .bt-step-spinner{width:13px;height:13px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:bt-spin .7s linear infinite;display:none;flex-shrink:0}
+    .bt-step.active .bt-step-spinner{display:block}
+    .bt-progress-bar-wrap{background:var(--border);border-radius:4px;height:6px;overflow:hidden;margin-bottom:6px}
+    .bt-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1);width:0%}
+    .bt-progress-info{display:flex;justify-content:space-between;font-size:11px;color:var(--text-sub)}
+    .bt-progress-msg{font-family:var(--mono)}
+    .bt-progress-pct{color:var(--accent);font-weight:700}
+    .bt-error{display:none;margin-top:12px;padding:10px 13px;background:rgba(240,92,92,.08);border:1px solid rgba(240,92,92,.25);border-radius:8px;color:var(--red);font-size:12px;line-height:1.5}
+    .bt-error.active{display:block}
+    /* 统计 */
+    .bt-stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+    .bt-stat{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px 14px;text-align:center;transition:border-color .2s,transform .2s}
+    .bt-stat:hover{border-color:var(--border2);transform:translateY(-2px)}
+    .bt-stat-label{font-size:10px;color:var(--text-sub);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+    .bt-stat-value{font-size:24px;font-weight:800;color:var(--text);line-height:1;font-family:var(--mono)}
+    .bt-stat-value.pos{color:var(--green)}
+    .bt-stat-value.neg{color:var(--red)}
+    .bt-chart-img{width:100%;border-radius:10px;display:block;border:1px solid var(--border)}
+    .bt-chart-placeholder{display:flex;align-items:center;justify-content:center;min-height:140px;color:var(--text-sub);font-size:13px;border:1px dashed var(--border);border-radius:10px}
+    .bt-config-summary{padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:9px;font-size:11px;color:var(--text-sub);line-height:1.7;margin-bottom:14px;font-family:var(--mono)}
+    .bt-config-summary span{color:var(--accent)}
+    .bt-hidden{display:none!important}
+  </style>
+</head>
+<body>
+<nav class="bt-nav">
+  <div class="bt-nav-left">
+    <a class="bt-back" href="./index.html">&#8592; 返回</a>
+    <div>
+      <div class="bt-nav-title">历史回测</div>
+      <div class="bt-nav-sub">基于历史K线模拟持仓 · 结果仅供参考</div>
+    </div>
+  </div>
+  <button class="bt-theme-btn" id="btThemeBtn" type="button">&#9728; 切换主题</button>
+</nav>
+
+<div class="bt-wrap">
+  <div class="bt-cols">
+    <!-- ══ 左列：配置 ══ -->
+    <div>
+      <!-- 基本参数 -->
+      <div class="bt-card">
+        <div class="bt-card-title"><span class="bt-card-title-dot"></span>回测参数</div>
+        <div class="bt-grid">
+          <div class="bt-field">
+            <label>市场</label>
+            <select id="btMarket">
+              <option value="swap">合约 (swap)</option>
+              <option value="spot">现货 (spot)</option>
+              <option value="all">全部</option>
+            </select>
+          </div>
+          <div class="bt-field">
+            <label>方向</label>
+            <select id="btDirection">
+              <option value="long">做多 (long)</option>
+              <option value="short">做空 (short)</option>
+            </select>
+          </div>
+          <div class="bt-field">
+            <label>开始时间</label>
+            <input type="datetime-local" id="btStartDt" />
+          </div>
+          <div class="bt-field">
+            <label>结束时间</label>
+            <input type="datetime-local" id="btEndDt" />
+          </div>
+          <div class="bt-field-full" style="margin-top:-4px">
+            <div style="font-size:11px;color:var(--text-sub);padding:7px 10px;background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.15);border-radius:7px;line-height:1.6">
+              ⚡ 回测速度提示：逐Bar对全市场计算指标，<strong style="color:var(--yellow)">建议时间范围控制在1个月内</strong>（约720根Bar），过长会导致等待时间较久。
+            </div>
+          </div>
+          <div class="bt-field">
+            <label title="1小时K线下，hold_hours=1 表示持仓1根Bar（约等于主框架每小时跑一次后持仓到下根Bar收盘），与实盘逻辑完全一致">持仓时长 <span style="color:var(--text-sub);font-weight:400">(Bar数)</span></label>
+            <input type="number" id="btHoldHours" value="1" min="1" max="168" title="持仓Bar数：1=下一根1h Bar收盘平仓，等同于主程序每小时选币逻辑" />
+          </div>
+          <div class="bt-field-full" style="margin-top:-2px">
+            <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--text-sub);line-height:1.5">
+              <input type="checkbox" id="btFullCoverage" checked style="margin-top:2px;flex-shrink:0" />
+              <span>
+                <strong style="color:var(--text)">每小时独立开仓</strong>（全时段滚动）<br>
+                <span style="font-size:11px;color:var(--text-sub)">勾选后：每根Bar都独立建仓并持有「持仓Bar数」后平仓，相当于主程序24小时不间断运行、每小时都有持仓。不勾选：仅在Bar序号为0时开仓，等待平仓后再次开仓（无重叠）。</span>
+              </span>
+            </label>
+          </div>
+          <div class="bt-field">
+            <label>手续费率</label>
+            <input type="number" id="btFeeRate" value="0.0005" min="0" max="0.01" step="0.0001" />
+          </div>
+          <div class="bt-field">
+            <label>杠杆倍数</label>
+            <input type="number" id="btLeverage" value="1" min="0.1" max="20" step="0.1" />
+          </div>
+          <div class="bt-field">
+            <label>TopN 每次持仓数</label>
+            <input type="number" id="btTopN" value="5" min="0" max="50" />
+          </div>
+        </div>
+        <!-- TopN 说明框 -->
+        <div class="bt-topn-box" id="btTopnBox">
+          <div>每根 Bar 筛选后，按 <span id="btTopnSortLabel" class="bt-topn-sort">涨跌幅↓</span> 排序，取前 <span id="btTopnN" class="bt-topn-badge">5</span> 个币种持仓。</div>
+          <div id="btTopnAllMsg" class="bt-topn-all">⚠ TopN=0 表示持有所有命中币种，数量不固定。</div>
+        </div>
+      </div>
+
+      <!-- 筛选条件 -->
+      <div class="bt-card">
+        <div class="bt-card-title"><span class="bt-card-title-dot"></span>当前筛选条件</div>
+        <div class="bt-cond-header">
+          <span class="bt-cond-label">已启用条件</span>
+          <span class="bt-cond-count" id="btCondCount">0 条</span>
+        </div>
+        <div class="bt-cond-tags" id="btCondBadges">
+          <span class="bt-cond-empty">未同步条件，请点击下方按钮从主页面读取</span>
+        </div>
+        <div class="bt-actions">
+          <button class="bt-btn bt-btn-primary" id="btRunBtn" type="button">&#9658; 开始回测</button>
+          <button class="bt-btn bt-btn-danger bt-hidden" id="btCancelBtn" type="button">&#9632; 取消</button>
+          <button class="bt-btn bt-btn-secondary" id="btSyncBtn" type="button">&#8635; 从主页面同步条件</button>
+        </div>
+        <!-- 进度区 -->
+        <div class="bt-progress-wrap" id="btProgressWrap">
+          <div class="bt-steps" id="btSteps"></div>
+          <div class="bt-progress-bar-wrap">
+            <div class="bt-progress-fill" id="btProgressFill"></div>
+          </div>
+          <div class="bt-progress-info">
+            <span class="bt-progress-msg" id="btProgressText"></span>
+            <span class="bt-progress-pct" id="btProgressPct">0%</span>
+          </div>
+        </div>
+        <div class="bt-error" id="btError"></div>
+      </div>
+    </div>
+
+    <!-- ══ 右列：结果 ══ -->
+    <div>
+      <!-- 回测结果统计 -->
+      <div class="bt-card bt-hidden" id="btStatsCard">
+        <div class="bt-card-title"><span class="bt-card-title-dot"></span>回测统计</div>
+        <div class="bt-config-summary" id="btConfigSummary"></div>
+        <div class="bt-stats-grid" id="btStatsGrid"></div>
+      </div>
+      <!-- 净值曲线 -->
+      <div class="bt-card bt-hidden" id="btEquityCard">
+        <div class="bt-card-title"><span class="bt-card-title-dot"></span>净值曲线</div>
+        <div class="bt-chart-placeholder" id="btEquityPlaceholder">图表加载中...</div>
+        <img class="bt-chart-img bt-hidden" id="btEquityChart" alt="净值曲线" />
+      </div>
+      <!-- Top 频次 -->
+      <div class="bt-card bt-hidden" id="btSymbolsCard">
+        <div class="bt-card-title"><span class="bt-card-title-dot"></span>Top 入选频次</div>
+        <div class="bt-chart-placeholder" id="btSymbolsPlaceholder">图表加载中...</div>
+        <img class="bt-chart-img bt-hidden" id="btSymbolsChart" alt="入选频次" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="./backtest.js"></script>
+</body>
+</html>
