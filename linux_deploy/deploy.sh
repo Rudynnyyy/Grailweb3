@@ -9,7 +9,7 @@
 set -euo pipefail
 
 # ========== 配置 ==========
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/..' && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WEB_DIR="$ROOT_DIR/apps/crypto_screener/web"
 APP_DIR="$ROOT_DIR/apps/crypto_screener/app"
 DATA_DIR="$ROOT_DIR/数据获取"
@@ -69,7 +69,7 @@ do_backup() {
 deploy_frontend() {
   log "更新前端文件..."
   local changed=0
-  for f in index.html app.js style.css kline.html; do
+  for f in index.html app.js style.css kline.html backtest.html monitor.html; do
     local src="$ROOT_DIR/linux_deploy/upload/$f"
     local dst="$WEB_DIR/$f"
     if [ -f "$src" ]; then
@@ -91,7 +91,7 @@ deploy_frontend() {
 deploy_backend() {
   log "更新后端文件..."
   local changed=0
-  for f in web_server.py series_source.py filter_engine.py pipeline.py; do
+  for f in web_server.py series_source.py filter_engine.py pipeline.py monitor.py; do
     local src="$ROOT_DIR/linux_deploy/upload/$f"
     local dst="$APP_DIR/$f"
     if [ -f "$src" ]; then

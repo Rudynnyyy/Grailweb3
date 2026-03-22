@@ -1639,25 +1639,113 @@ body.light-theme .kline-binance-link:hover {
   word-break: break-word;
 }
 
+/* ── K线悬停标签 深色模式 ── */
 .kline-tooltip {
   position: fixed;
   z-index: 1000;
   pointer-events: none;
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.78);
-  color: #ffffff;
+  padding: 11px 14px;
+  border: 1px solid rgba(99,120,180,0.22);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(15,22,42,0.97) 0%, rgba(20,30,55,0.97) 100%);
+  color: #e2e8f0;
   font-size: 12px;
-  line-height: 1.4;
-  white-space: pre;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
-  max-width: 420px;
-  backdrop-filter: blur(10px);
+  line-height: 1.5;
+  white-space: normal;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3), 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+  max-width: 240px;
+  min-width: 190px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* 深色：时间行 */
+.ktt-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.ktt-time {
+  font-size: 10.5px;
+  color: #64748b;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.ktt-pct {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.07);
+}
+.ktt-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+  margin: 6px 0;
+}
+.ktt-ohlc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  margin: 4px 0;
+}
+.ktt-ohlc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+.ktt-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 1.5px 0;
+}
+.ktt-label {
+  font-size: 11px;
+  color: #475569;
+  white-space: nowrap;
+}
+.ktt-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── K线悬停标签 浅色模式 ── */
+body.light-theme .kline-tooltip {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06), 0 8px 32px rgba(15,23,42,0.12), inset 0 1px 0 rgba(255,255,255,0.9);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+body.light-theme .ktt-time {
+  color: #94a3b8;
+}
+body.light-theme .ktt-pct {
+  background: rgba(0,0,0,0.04);
+}
+body.light-theme .ktt-divider {
+  background: #e2e8f0;
+}
+body.light-theme .ktt-label {
+  color: #94a3b8;
+}
+body.light-theme .ktt-value {
+  color: #1e293b;
 }
 
 body.light-theme .kline-tooltip {
-  background: rgba(15, 23, 42, 0.9);
+  /* 已在 ktt 块中定义 */
 }
 
 .kline-settings {
@@ -2143,3 +2231,487 @@ body.light-theme .factor-lib-item {
   background: var(--accent);
   opacity: 0.5;
 }
+
+/* ===================== TradingView 风格工具栏 ===================== */
+.tv-toolbar {
+  width: 52px;
+  flex: 0 0 52px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  gap: 2px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  position: relative;
+  z-index: 10;
+}
+
+.tv-toolbar::-webkit-scrollbar { display: none; }
+
+.tv-toolbar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  padding: 0 6px;
+  box-sizing: border-box;
+}
+
+.tv-toolbar-sep {
+  width: 32px;
+  height: 1px;
+  background: var(--border);
+  margin: 6px 0;
+  flex-shrink: 0;
+}
+
+.tv-tool-btn {
+  width: 38px;
+  height: 38px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+  position: relative;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.tv-tool-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.tv-tool-btn svg path,
+.tv-tool-btn svg line,
+.tv-tool-btn svg circle,
+.tv-tool-btn svg rect,
+.tv-tool-btn svg text {
+  vector-effect: non-scaling-stroke;
+}
+
+.tv-tool-btn:hover {
+  background: rgba(59,130,246,0.12);
+  border-color: rgba(59,130,246,0.35);
+  color: var(--accent);
+}
+
+.tv-tool-btn.active {
+  background: rgba(59,130,246,0.18);
+  border-color: rgba(59,130,246,0.55);
+  color: var(--accent);
+}
+
+.tv-tool-btn.tv-tool-danger:hover {
+  background: rgba(239,68,68,0.12);
+  border-color: rgba(239,68,68,0.35);
+  color: var(--danger);
+}
+
+/* 工具提示 */
+.tv-tool-btn::after {
+  content: attr(title);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(15,23,42,0.92);
+  color: #e2e8f0;
+  font-size: 12px;
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+body.light-theme .tv-tool-btn::after {
+  background: rgba(15,23,42,0.88);
+  color: #f1f5f9;
+}
+
+.tv-tool-btn:hover::after {
+  opacity: 1;
+}
+
+/* 指标信息面板 */
+.tv-info-panel {
+  position: fixed;
+  left: 80px;
+  top: 80px;
+  width: 220px;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+  padding: 12px 14px;
+  display: none;
+  z-index: 200;
+  backdrop-filter: blur(10px);
+}
+
+.tv-info-panel.visible {
+  display: block;
+  animation: fadeInLeft 150ms ease;
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.tv-info-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tv-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tv-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tv-info-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.tv-info-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.tv-info-value.up { color: var(--success); }
+.tv-info-value.down { color: var(--danger); }
+
+.tv-info-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(59,130,246,0.15);
+  color: var(--accent);
+  border: 1px solid rgba(59,130,246,0.3);
+}
+
+/* 绘图图层覆盖在 canvas 上 */
+.kline-draw-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.kline-draw-layer.active {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.kline-draw-layer.line-active {
+  cursor: crosshair;
+}
+
+.kline-draw-layer.erase-active {
+  cursor: cell;
+}
+
+.kline-draw-layer.text-active {
+  cursor: text;
+}
+
+.kline-candle-panel {
+  position: relative;
+}
+
+/* 颜色选择器浮层 */
+.tv-color-picker {
+  position: fixed;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  z-index: 2000;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  width: 180px;
+}
+
+.tv-cp-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.tv-cp-swatches {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.tv-cp-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 100ms ease, border-color 100ms ease;
+}
+
+.tv-cp-swatch:hover {
+  transform: scale(1.15);
+  border-color: rgba(255,255,255,0.5);
+}
+
+.tv-cp-swatch.selected {
+  border-color: #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.3);
+}
+
+/* 选区测量结果 */
+.tv-measure-badge {
+  position: absolute;
+  background: rgba(15,23,42,0.88);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #e2e8f0;
+  pointer-events: none;
+  z-index: 20;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+body.light-theme .tv-measure-badge {
+  background: rgba(15,23,42,0.85);
+  color: #f1f5f9;
+}
+
+/* 文字标注输入框 */
+.tv-text-input {
+  position: absolute;
+  background: rgba(15,23,42,0.82);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 13px;
+  padding: 4px 8px;
+  outline: none;
+  min-width: 80px;
+  z-index: 30;
+  backdrop-filter: blur(6px);
+}
+
+/* 移动端隐藏工具栏 */
+@media (max-width: 768px) {
+  .tv-toolbar {
+    display: none;
+  }
+}
+
+/* ===================== 指标统计面板（仿TradingView数据窗口） ===================== */
+.tv-stats-panel {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 210px;
+  background: rgba(15,23,42,0.82);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  padding: 12px 14px;
+  z-index: 7;
+  backdrop-filter: blur(14px);
+  pointer-events: none;
+  user-select: none;
+  display: none;
+  animation: fadeInRight 160ms ease;
+}
+
+.tv-stats-panel.visible {
+  display: block;
+}
+
+body.light-theme .tv-stats-panel {
+  background: rgba(248,250,252,0.92);
+  border-color: rgba(15,23,42,0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.tv-stats-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+body.light-theme .tv-stats-head {
+  border-bottom-color: rgba(15,23,42,0.1);
+}
+
+.tv-stats-symbol {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tv-stats-tf {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.07);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+body.light-theme .tv-stats-tf {
+  background: rgba(15,23,42,0.07);
+}
+
+.tv-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+.tv-stats-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.tv-stats-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-main);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.tv-stats-value.up { color: var(--success); }
+.tv-stats-value.down { color: var(--danger); }
+
+.tv-stats-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+  margin: 6px 0;
+}
+
+body.light-theme .tv-stats-divider {
+  background: rgba(15,23,42,0.08);
+}
+
+.tv-stats-range-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(59,130,246,0.15);
+  color: var(--accent);
+  border: 1px solid rgba(59,130,246,0.28);
+  margin-top: 4px;
+  width: 100%;
+  justify-content: center;
+}
+
+/* 波浪理论工具按钮角标 */
+.tv-tool-btn .tv-tool-sub {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  font-size: 7px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  opacity: 0.85;
+}
+
+/* 波浪数字标注 */
+.tv-wave-badge {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+}
+
+/* 统计面板调整大小把手 */
+.tv-stats-resizer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: se-resize;
+  opacity: 0.45;
+  transition: opacity 120ms;
+  background: linear-gradient(135deg, transparent 40%, var(--text-dim) 40%, var(--text-dim) 55%, transparent 55%, transparent 70%, var(--text-dim) 70%, var(--text-dim) 85%, transparent 85%);
+  border-radius: 0 0 14px 0;
+}
+
+.tv-stats-resizer:hover {
+  opacity: 0.85;
+}
+
+.tv-stats-panel {
+  user-select: none;
+}
+
+  

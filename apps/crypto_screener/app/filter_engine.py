@@ -1091,7 +1091,11 @@ def compute_builtins(row: dict, params: dict) -> dict:
     market0 = str((row or {}).get("market") or (params or {}).get("market") or "").strip().lower()
     if market0 == "all":
         market0 = str((row or {}).get("market") or "").strip().lower()
-    fc = _get_cached_factors(market=market0, symbol=str((row or {}).get("symbol") or "")) if market0 else None
+    # _disable_pkl=True 时跳过PKL缓存（回测模式，避免未来函数）
+    disable_pkl = bool((params or {}).get("_disable_pkl"))
+    fc = None
+    if not disable_pkl and market0:
+        fc = _get_cached_factors(market=market0, symbol=str((row or {}).get("symbol") or ""))
     ps = [params.get("maPeriodClose"), params.get("maFast"), params.get("maSlow")]
     for p in ps:
         if _is_num(p) and int(float(p)) > 0:
@@ -1116,6 +1120,7 @@ def apply_all_filters(rows: list, config: dict) -> dict:
     params = (config or {}).get("params") or {}
     toggles = (config or {}).get("toggles") or {}
     custom_factors = (config or {}).get("customFactors") or []
+    disable_pkl = bool((config or {}).get("_disable_pkl"))
     market = str(params.get("market") or "all")
     lists0 = (config or {}).get("lists") or {}
     wl0 = (lists0.get("whitelist") if isinstance(lists0, dict) else None) or (config or {}).get("whitelist") or []
@@ -1156,7 +1161,7 @@ def apply_all_filters(rows: list, config: dict) -> dict:
         volumes = get_series(r, "volume")
         last_close = float(r.get("close") or 0.0)
         market0 = str((r or {}).get("market") or "").strip().lower()
-        fc = _get_cached_factors(market=market0, symbol=sym0) if market0 else None
+        fc = _get_cached_factors(market=market0, symbol=sym0) if (market0 and not disable_pkl) else None
 
         if toggles.get("condCloseMa"):
             ma_v = r["_builtins"].get(f"ma_{int(params.get('maPeriodClose') or 0)}")
@@ -1346,23 +1351,48 @@ def apply_all_filters(rows: list, config: dict) -> dict:
 
 def sort_rows(rows: list[dict], config: dict) -> tuple[list[dict], str]:
     sort_cfg = (config or {}).get("sort") or {}
-    key = str(sort_cfg.get("key") or "close")
+    key = str(sort_cfg.get("key") or "pct_change")
     order = str(sort_cfg.get("order") or "desc")
     dir0 = 1 if order == "asc" else -1
     params = (config or {}).get("params") or {}
+    disable_pkl = bool((config or {}).get("_disable_pkl"))
 
     def get_value(r: dict):
+        if key == "pct_change":
+            closes = get_series(r, "close")
+            if closes and len(closes) >= 2:
+                c0 = next((v for v in reversed(closes[:-1]) if _is_num(v)), None)
+                c1 = closes[-1]
+                if _is_num(c0) and _is_num(c1) and float(c0) != 0:
+                    return (float(c1) - float(c0)) / float(c0)
+            return None
         if key == "close":
             v = r.get("close")
             return float(v) if _is_num(v) else None
         if key.startswith("ma_") or key.startswith("rsi_"):
-            return r.get("_builtins", {}).get(key)
+            b = r.get("_builtins") or {}
+            if key in b:
+                return b.get(key)
+            # 按需计算（sort key 不在筛选条件中时）
+            closes = get_series(r, "close")
+            try:
+                period = int(key.split("_", 1)[1])
+            except (IndexError, ValueError):
+                return None
+            if key.startswith("ma_"):
+                v = sma(closes, period)
+            else:
+                v = rsi(closes, period)
+            if isinstance(b, dict):
+                b[key] = v
+                r["_builtins"] = b
+            return v
         if key == "ema":
             b = (r.get("_builtins") or {}) if isinstance(r.get("_builtins"), dict) else {}
             if "ema" in b:
                 return b.get("ema")
             ep = int(params.get("emaPeriod") or 0)
-            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or ""))
+            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or "")) if not disable_pkl else None
             v = (fc.get(f"ema_{ep}") if isinstance(fc, dict) else None) if ep > 0 else None
             if v is None:
                 v = ema(get_series(r, "close"), ep)
@@ -1376,7 +1406,7 @@ def sort_rows(rows: list[dict], config: dict) -> tuple[list[dict], str]:
             if "boll_up" in b:
                 return b.get("boll_up")
             bp = int(params.get("bollPeriod") or 0)
-            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or ""))
+            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or "")) if not disable_pkl else None
             ma0 = (fc.get(f"ma_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
             std0 = (fc.get(f"std_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
             if ma0 is None:
@@ -1398,7 +1428,7 @@ def sort_rows(rows: list[dict], config: dict) -> tuple[list[dict], str]:
             if "boll_down" in b:
                 return b.get("boll_down")
             bp = int(params.get("bollDownPeriod") or 0)
-            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or ""))
+            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or "")) if not disable_pkl else None
             ma0 = (fc.get(f"ma_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
             std0 = (fc.get(f"std_{bp}") if isinstance(fc, dict) else None) if bp > 0 else None
             if ma0 is None:
@@ -1421,7 +1451,7 @@ def sort_rows(rows: list[dict], config: dict) -> tuple[list[dict], str]:
                 return b.get("supertrend")
             ap = int(params.get("superAtrPeriod") or 0)
             mult = float(params.get("superMult") or 0.0)
-            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or ""))
+            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or "")) if not disable_pkl else None
             v = (fc.get("supertrend") if isinstance(fc, dict) and ap == 10 and mult == 3.0 else None)
             if v is None:
                 v = supertrend(get_series(r, "high"), get_series(r, "low"), get_series(r, "close"), ap, mult)
@@ -1464,7 +1494,7 @@ def assign_rank(rows: list[dict], sort_key: str, config: dict) -> None:
             if "ema" in b:
                 return b.get("ema")
             ep = int(params.get("emaPeriod") or 0)
-            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or ""))
+            fc = _get_cached_factors(market=str(r.get("market") or "").strip().lower(), symbol=str(r.get("symbol") or "")) if not disable_pkl else None
             v = (fc.get(f"ema_{ep}") if isinstance(fc, dict) else None) if ep > 0 else None
             if v is None:
                 v = ema(get_series(r, "close"), ep)

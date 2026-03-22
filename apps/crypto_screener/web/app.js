@@ -4075,6 +4075,7 @@ function initControls(meta) {
     btn.classList.add('btn-loading');
     const origText = btn.textContent;
     btn.textContent = '';
+    _saveConditionsToStorage();
     refresh({ manual: true, fetchMode: false }).finally(() => {
       btn.disabled = false;
       btn.classList.remove('btn-loading');
@@ -4640,4 +4641,35 @@ if (pageMode === "main") {
   });
   // SSE推送：数据更新后自动刷新
   startSSEWatcher();
+}
+
+// ── 回测页面共享：把当前筛选条件写入 localStorage ──
+function _saveConditionsToStorage() {
+  try {
+    const params = getParams();
+    const toggles = {
+      condCloseMa:  !!($('condCloseMa')  && $('condCloseMa').checked),
+      condMa:       !!($('condMa')       && $('condMa').checked),
+      condRsi:      !!($('condRsi')      && $('condRsi').checked),
+      condEma:      !!($('condEma')      && $('condEma').checked),
+      condBollUp:   !!($('condBollUp')   && $('condBollUp').checked),
+      condBollDown: !!($('condBollDown') && $('condBollDown').checked),
+      condSuper:    !!($('condSuper')    && $('condSuper').checked),
+      condKdj:      !!($('condKdj')      && $('condKdj').checked),
+      condObv:      !!($('condObv')      && $('condObv').checked),
+      condStochRsi: !!($('condStochRsi') && $('condStochRsi').checked),
+    };
+    const customFactors = (state.customFactors || []).map(f => ({
+      id: f.id, name: f.name,
+      template: f.template || f.expr || '',
+      params: Array.isArray(f.params) ? f.params : [],
+      enabled: !!f.enabled,
+      thresholdEnabled: !!f.thresholdEnabled,
+      cmp: f.cmp || '>=',
+      threshold: Number(f.threshold),
+    }));
+    localStorage.setItem('qc_bt_params',  JSON.stringify(params));
+    localStorage.setItem('qc_bt_toggles', JSON.stringify(toggles));
+    localStorage.setItem('qc_bt_factors', JSON.stringify(customFactors));
+  } catch(e) {}
 }

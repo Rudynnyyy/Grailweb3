@@ -43,6 +43,10 @@ const viewState = {
   pickRows: [],
   pickLabel: "",
   pickRankMap: null,
+  selActive: false,
+  selStartLocal: null,
+  selEndLocal: null,
+  selResult: null,
 };
 
 function loadPlacement() {
@@ -447,6 +451,20 @@ function scheduleDraw() {
   viewState.raf = requestAnimationFrame(() => {
     viewState.raf = 0;
     drawFromState();
+    // 同步绘图层尺寸并重绘
+    const ref = document.getElementById('candleCanvas');
+    const dc = drawState.drawCanvas;
+    if (ref && dc) {
+      if (dc.width !== ref.width || dc.height !== ref.height) {
+        dc.width = ref.width; dc.height = ref.height;
+        dc.style.width = (ref.offsetWidth || ref.clientWidth) + 'px';
+        dc.style.height = (ref.offsetHeight || ref.clientHeight) + 'px';
+        drawState.drawCtx = dc.getContext('2d');
+      }
+      redrawDrawings();
+    }
+    if (drawState.infoVisible) updateInfoPanel();
+    updateStatsPanel();
   });
 }
 
@@ -796,7 +814,7 @@ function drawLineSeries(ctx, arr, mapX, mapY, color) {
   ctx.stroke();
 }
 
-function drawCandles(ctx, row, overlays, start, n, endIdx, labelAt, hoverLocalIdx) {
+function drawCandles(ctx, row, overlays, start, n, endIdx, labelAt, hoverLocalIdx, showVolumeBar) {
   const cs = getComputedStyle(document.body);
   const border = cs.getPropertyValue("--border").trim() || "rgba(255,255,255,0.1)";
   const up = cs.getPropertyValue("--success").trim() || "#10b981";
@@ -844,8 +862,13 @@ function drawCandles(ctx, row, overlays, start, n, endIdx, labelAt, hoverLocalId
   const R = 10;
   const T = 10;
   const B = 22;
+  // 成交量区域：只在 showVolumeBar 时留出底部22%
+  const volRatio = 0.22;
+  const totalH = h - T - B;
+  const volH = showVolumeBar ? Math.round(totalH * volRatio) : 0;
+  const candleH = totalH - volH - (showVolumeBar ? 4 : 0);
+  const ph = candleH;
   const pw = w - L - R;
-  const ph = h - T - B;
   const stepX = pw / Math.max(1, n);
   const bodyW = Math.max(1, Math.min(14, Math.floor(stepX * 0.65)));
 
@@ -909,6 +932,46 @@ function drawCandles(ctx, row, overlays, start, n, endIdx, labelAt, hoverLocalId
       (v) => yOf(v),
       ov.color
     );
+  }
+
+  // ---- 成交量柱状图 ----
+  {
+    const vols = (row.series || {}).volume || [];
+    const volTop = T + candleH + 4;
+    const volBase = volTop + volH;
+    let maxVol = 0;
+    for (let i = st; i <= end; i++) {
+      const v = Number(vols[i]);
+      if (Number.isFinite(v) && v > maxVol) maxVol = v;
+    }
+    if (showVolumeBar && maxVol > 0) {
+      // 成交量区域背景分隔线
+      ctx.strokeStyle = border;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(L, volTop); ctx.lineTo(L + pw, volTop);
+      ctx.stroke();
+      // 成交量 Y 轴标签（最大值）
+      ctx.fillStyle = text;
+      ctx.font = `${Math.max(9, Math.round(9 * (window.devicePixelRatio || 1)))}px sans-serif`;
+      ctx.textAlign = 'right'; ctx.textBaseline = 'top';
+      ctx.fillText(fmtAxisNum(maxVol), L - 4, volTop);
+      ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
+      // 绘制柱子
+      for (let i = 0; i < n; i++) {
+        const idx = st + i;
+        const v = Number(vols[idx]);
+        if (!Number.isFinite(v) || v <= 0) continue;
+        const o = Number(opens[idx]), c0 = Number(closes[idx]);
+        const color = (Number.isFinite(o) && Number.isFinite(c0) && c0 >= o) ? up : dn;
+        const barH = Math.max(1, Math.round((v / maxVol) * volH));
+        const x = xOf(i);
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.55;
+        ctx.fillRect(Math.round(x - bodyW / 2), volBase - barH, bodyW, barH);
+      }
+      ctx.globalAlpha = 1.0;
+    }
   }
 
   if (typeof labelAt === "function" && n >= 2) {
@@ -1198,6 +1261,12 @@ function computeSeriesForKeys(row, keys, params) {
     }
   }
 
+  // 成交量作为可管理的指标
+  if (!done.has('volume')) {
+    addInd('volume', '成交量', volume);
+    done.add('volume');
+  }
+
   return { overlays, indicators };
 }
 
@@ -1280,6 +1349,9 @@ async function render() {
     }
     $("klineSub").textContent = `生成：${fmtDt(sum.generated_at)} ｜ 最新：${latestText}`;
 
+    // 切换币种时保存旧币种绘图，加载新币种绘图
+    const prevKey = viewState.key;
+    if (prevKey && prevKey !== selectedKey) saveDrawingsForKey(prevKey);
     viewState.key = selectedKey;
     viewState.latestSummary = latest.summary || {};
     viewState.barHours = Number((latest.config || {}).bar_hours || 1) || 1;
@@ -1327,6 +1399,18 @@ async function render() {
       const k = String(it.key || "");
       const v0 = placement[k];
       const v = Number.isFinite(Number(v0)) ? Math.trunc(Number(v0)) : null;
+      // volume 特殊处理：placement=0 表示在主图底部柱状图，不作为 overlay 折线
+      if (k === 'volume') {
+        if (v !== null && v !== 0 && v !== -1) {
+          // 移到副图
+          const pid = Math.max(1, Math.min(maxPanels, v));
+          if (!panelMap.has(pid)) panelMap.set(pid, []);
+          panelMap.get(pid).push(it);
+        }
+        // v===0 或 null → 主图柱状图（由 showVolumeBar 控制），不入 mainOverlays
+        // v===-1 → 隐藏
+        continue;
+      }
       const def = it.kind === "overlay" ? 0 : 1;
       const where = v === null ? def : v;
       if (where === -1) continue;
@@ -1352,6 +1436,7 @@ async function render() {
     }
 
     computeWindow();
+    loadDrawingsForKey(selectedKey);
     drawFromState();
   } catch (e) {
     $("klineTitle").textContent = "K线";
@@ -1385,7 +1470,13 @@ function drawFromState() {
     .filter((x) => !isKeyHidden(x && x.key ? x.key : ""))
     .map((x) => ({ ...x, series: (x.series || []).slice(start, end + 1) }));
 
-  drawCandles(candleCtx, viewState.row, overlays, start, n, end, labelAt, viewState.hoverLocalIdx);
+  // 成交量在主图时显示柱状图，在副图或隐藏时不显示
+  const placement = loadPlacement();
+  const volPlacement = placement['volume'];
+  const volWhere = Number.isFinite(Number(volPlacement)) ? Math.trunc(Number(volPlacement)) : 0;
+  const showVolumeBar = (volWhere === 0) && !isKeyHidden('volume');
+
+  drawCandles(candleCtx, viewState.row, overlays, start, n, end, labelAt, viewState.hoverLocalIdx, showVolumeBar);
 
   const panels = viewState.indicatorPanels || [];
   for (const p of panels) {
@@ -1396,6 +1487,7 @@ function drawFromState() {
       .map((x) => ({ ...x, series: (x.series || []).slice(start, end + 1) }));
     drawIndicators(ctx, groups, n, labelAt, p.title);
   }
+  updateStatsPanel();
 }
 
 function buildIndicatorStack(panels) {
@@ -1493,11 +1585,11 @@ function showTooltip(text, x, y) {
   if (!el) return;
   if (!text) {
     el.classList.add("hidden");
-    el.textContent = "";
+    el.innerHTML = "";
     return;
   }
   el.classList.remove("hidden");
-  el.textContent = String(text);
+  el.innerHTML = String(text);
   const pad = 12;
   const rect = el.getBoundingClientRect();
   const nx = Math.max(pad, Math.min(window.innerWidth - rect.width - pad, x));
@@ -1534,24 +1626,50 @@ function buildMainHoverText(gi) {
   const h = Number((s.high || [])[gi]);
   const l = Number((s.low || [])[gi]);
   const c = Number((s.close || [])[gi]);
+  const vol = Number((s.volume || [])[gi]);
   const pct = Number.isFinite(o) && o !== 0 && Number.isFinite(c) ? ((c / o - 1) * 100) : null;
-  const lines = [];
-  lines.push(fmtTs(ms));
-  lines.push(`开盘价 ${fmtNum(o)}  最高价 ${fmtNum(h)}`);
-  lines.push(`最低价 ${fmtNum(l)}  收盘价 ${fmtNum(c)}`);
-  lines.push(`涨跌幅 ${pct === null ? "-" : pct.toFixed(2) + "%"}`);
-  for (const it of viewState.overlaysAll || []) {
-    if (isKeyHidden(it && it.key ? it.key : "")) continue;
-    const v = Number((it && it.series ? it.series : [])[gi]);
-    lines.push(`${String(it.name || it.key)} ${Number.isFinite(v) ? fmtNum(v) : "-"}`);
+  const isUp = pct === null ? true : pct >= 0;
+  const pctColor = isUp ? 'var(--success,#10b981)' : 'var(--danger,#ef4444)';
+  const pctStr = pct === null ? '-' : (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+
+  const esc = (v) => String(v).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const row = (label, value, color) =>
+    `<div class="ktt-row"><span class="ktt-label">${esc(label)}</span><span class="ktt-value"${color ? ` style="color:${color}"` : ''}>${esc(value)}</span></div>`;
+
+  let html = `<div class="ktt-head"><span class="ktt-time">${esc(fmtTs(ms))}</span><span class="ktt-pct" style="color:${pctColor}">${esc(pctStr)}</span></div>`;
+  html += `<div class="ktt-divider"></div>`;
+  html += `<div class="ktt-ohlc">`;
+  html += `<div class="ktt-ohlc-item"><span class="ktt-label">开</span><span class="ktt-value">${fmtNum(o)}</span></div>`;
+  html += `<div class="ktt-ohlc-item"><span class="ktt-label">高</span><span class="ktt-value" style="color:var(--success,#10b981)">${fmtNum(h)}</span></div>`;
+  html += `<div class="ktt-ohlc-item"><span class="ktt-label">低</span><span class="ktt-value" style="color:var(--danger,#ef4444)">${fmtNum(l)}</span></div>`;
+  html += `<div class="ktt-ohlc-item"><span class="ktt-label">收</span><span class="ktt-value" style="color:${pctColor}">${fmtNum(c)}</span></div>`;
+  html += `</div>`;
+  if (Number.isFinite(vol) && vol > 0) {
+    html += `<div class="ktt-divider"></div>`;
+    html += row('成交量', fmtAxisNum(vol), null);
   }
-  for (const x of getAllIndicatorItems()) {
-    const it = x.item;
-    const v = Number((it && it.series ? it.series : [])[gi]);
-    const prefix = x.panel ? String(x.panel.title || `副图${x.panel.panelId}`) : "副图";
-    lines.push(`${prefix}｜${String(it.name || it.key)} ${Number.isFinite(v) ? fmtNum(v) : "-"}`);
+  // 主图指标
+  const ovItems = (viewState.overlaysAll || []).filter(it => !isKeyHidden(it && it.key ? it.key : ''));
+  if (ovItems.length > 0) {
+    html += `<div class="ktt-divider"></div>`;
+    for (const it of ovItems) {
+      const v = Number((it && it.series ? it.series : [])[gi]);
+      html += row(String(it.name || it.key), Number.isFinite(v) ? fmtNum(v) : '-', it.color || null);
+    }
   }
-  return lines.join("\n");
+  // 副图指标
+  const indItems = getAllIndicatorItems();
+  if (indItems.length > 0) {
+    html += `<div class="ktt-divider"></div>`;
+    for (const x of indItems) {
+      const it = x.item;
+      if (isKeyHidden(it && it.key ? it.key : '')) continue;
+      const v = Number((it && it.series ? it.series : [])[gi]);
+      const prefix = x.panel ? String(x.panel.title || `副图${x.panel.panelId}`) : '副图';
+      html += row(`${prefix} ${String(it.name || it.key)}`, Number.isFinite(v) ? fmtNum(v) : '-', it.color || null);
+    }
+  }
+  return html;
 }
 
 function buildPanelHoverText(panelId, gi, mouseY, canvas) {
@@ -1591,6 +1709,8 @@ function attachInteractions(canvas) {
 
   canvas.addEventListener("pointerdown", (e) => {
     if (!viewState.row || !viewState.n0) return;
+    // 绘图工具激活时，不触发拖拽
+    if (drawState.tool !== 'cursor' && drawState.tool !== 'info') return;
     viewState.dragging = true;
     viewState.dragStartX = e.clientX;
     viewState.dragStartOffset = viewState.offset;
@@ -1637,7 +1757,13 @@ function attachInteractions(canvas) {
     }
     const gi = viewState.start + i;
     if (canvas.id === "candleCanvas") {
-      showTooltip(buildMainHoverText(gi), e.clientX + 12, e.clientY + 12);
+      // 划线工具激活时不显示单根K线详情
+      if (drawState.tool !== 'cursor' && drawState.tool !== 'info') {
+        showTooltip('', 0, 0);
+      } else {
+        showTooltip(buildMainHoverText(gi), e.clientX + 12, e.clientY + 12);
+      }
+      updateStatsPanel();
       return;
     }
     const pid = canvas.dataset ? canvas.dataset.panel : "";
@@ -1774,5 +1900,1004 @@ function initKlinePage() {
   setTimeout(() => render(), 250);
 }
 
+// ===================== 工具栏绘图系统 =====================
+const DRAW_COLORS = [
+  '#3b82f6','#10b981','#ef4444','#f59e0b','#a855f7',
+  '#14b8a6','#f97316','#ec4899','#ffffff','#94a3b8',
+  '#fbbf24','#34d399','#60a5fa','#f87171','#c084fc',
+  '#fb923c','#e2e8f0','#475569','#1e293b','#0f172a'];
+
+const FIB_LEVELS = [0, 0.236, 0.382, 0.5, 0.618, 0.786, 1.0];
+const FIB_EXT_LEVELS = [0, 0.618, 1.0, 1.382, 1.618, 2.0, 2.618];
+const FIB_COLORS = ['#ef4444','#f59e0b','#10b981','#3b82f6','#a855f7','#14b8a6','#94a3b8'];
+
+const WAVE_LABELS_IMPULSE = ['①','②','③','④','⑤'];  // 推进浪
+const WAVE_LABELS_CORRECTIVE = ['A','B','C'];          // 调整浪
+const WAVE_LABEL_SETS = [WAVE_LABELS_IMPULSE, WAVE_LABELS_CORRECTIVE];
+
+const drawState = {
+  tool: 'cursor',
+  color: '#3b82f6',
+  drawings: [],        // { type, points:[{x,y,gi,price},...], color, text? }
+  drawingsByKey: {},   // { [symbolKey]: drawings[] } 按币种隔离
+  drawing: false,
+  erasing: false,
+  tempStart: null,
+  drawCanvas: null,
+  drawCtx: null,
+  infoVisible: false,
+  statsVisible: false,  // 右上角统计面板，默认隐藏，点指标信息框按钮开启
+  // 波浪标注临时点集
+  wavePoints: [],
+  waveLabelSet: 0,     // 0=推进浪①~⑤, 1=调整浪A~C
+};
+
+// ---- 按币种隔离绘图 ----
+function saveDrawingsForKey(key) {
+  if (!key) return;
+  drawState.drawingsByKey[key] = drawState.drawings.slice();
+}
+function loadDrawingsForKey(key) {
+  if (!key) { drawState.drawings = []; return; }
+  drawState.drawings = (drawState.drawingsByKey[key] || []).slice();
+  drawState.wavePoints = [];
+  drawState.drawing = false;
+  drawState.tempStart = null;
+  drawState.tempEnd = null;
+  redrawDrawings();
+}
+
+// ---- 坐标映射 ----
+function canvasToPlot(canvas, clientX, clientY) {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const L = axisL;
+  const R = 10;
+  const w = canvas.width;
+  const pw = Math.max(10, w - L - R);
+  const n = Math.max(1, viewState.n);
+  const stepX = pw / n;
+  const x = (clientX - rect.left) * dpr;
+  const y = (clientY - rect.top) * dpr;
+  const relX = x - L;
+  const localI = Math.round(relX / stepX - 0.5);
+  const gi = viewState.start + Math.max(0, Math.min(n - 1, localI));
+  const s = (viewState.row && viewState.row.series) ? viewState.row.series : {};
+  const closes = s.close || [];
+  const highs = s.high || [];
+  const lows = s.low || [];
+  // Y price mapping
+  const candle = document.getElementById('candleCanvas');
+  if (!candle) return { gi, price: null, px: x, py: y, localI };
+  const cw = candle.width;
+  const ch = candle.height;
+  const T = 10, B = 22;
+  const cph = ch - T - B;
+  // recompute yMin/yMax from current view
+  let minP = Infinity, maxP = -Infinity;
+  const st = viewState.start, end = viewState.end;
+  for (let i = st; i <= end; i++) {
+    const hi = Number((highs)[i]); const lo = Number((lows)[i]);
+    if (Number.isFinite(hi)) maxP = Math.max(maxP, hi);
+    if (Number.isFinite(lo)) minP = Math.min(minP, lo);
+  }
+  if (!Number.isFinite(minP)) { return { gi, price: null, px: x, py: y, localI }; }
+  const pad = (maxP - minP) * 0.06;
+  const yMax = maxP + pad, yMin = minP - pad;
+  const price = yMax - ((y - T) / cph) * (yMax - yMin);
+  return { gi, price, px: x, py: y, localI };
+}
+
+function priceToY(price, canvasH) {
+  const s = (viewState.row && viewState.row.series) ? viewState.row.series : {};
+  const highs = s.high || [], lows = s.low || [];
+  const st = viewState.start, end = viewState.end;
+  let minP = Infinity, maxP = -Infinity;
+  for (let i = st; i <= end; i++) {
+    const hi = Number(highs[i]), lo = Number(lows[i]);
+    if (Number.isFinite(hi)) maxP = Math.max(maxP, hi);
+    if (Number.isFinite(lo)) minP = Math.min(minP, lo);
+  }
+  if (!Number.isFinite(minP)) return null;
+  const pad = (maxP - minP) * 0.06;
+  const yMax = maxP + pad, yMin = minP - pad;
+  const T = 10, B = 22;
+  const ph = canvasH - T - B;
+  return T + ((yMax - price) / (yMax - yMin)) * ph;
+}
+
+function giToX(gi, canvasW) {
+  const L = axisL, R = 10;
+  const pw = Math.max(10, canvasW - L - R);
+  const n = Math.max(1, viewState.n);
+  const stepX = pw / n;
+  const localI = gi - viewState.start;
+  return L + localI * stepX + stepX / 2;
+}
+
+// ---- 绘制所有 drawings ----
+function redrawDrawings() {
+  const dc = drawState.drawCtx;
+  const canvas = drawState.drawCanvas;
+  if (!dc || !canvas) return;
+  const w = canvas.width, h = canvas.height;
+  dc.clearRect(0, 0, w, h);
+  const dpr = window.devicePixelRatio || 1;
+  dc.save();
+  dc.lineWidth = 1.5 * dpr;
+  for (const d of drawState.drawings) {
+    renderDrawing(dc, d, w, h, dpr, false);
+  }
+  // 波浪工具预览已点节点
+  if (drawState.tool === 'wave' && drawState.wavePoints.length > 0) {
+    const fake = { type: 'wave', points: drawState.wavePoints, color: drawState.color, labelSet: drawState.waveLabelSet };
+    renderDrawing(dc, fake, w, h, dpr, true);
+  }
+  // temp drawing preview
+  if (drawState.drawing && drawState.tempStart && drawState.tempEnd) {
+    const fake = { type: drawState.tool, points: [drawState.tempStart, drawState.tempEnd], color: drawState.color };
+    renderDrawing(dc, fake, w, h, dpr, true);
+  }
+  dc.restore();
+}
+
+function renderDrawing(dc, d, w, h, dpr, isPreview) {
+  if (!d || !d.points || d.points.length < 1) return;
+  dc.strokeStyle = d.color || '#3b82f6';
+  dc.fillStyle = d.color || '#3b82f6';
+  dc.lineWidth = 1.5 * dpr;
+  if (isPreview) dc.globalAlpha = 0.72;
+  else dc.globalAlpha = 1.0;
+
+  const p0 = d.points[0];
+  const p1 = d.points[1] || p0;
+  const x0 = giToX(p0.gi, w), y0 = priceToY(p0.price, h);
+  const x1 = giToX(p1.gi, w), y1 = priceToY(p1.price, h);
+  if (y0 === null || y1 === null) return;
+
+  if (d.type === 'cursor') return;
+
+  if (d.type === 'line') {
+    dc.setLineDash([]);
+    dc.beginPath(); dc.moveTo(x0, y0); dc.lineTo(x1, y1); dc.stroke();
+    // endpoints
+    dc.beginPath(); dc.arc(x0, y0, 3*dpr, 0, Math.PI*2); dc.fill();
+    dc.beginPath(); dc.arc(x1, y1, 3*dpr, 0, Math.PI*2); dc.fill();
+  }
+
+  if (d.type === 'ray') {
+    // extend from p0 through p1 to edge
+    dc.setLineDash([]);
+    const dx = x1 - x0, dy = y1 - y0;
+    const len = Math.sqrt(dx*dx + dy*dy) || 1;
+    const ex = x0 + (dx/len) * Math.max(w, h) * 3;
+    const ey = y0 + (dy/len) * Math.max(w, h) * 3;
+    dc.beginPath(); dc.moveTo(x0, y0); dc.lineTo(ex, ey); dc.stroke();
+    dc.beginPath(); dc.arc(x0, y0, 3*dpr, 0, Math.PI*2); dc.fill();
+  }
+
+  if (d.type === 'hline') {
+    dc.setLineDash([6*dpr, 3*dpr]);
+    dc.beginPath(); dc.moveTo(axisL, y0); dc.lineTo(w - 10, y0); dc.stroke();
+    dc.setLineDash([]);
+    // price label
+    dc.font = `${Math.round(11*dpr)}px sans-serif`;
+    dc.textAlign = 'right';
+    dc.textBaseline = 'middle';
+    dc.fillStyle = d.color || '#3b82f6';
+    dc.fillText(fmtAxisNum(p0.price), axisL - 4, y0);
+    dc.textAlign = 'start'; dc.textBaseline = 'alphabetic';
+  }
+
+  if (d.type === 'channel') {
+    const dy = y1 - y0;
+    const dx2 = x1 - x0, dy2 = dy;
+    dc.setLineDash([]);
+    dc.beginPath(); dc.moveTo(x0, y0); dc.lineTo(x1, y1); dc.stroke();
+    // parallel offset: perpendicular distance stored in p0.channelOffset (price diff)
+    const off = (d.channelOffset || 0);
+    const yo0 = priceToY(p0.price + off, h);
+    const yo1 = priceToY(p1.price + off, h);
+    if (yo0 !== null && yo1 !== null) {
+      dc.setLineDash([6*dpr, 3*dpr]);
+      dc.beginPath(); dc.moveTo(x0, yo0); dc.lineTo(x1, yo1); dc.stroke();
+      dc.setLineDash([]);
+    }
+  }
+
+  if (d.type === 'fib' || d.type === 'fibext') {
+    const levels = d.type === 'fib' ? FIB_LEVELS : FIB_EXT_LEVELS;
+    const hiP = Math.max(p0.price, p1.price);
+    const loP = Math.min(p0.price, p1.price);
+    const range = hiP - loP;
+    const xL = axisL, xR = w - 10;
+    dc.font = `${Math.round(10*dpr)}px sans-serif`;
+    dc.textAlign = 'left';
+    dc.textBaseline = 'middle';
+    for (let li = 0; li < levels.length; li++) {
+      const lvl = levels[li];
+      const price = d.type === 'fib' ? (hiP - lvl * range) : (loP + lvl * range);
+      const yy = priceToY(price, h);
+      if (yy === null) continue;
+      const col = FIB_COLORS[li % FIB_COLORS.length];
+      dc.strokeStyle = col; dc.fillStyle = col; dc.globalAlpha = 0.85;
+      dc.setLineDash([4*dpr, 3*dpr]);
+      dc.beginPath(); dc.moveTo(xL, yy); dc.lineTo(xR, yy); dc.stroke();
+      dc.setLineDash([]); dc.globalAlpha = 1.0;
+      dc.fillText(`${lvl.toFixed(3)}  ${fmtAxisNum(price)}`, xL + 4, yy - 8*dpr);
+    }
+    dc.textAlign = 'start'; dc.textBaseline = 'alphabetic';
+    dc.strokeStyle = d.color || '#3b82f6'; dc.setLineDash([]);
+    dc.beginPath(); dc.moveTo(x0, y0); dc.lineTo(x1, y1); dc.stroke();
+    dc.beginPath(); dc.arc(x0, y0, 3*dpr, 0, Math.PI*2); dc.fill();
+    dc.beginPath(); dc.arc(x1, y1, 3*dpr, 0, Math.PI*2); dc.fill();
+  }
+
+  if (d.type === 'highlow') {
+    const s0 = (viewState.row && viewState.row.series) ? viewState.row.series : {};
+    const his = s0.high || [], los = s0.low || [];
+    const st2 = viewState.start, end2 = viewState.end;
+    let hiP2 = -Infinity, loP2 = Infinity;
+    for (let i = st2; i <= end2; i++) {
+      const hv = Number(his[i]), lv = Number(los[i]);
+      if (Number.isFinite(hv)) hiP2 = Math.max(hiP2, hv);
+      if (Number.isFinite(lv)) loP2 = Math.min(loP2, lv);
+    }
+    if (!Number.isFinite(hiP2) || !Number.isFinite(loP2)) { dc.globalAlpha = 1.0; return; }
+    const range2 = hiP2 - loP2;
+    const xL2 = axisL, xR2 = w - 10;
+    dc.font = `${Math.round(10*dpr)}px sans-serif`;
+    dc.textAlign = 'left'; dc.textBaseline = 'middle';
+    const yHi2 = priceToY(hiP2, h), yLo2 = priceToY(loP2, h);
+    if (yHi2 !== null) {
+      dc.strokeStyle = '#ef4444'; dc.fillStyle = '#ef4444'; dc.globalAlpha = 1.0; dc.setLineDash([]);
+      dc.beginPath(); dc.moveTo(xL2, yHi2); dc.lineTo(xR2, yHi2); dc.stroke();
+      dc.fillText(`最高 ${fmtAxisNum(hiP2)}`, xL2 + 4, yHi2 - 8*dpr);
+    }
+    if (yLo2 !== null) {
+      dc.strokeStyle = '#10b981'; dc.fillStyle = '#10b981'; dc.globalAlpha = 1.0; dc.setLineDash([]);
+      dc.beginPath(); dc.moveTo(xL2, yLo2); dc.lineTo(xR2, yLo2); dc.stroke();
+      dc.fillText(`最低 ${fmtAxisNum(loP2)}`, xL2 + 4, yLo2 + 4*dpr);
+    }
+    for (let li2 = 0; li2 < FIB_LEVELS.length; li2++) {
+      const lvl2 = FIB_LEVELS[li2];
+      const price2 = hiP2 - lvl2 * range2;
+      const yy2 = priceToY(price2, h);
+      if (yy2 === null) continue;
+      const col2 = FIB_COLORS[li2 % FIB_COLORS.length];
+      dc.strokeStyle = col2; dc.fillStyle = col2; dc.globalAlpha = 0.7;
+      dc.setLineDash([4*dpr, 3*dpr]);
+      dc.beginPath(); dc.moveTo(xL2, yy2); dc.lineTo(xR2, yy2); dc.stroke();
+      dc.setLineDash([]); dc.globalAlpha = 0.9;
+      dc.fillText(`${lvl2.toFixed(3)}`, xR2 - 36*dpr, yy2 - 6*dpr);
+    }
+    dc.textAlign = 'start'; dc.textBaseline = 'alphabetic'; dc.globalAlpha = 1.0;
+  }
+
+  if (d.type === 'text' && d.text) {
+    dc.font = `bold ${Math.round(13*dpr)}px sans-serif`;
+    dc.fillStyle = d.color || '#3b82f6'; dc.globalAlpha = 1.0; dc.textBaseline = 'bottom';
+    dc.fillText(d.text, x0, y0); dc.textBaseline = 'alphabetic';
+  }
+
+  if (d.type === 'rect') {
+    const rx0 = Math.min(x0, x1), ry0 = Math.min(y0, y1);
+    const rw = Math.abs(x1 - x0), rh = Math.abs(y1 - y0);
+    if (rw < 2 || rh < 2) { dc.globalAlpha = 1.0; return; }
+    const col = d.color || '#3b82f6';
+    // 半透明填充
+    dc.globalAlpha = isPreview ? 0.10 : 0.13;
+    dc.fillStyle = col;
+    dc.beginPath();
+    dc.roundRect ? dc.roundRect(rx0, ry0, rw, rh, 4*dpr) : dc.rect(rx0, ry0, rw, rh);
+    dc.fill();
+    // 边框
+    dc.globalAlpha = isPreview ? 0.6 : 0.9;
+    dc.strokeStyle = col;
+    dc.setLineDash([]);
+    dc.lineWidth = 1.5 * dpr;
+    dc.beginPath();
+    dc.roundRect ? dc.roundRect(rx0, ry0, rw, rh, 4*dpr) : dc.rect(rx0, ry0, rw, rh);
+    dc.stroke();
+    // 四个角的小方块
+    const cs = 4 * dpr;
+    dc.fillStyle = col; dc.globalAlpha = 1.0;
+    [[rx0, ry0],[rx0+rw, ry0],[rx0, ry0+rh],[rx0+rw, ry0+rh]].forEach(([cx, cy]) => {
+      dc.fillRect(cx - cs/2, cy - cs/2, cs, cs);
+    });
+    // 价格标注（左侧顶部和底部）
+    const priceTop = Math.max(p0.price, p1.price);
+    const priceBtm = Math.min(p0.price, p1.price);
+    const priceDiff = priceTop - priceBtm;
+    const pricePct = (Number.isFinite(p0.price) && p0.price !== 0)
+      ? ((p1.price - p0.price) / Math.abs(p0.price) * 100) : null;
+    // K线根数和时间跨度
+    const gi0 = Math.min(p0.gi, p1.gi), gi1 = Math.max(p0.gi, p1.gi);
+    const kCount = gi1 - gi0 + 1;
+    const bh2 = Number(viewState.barHours || 1);
+    const totalH2 = kCount * bh2;
+    const days2 = Math.floor(totalH2 / 24);
+    const remH2 = Math.round(totalH2 % 24);
+    const timeStr = days2 > 0 ? `${days2}天${remH2}小时` : `${remH2}小时`;
+    dc.font = `${Math.round(10*dpr)}px sans-serif`;
+    dc.fillStyle = col; dc.textAlign = 'right'; dc.textBaseline = 'middle';
+    dc.fillText(fmtAxisNum(priceTop), rx0 - 4, Math.min(y0, y1));
+    dc.fillText(fmtAxisNum(priceBtm), rx0 - 4, Math.max(y0, y1));
+    // 框内中央显示统计信息（仿TradingView）
+    if (rh > 28 * dpr && rw > 60 * dpr) {
+      const sign = (pricePct || 0) >= 0 ? '+' : '';
+      const pctStr = pricePct !== null ? `${sign}${pricePct.toFixed(2)}%` : '';
+      const diffStr = fmtAxisNum(priceDiff);
+      const line1 = pctStr ? `${diffStr}  (${pctStr})` : diffStr;
+      const line2 = `${kCount}根K线，${timeStr}`;
+      dc.textAlign = 'center'; dc.textBaseline = 'middle';
+      dc.globalAlpha = 0.95;
+      dc.font = `bold ${Math.round(11*dpr)}px sans-serif`;
+      dc.fillText(line1, rx0 + rw/2, ry0 + rh/2 - 8*dpr);
+      dc.font = `${Math.round(10*dpr)}px sans-serif`;
+      dc.globalAlpha = 0.75;
+      dc.fillText(line2, rx0 + rw/2, ry0 + rh/2 + 8*dpr);
+    }
+    dc.textAlign = 'start'; dc.textBaseline = 'alphabetic';
+    dc.globalAlpha = 1.0;
+  }
+
+  if (d.type === 'wave' && d.points && d.points.length >= 2) {
+    // 波浪理论标注：连线 + 圆圈数字标注
+    const labels = d.labelSet === 1 ? WAVE_LABELS_CORRECTIVE : WAVE_LABELS_IMPULSE;
+    const pts = d.points;
+    const col = d.color || '#f59e0b';
+    dc.strokeStyle = col;
+    dc.fillStyle = col;
+    dc.setLineDash([4*dpr, 2*dpr]);
+    dc.lineWidth = 1.8 * dpr;
+    // 连接各波浪点
+    dc.beginPath();
+    for (let wi = 0; wi < pts.length; wi++) {
+      const px = giToX(pts[wi].gi, w);
+      const py = priceToY(pts[wi].price, h);
+      if (py === null) continue;
+      if (wi === 0) dc.moveTo(px, py); else dc.lineTo(px, py);
+    }
+    dc.stroke();
+    dc.setLineDash([]);
+    // 绘制标注点和标签
+    dc.font = `bold ${Math.round(12*dpr)}px 'Georgia', serif`;
+    dc.textAlign = 'center';
+    dc.textBaseline = 'middle';
+    for (let wi = 0; wi < pts.length; wi++) {
+      const px = giToX(pts[wi].gi, w);
+      const py = priceToY(pts[wi].price, h);
+      if (py === null) continue;
+      const label = labels[wi] || String(wi + 1);
+      const r = 9 * dpr;
+      // 判断上方还是下方放标签（奇数点在上，偶数在下，从1开始）
+      const above = (wi % 2 === 0);
+      const labelY = above ? py - r - 6*dpr : py + r + 6*dpr;
+      // 圆圈背景
+      dc.globalAlpha = 0.92;
+      dc.fillStyle = col;
+      dc.beginPath(); dc.arc(px, labelY, r, 0, Math.PI * 2); dc.fill();
+      // 标签文字
+      dc.globalAlpha = 1.0;
+      dc.fillStyle = '#ffffff';
+      dc.fillText(label, px, labelY);
+      // 小圆点在价格位
+      dc.fillStyle = col;
+      dc.beginPath(); dc.arc(px, py, 3*dpr, 0, Math.PI*2); dc.fill();
+    }
+    dc.textAlign = 'start'; dc.textBaseline = 'alphabetic'; dc.globalAlpha = 1.0;
+  }
+
+  dc.globalAlpha = 1.0;
+}
+
+// ---- 指标信息框 ----
+function updateInfoPanel() {
+  const panel = document.getElementById('tvInfoPanel');
+  const content = document.getElementById('tvInfoContent');
+  if (!panel || !content) return;
+  if (!drawState.infoVisible) { panel.classList.remove('visible'); return; }
+  panel.classList.add('visible');
+  const row = viewState.row;
+  if (!row) { content.innerHTML = '<div class="tv-info-label">无数据</div>'; return; }
+  const s = row.series || {};
+  const closes = s.close || [];
+  const hi = viewState.hoverLocalIdx;
+  const gi = (Number.isFinite(Number(hi)) ? viewState.start + Math.trunc(Number(hi)) : viewState.end);
+  const c = Number(closes[gi]);
+  const o = Number((s.open || [])[gi]);
+  const hh = Number((s.high || [])[gi]);
+  const ll = Number((s.low || [])[gi]);
+  const vol = Number((s.volume || [])[gi]);
+  const pct = Number.isFinite(o) && o !== 0 ? ((c/o-1)*100) : null;
+  const ms = barTimeMs(gi);
+  const pctClass = pct === null ? '' : (pct >= 0 ? 'up' : 'down');
+  const pctText = pct === null ? '-' : (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+  const rangeN = viewState.n;
+  const bh = Number(viewState.barHours || 1);
+  const totalH = rangeN * bh;
+  const days = Math.floor(totalH / 24);
+  const remH = Math.round(totalH % 24);
+  const rangeStr = days > 0 ? `${days}天${remH}小时` : `${remH}小时`;
+  const st2 = viewState.start, end2 = viewState.end;
+  const firstClose = Number(closes[st2]), lastClose = Number(closes[end2]);
+  const rangePct = (Number.isFinite(firstClose) && firstClose !== 0 && Number.isFinite(lastClose))
+    ? ((lastClose/firstClose - 1)*100) : null;
+  const rangePctClass = rangePct === null ? '' : (rangePct >= 0 ? 'up' : 'down');
+  const rangePctStr = rangePct === null ? '-' : (rangePct >= 0 ? '+' : '') + rangePct.toFixed(2) + '%';
+  const rows = [
+    ['时间', fmtTs(ms)],
+    ['开盘', fmtNum(o)],
+    ['最高', fmtNum(hh)],
+    ['最低', fmtNum(ll)],
+    ['收盘', `<span class="tv-info-value ${pctClass}">${fmtNum(c)}</span>`],
+    ['涨跌', `<span class="tv-info-value ${pctClass}">${pctText}</span>`],
+    ['成交量', fmtAxisNum(vol)],
+    ['区间', `<span class="tv-info-badge">${rangeN}根·${rangeStr}</span>`],
+    ['区间涨跌', `<span class="tv-info-value ${rangePctClass}">${rangePctStr}</span>`],
+  ];
+  for (const ov of (viewState.overlaysAll || [])) {
+    if (isKeyHidden(ov.key)) continue;
+    const v = Number((ov.series || [])[gi]);
+    if (Number.isFinite(v)) rows.push([ov.name || ov.key, fmtNum(v)]);
+  }
+  content.innerHTML = rows.map(([k, v]) =>
+    `<div class="tv-info-row"><span class="tv-info-label">${k}</span><span class="tv-info-value">${v}</span></div>`
+  ).join('');
+}
+
+// ---- 统计面板（右上角仿TradingView数据窗口） ----
+function updateStatsPanel() {
+  const panel = document.getElementById('tvStatsPanel');
+  const body = document.getElementById('tvStatsBody');
+  const symEl = document.getElementById('tvStatsSymbol');
+  const tfEl = document.getElementById('tvStatsTf');
+  if (!panel) return;
+  if (!drawState.statsVisible || !viewState.row) {
+    panel.classList.remove('visible');
+    return;
+  }
+  panel.classList.add('visible');
+  const row = viewState.row;
+  const s = row.series || {};
+  const closes = s.close || [];
+  const opens = s.open || [];
+  const highs = s.high || [];
+  const lows = s.low || [];
+  const volumes = s.volume || [];
+  const hi = viewState.hoverLocalIdx;
+  const gi = (Number.isFinite(Number(hi)) ? viewState.start + Math.trunc(Number(hi)) : viewState.end);
+  const c = Number(closes[gi]);
+  const o = Number(opens[gi]);
+  const hh = Number(highs[gi]);
+  const ll = Number(lows[gi]);
+  const vol = Number(volumes[gi]);
+  const pct = Number.isFinite(o) && o !== 0 ? ((c/o-1)*100) : null;
+  const ms = barTimeMs(gi);
+  // range stats
+  const st2 = viewState.start, end2 = viewState.end;
+  const n = viewState.n;
+  const bh2 = Number(viewState.barHours || 1);
+  const totalH = n * bh2;
+  const days = Math.floor(totalH / 24);
+  const remH = Math.round(totalH % 24);
+  const rangeStr = days > 0 ? `${days}天${remH}小时` : `${remH}小时`;
+  const firstClose = Number(closes[st2]);
+  const lastClose = Number(closes[end2]);
+  const rangePct = (Number.isFinite(firstClose) && firstClose !== 0 && Number.isFinite(lastClose))
+    ? ((lastClose/firstClose - 1)*100) : null;
+  // symbol & tf
+  if (symEl) symEl.textContent = stripQuote(row.symbol || '-');
+  if (tfEl) tfEl.textContent = bh2 === 1 ? '1H' : bh2 === 4 ? '4H' : bh2 === 24 ? '1D' : `${bh2}H`;
+  if (!body) return;
+  const pctClass = pct === null ? '' : (pct >= 0 ? 'up' : 'down');
+  const pctStr = pct === null ? '-' : (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+  const rangePctClass = rangePct === null ? '' : (rangePct >= 0 ? 'up' : 'down');
+  const rangePctStr = rangePct === null ? '-' : (rangePct >= 0 ? '+' : '') + rangePct.toFixed(2) + '%';
+  const rows = [
+    ['时间', fmtTs(ms)],
+    ['开盘', fmtNum(o)],
+    ['最高', fmtNum(hh)],
+    ['最低', fmtNum(ll)],
+    ['收盘', `<span class="tv-stats-value ${pctClass}">${fmtNum(c)}</span>`],
+    ['涨跌', `<span class="tv-stats-value ${pctClass}">${pctStr}</span>`],
+    ['成交量', fmtAxisNum(vol)],
+  ];
+  for (const ov of (viewState.overlaysAll || [])) {
+    if (isKeyHidden(ov.key)) continue;
+    const v = Number((ov.series || [])[gi]);
+    if (Number.isFinite(v)) rows.push([ov.name || ov.key, fmtNum(v)]);
+  }
+  const rowsHtml = rows.map(([k, v]) =>
+    `<div class="tv-stats-row"><span class="tv-stats-label">${k}</span><span class="tv-stats-value">${v}</span></div>`
+  ).join('');
+  body.innerHTML = rowsHtml +
+    `<div class="tv-stats-divider"></div>` +
+    `<div class="tv-stats-range-chip"><span class="tv-stats-value ${rangePctClass}" style="font-size:11px">${rangePctStr}</span><span style="color:var(--text-dim);font-size:10px">&nbsp;${n}根·${rangeStr}</span></div>`;
+}
+
+// ---- 颜色选择器 ----
+function initColorPicker() {
+  const cp = document.getElementById('tvColorPicker');
+  const sw = document.getElementById('tvColorSwatches');
+  if (!cp || !sw) return;
+  sw.innerHTML = '';
+  for (const col of DRAW_COLORS) {
+    const btn = document.createElement('button');
+    btn.className = 'tv-cp-swatch';
+    btn.style.background = col;
+    btn.title = col;
+    if (col === drawState.color) btn.classList.add('selected');
+    btn.addEventListener('click', () => {
+      drawState.color = col;
+      sw.querySelectorAll('.tv-cp-swatch').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      cp.style.display = 'none';
+    });
+    sw.appendChild(btn);
+  }
+}
+
+// ---- 工具栏初始化 ----
+function initToolbar() {
+  const toolbar = document.getElementById('tvToolbar');
+  if (!toolbar) return;
+  function setTool(tool) {
+    drawState.tool = tool;
+    drawState.drawing = false;
+    drawState.tempStart = null;
+    drawState.tempEnd = null;
+    toolbar.querySelectorAll('.tv-tool-btn[data-tool]').forEach(b => {
+      b.classList.toggle('active', b.dataset.tool === tool);
+    });
+    const dc = drawState.drawCanvas;
+    if (dc) {
+      dc.classList.remove('active','line-active','text-active','erase-active');
+      if (tool !== 'cursor' && tool !== 'info' && tool !== 'highlow') {
+        dc.style.pointerEvents = 'auto';
+        dc.classList.add('active', tool === 'text' ? 'text-active' : tool === 'erase' ? 'erase-active' : 'line-active');
+      } else {
+        dc.style.pointerEvents = 'none';
+      }
+    }
+    if (tool !== 'info') { drawState.infoVisible = false; updateInfoPanel(); }
+    redrawDrawings();
+  }
+  toolbar.querySelectorAll('.tv-tool-btn[data-tool]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tool = btn.dataset.tool;
+      if (tool === 'info') {
+        drawState.infoVisible = !drawState.infoVisible;
+        btn.classList.toggle('active', drawState.infoVisible);
+        updateInfoPanel();
+        return;
+      }
+      if (tool === 'highlow') {
+        drawState.drawings.push({ type: 'highlow', points: [{ gi: viewState.start, price: 0 }, { gi: viewState.end, price: 0 }], color: drawState.color });
+        redrawDrawings();
+        return;
+      }
+      if (tool === 'wave') {
+        // 切换标签集（右键切换，左键选工具）
+        setTool(tool);
+        drawState.wavePoints = [];
+        return;
+      }
+      setTool(tool);
+    });
+  });
+  const clearBtn = document.getElementById('toolClear');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (!drawState.drawings.length) return;
+      if (!confirm('清除所有绘图？')) return;
+      drawState.drawings = [];
+      redrawDrawings();
+    });
+  }
+  toolbar.addEventListener('contextmenu', (e) => {
+    const btn = e.target.closest('.tv-tool-btn[data-tool]');
+    if (!btn) return;
+    e.preventDefault();
+    if (btn.dataset.tool === 'wave') {
+      // 右键切换波浪标签集
+      drawState.waveLabelSet = drawState.waveLabelSet === 0 ? 1 : 0;
+      drawState.wavePoints = [];
+      const labels = drawState.waveLabelSet === 1 ? 'A-B-C调整浪' : '①-⑤推进浪';
+      showAlert(`波浪标注切换为：${labels}（右键再次切换）`);
+      setTimeout(() => showAlert(''), 2500);
+      return;
+    }
+    if (btn.dataset.tool === 'cursor') return;
+    const cp = document.getElementById('tvColorPicker');
+    if (!cp) return;
+    cp.style.display = 'block';
+    cp.style.left = (e.clientX + 10) + 'px';
+    cp.style.top = Math.min(e.clientY, window.innerHeight - 220) + 'px';
+  });
+  // 波浪工具：按 Escape 取消当前波浪
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawState.tool === 'wave' && drawState.wavePoints.length > 0) {
+      drawState.wavePoints = [];
+      redrawDrawings();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    const cp = document.getElementById('tvColorPicker');
+    if (cp && !cp.contains(e.target)) cp.style.display = 'none';
+  });
+  initColorPicker();
+  initStatsPanelDrag();
+  initInfoPanelDrag();
+}
+
+// ---- 统计面板拖拽移动 + 调整大小 ----
+function initStatsPanelDrag() {
+  const panel = document.getElementById('tvStatsPanel');
+  if (!panel) return;
+
+  // 添加调整大小的把手
+  const resizer = document.createElement('div');
+  resizer.className = 'tv-stats-resizer';
+  resizer.title = '拖拽调整大小';
+  panel.appendChild(resizer);
+
+  // 拖拽移动
+  let dragX = 0, dragY = 0, startL = 0, startT = 0, isDragging = false;
+  const head = panel.querySelector('.tv-stats-head');
+  if (head) {
+    head.style.cursor = 'move';
+    head.addEventListener('pointerdown', (e) => {
+      if (e.target === resizer) return;
+      isDragging = true;
+      dragX = e.clientX; dragY = e.clientY;
+      const r = panel.getBoundingClientRect();
+      startL = r.left; startT = r.top;
+      panel.style.right = 'auto';
+      panel.style.left = startL + 'px';
+      panel.style.top = startT + 'px';
+      head.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+    head.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragX, dy = e.clientY - dragY;
+      const newL = Math.max(0, Math.min(window.innerWidth - panel.offsetWidth, startL + dx));
+      const newT = Math.max(0, Math.min(window.innerHeight - panel.offsetHeight, startT + dy));
+      panel.style.left = newL + 'px';
+      panel.style.top = newT + 'px';
+    });
+    head.addEventListener('pointerup', () => { isDragging = false; });
+    head.addEventListener('pointercancel', () => { isDragging = false; });
+  }
+
+  // 调整大小
+  let resizing = false, rsX = 0, rsY = 0, rsW = 0, rsH = 0;
+  resizer.addEventListener('pointerdown', (e) => {
+    resizing = true;
+    rsX = e.clientX; rsY = e.clientY;
+    rsW = panel.offsetWidth; rsH = panel.offsetHeight;
+    resizer.setPointerCapture(e.pointerId);
+    e.preventDefault(); e.stopPropagation();
+  });
+  resizer.addEventListener('pointermove', (e) => {
+    if (!resizing) return;
+    const newW = Math.max(160, rsW + (e.clientX - rsX));
+    const newH = Math.max(120, rsH + (e.clientY - rsY));
+    panel.style.width = newW + 'px';
+    panel.style.maxHeight = newH + 'px';
+    panel.style.overflowY = 'auto';
+  });
+  resizer.addEventListener('pointerup', () => { resizing = false; });
+  resizer.addEventListener('pointercancel', () => { resizing = false; });
+}
+
+// ---- 指标信息浮框拖拽 ----
+function initInfoPanelDrag() {
+  const panel = document.getElementById('tvInfoPanel');
+  const head = document.getElementById('tvInfoPanelHead');
+  if (!panel || !head) return;
+  let isDragging = false, dragX = 0, dragY = 0, startL = 0, startT = 0;
+  head.addEventListener('pointerdown', (e) => {
+    isDragging = true;
+    dragX = e.clientX; dragY = e.clientY;
+    const r = panel.getBoundingClientRect();
+    startL = r.left; startT = r.top;
+    panel.style.left = startL + 'px';
+    panel.style.top = startT + 'px';
+    head.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  head.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragX, dy = e.clientY - dragY;
+    const newL = Math.max(0, Math.min(window.innerWidth - panel.offsetWidth, startL + dx));
+    const newT = Math.max(0, Math.min(window.innerHeight - panel.offsetHeight, startT + dy));
+    panel.style.left = newL + 'px';
+    panel.style.top = newT + 'px';
+  });
+  head.addEventListener('pointerup', () => { isDragging = false; });
+  head.addEventListener('pointercancel', () => { isDragging = false; });
+}
+function attachDrawCanvas() {
+  const candlePanel = document.querySelector('.kline-candle-panel');
+  if (!candlePanel || candlePanel.querySelector('.kline-draw-layer')) return;
+  const dc = document.createElement('canvas');
+  dc.className = 'kline-draw-layer';
+  dc.style.position = 'absolute';
+  dc.style.inset = '0';
+  dc.style.zIndex = '5';
+  dc.style.borderRadius = '10px';
+  dc.style.pointerEvents = 'none';
+  candlePanel.appendChild(dc);
+  drawState.drawCanvas = dc;
+
+  function ensureDraw() {
+    const ref = candlePanel.querySelector('canvas.kline-canvas');
+    if (!ref) return;
+    if (dc.width !== ref.width || dc.height !== ref.height) {
+      dc.width = ref.width; dc.height = ref.height;
+      dc.style.width = (ref.offsetWidth || ref.clientWidth) + 'px';
+      dc.style.height = (ref.offsetHeight || ref.clientHeight) + 'px';
+    }
+    drawState.drawCtx = dc.getContext('2d');
+  }
+
+  if (window.ResizeObserver) {
+    new ResizeObserver(() => { ensureDraw(); redrawDrawings(); }).observe(candlePanel);
+  }
+
+  dc.addEventListener('pointerdown', (e) => {
+    if (drawState.tool === 'cursor' || drawState.tool === 'info') return;
+    ensureDraw();
+    const pt = canvasToPlot(dc, e.clientX, e.clientY);
+    if (drawState.tool === 'text') {
+      const inp = document.createElement('input');
+      inp.className = 'tv-text-input';
+      inp.style.left = e.clientX + 'px';
+      inp.style.top = (e.clientY - 28) + 'px';
+      inp.style.position = 'fixed';
+      inp.placeholder = '输入文字…';
+      document.body.appendChild(inp);
+      inp.focus();
+      const commit = () => {
+        const txt = inp.value.trim();
+        if (txt) drawState.drawings.push({ type: 'text', points: [pt], color: drawState.color, text: txt });
+        inp.remove(); redrawDrawings();
+      };
+      inp.addEventListener('keydown', (ke) => { if (ke.key === 'Enter' || ke.key === 'Escape') commit(); });
+      inp.addEventListener('blur', commit);
+      return;
+    }
+    if (drawState.tool === 'erase') {
+      // 橡皮擦画笔：按下即开始，划过的绘图都删除
+      drawState.erasing = true;
+      dc.setPointerCapture(e.pointerId);
+      return;
+    }
+    if (drawState.tool === 'wave') {
+      // 逐点模式：每次点击添加一个波浪节点
+      const labels = drawState.waveLabelSet === 1 ? WAVE_LABELS_CORRECTIVE : WAVE_LABELS_IMPULSE;
+      drawState.wavePoints.push(pt);
+      // 达到最大标注数时自动提交
+      if (drawState.wavePoints.length >= labels.length) {
+        drawState.drawings.push({
+          type: 'wave',
+          points: [...drawState.wavePoints],
+          color: drawState.color,
+          labelSet: drawState.waveLabelSet,
+        });
+        drawState.wavePoints = [];
+        redrawDrawings();
+      } else {
+        // 预览已点的节点
+        redrawDrawings();
+      }
+      return;
+    }
+    e.preventDefault();
+    drawState.drawing = true;
+    drawState.tempStart = pt;
+    drawState.tempEnd = pt;
+    try { dc.setPointerCapture(e.pointerId); } catch {}
+  });
+
+  dc.addEventListener('pointermove', (e) => {
+    const pt = canvasToPlot(dc, e.clientX, e.clientY);
+    if (drawState.tool === 'erase') {
+      ensureDraw();
+      redrawDrawings();
+      const dpr = window.devicePixelRatio || 1;
+      const ctx2 = drawState.drawCtx;
+      if (ctx2) {
+        const r = 14 * dpr;
+        ctx2.save();
+        ctx2.strokeStyle = 'rgba(239,68,68,0.85)';
+        ctx2.lineWidth = 1.5 * dpr;
+        ctx2.setLineDash([]);
+        ctx2.beginPath(); ctx2.arc(pt.px, pt.py, r, 0, Math.PI * 2); ctx2.stroke();
+        const hs = 5 * dpr;
+        ctx2.beginPath();
+        ctx2.moveTo(pt.px - hs, pt.py); ctx2.lineTo(pt.px + hs, pt.py);
+        ctx2.moveTo(pt.px, pt.py - hs); ctx2.lineTo(pt.px, pt.py + hs);
+        ctx2.stroke();
+        ctx2.restore();
+      }
+      // 无论是否按下，只要移动就检测并删除碰到的绘图
+      const eraseR = 20 * dpr;
+      const toRemove = new Set();
+      for (let i = 0; i < drawState.drawings.length; i++) {
+        const dr = drawState.drawings[i];
+        if (!dr.points || dr.points.length < 1) continue;
+        let hit = false;
+        // 检测控制点距离
+        for (const pp of dr.points) {
+          const px = giToX(pp.gi, dc.width);
+          const py = priceToY(pp.price, dc.height);
+          if (py === null) continue;
+          if (Math.hypot(pt.px - px, pt.py - py) <= eraseR) { hit = true; break; }
+        }
+        // 检测线段中间（趋势线、射线、通道等）
+        if (!hit && dr.points.length >= 2) {
+          const ax = giToX(dr.points[0].gi, dc.width);
+          const ay = priceToY(dr.points[0].price, dc.height);
+          const bx = giToX(dr.points[1].gi, dc.width);
+          const by = priceToY(dr.points[1].price, dc.height);
+          if (ay !== null && by !== null) {
+            const ddx = bx - ax, ddy = by - ay;
+            const len2 = ddx*ddx + ddy*ddy;
+            if (len2 > 0) {
+              const tt = Math.max(0, Math.min(1, ((pt.px-ax)*ddx + (pt.py-ay)*ddy) / len2));
+              const cx2 = ax + tt*ddx, cy2 = ay + tt*ddy;
+              if (Math.hypot(pt.px - cx2, pt.py - cy2) <= eraseR) hit = true;
+            }
+          }
+        }
+        // 水平线
+        if (!hit && dr.type === 'hline') {
+          const py = priceToY(dr.points[0].price, dc.height);
+          if (py !== null && Math.abs(pt.py - py) <= eraseR) hit = true;
+        }
+        // 矩形
+        if (!hit && dr.type === 'rect' && dr.points[1]) {
+          const p0r = dr.points[0], p1r = dr.points[1];
+          const rx0 = Math.min(giToX(p0r.gi, dc.width), giToX(p1r.gi, dc.width));
+          const rx1 = Math.max(giToX(p0r.gi, dc.width), giToX(p1r.gi, dc.width));
+          const ry0v = priceToY(p0r.price, dc.height);
+          const ry1v = priceToY(p1r.price, dc.height);
+          if (ry0v !== null && ry1v !== null) {
+            const ry0 = Math.min(ry0v, ry1v), ry1 = Math.max(ry0v, ry1v);
+            if (pt.px >= rx0 && pt.px <= rx1 && pt.py >= ry0 && pt.py <= ry1) hit = true;
+          }
+        }
+        if (hit) toRemove.add(i);
+      }
+      if (toRemove.size > 0) {
+        drawState.drawings = drawState.drawings.filter((_, i) => !toRemove.has(i));
+        redrawDrawings();
+      }
+      return;
+    }
+    if (!drawState.drawing) return;
+    ensureDraw();
+    drawState.tempEnd = pt;
+    redrawDrawings();
+  });
+
+  dc.addEventListener('pointerup', (e) => {
+    if (drawState.erasing) { drawState.erasing = false; return; }
+    if (!drawState.drawing) return;
+    drawState.drawing = false;
+    const pt1 = canvasToPlot(dc, e.clientX, e.clientY);
+    const p0 = drawState.tempStart;
+    if (p0) {
+      const tool = drawState.tool;
+      const d = { type: tool, points: [p0, pt1], color: drawState.color };
+      if (tool === 'channel') {
+        d.channelOffset = Math.abs(p0.price - pt1.price) * 0.25;
+      }
+      drawState.drawings.push(d);
+    }
+    drawState.tempStart = null;
+    drawState.tempEnd = null;
+    redrawDrawings();
+  });
+
+  dc.addEventListener('pointercancel', () => {
+    drawState.drawing = false;
+    drawState.erasing = false;
+    drawState.tempStart = null;
+    drawState.tempEnd = null;
+    redrawDrawings();
+  });
+
+  // 双击删除最近绘图
+  const refCanvas = document.getElementById('candleCanvas');
+  if (refCanvas) {
+    refCanvas.addEventListener('dblclick', (e) => {
+      if (drawState.tool !== 'cursor') return;
+      ensureDraw();
+      const pt = canvasToPlot(dc, e.clientX, e.clientY);
+      let bestIdx = -1, bestDist = 60;
+      for (let i = 0; i < drawState.drawings.length; i++) {
+        const d = drawState.drawings[i];
+        if (!d.points || !d.points[0]) continue;
+        const px = giToX(d.points[0].gi, dc.width);
+        const py = priceToY(d.points[0].price, dc.height);
+        if (px === null || py === null) continue;
+        const dpr = window.devicePixelRatio || 1;
+        const dist = Math.hypot((pt.px - px)/dpr, (pt.py - py)/dpr);
+        if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+      }
+      if (bestIdx >= 0) { drawState.drawings.splice(bestIdx, 1); redrawDrawings(); }
+    });
+  }
+}
+
+// 绘图层同步已集成进 scheduleDraw 的 requestAnimationFrame 回调中，无需额外钩子
+
+function initKlinePage() {
+  wireGlobalErrorHandler();
+  const back = $("btnBack");
+  const reload = $("btnReload");
+  const btnIndicators = $("btnIndicators");
+  const btnCloseIndicators = $("btnCloseIndicators");
+  const btnResetView = $("btnResetView");
+  const tailSelect = $("tailSelect");
+  if (back) {
+    back.addEventListener("click", () => {
+      if (window.history.length > 1) { window.history.back(); return; }
+      window.location.href = "./index.html";
+    });
+  }
+  if (reload) reload.addEventListener("click", () => render());
+  if (tailSelect) {
+    const v0 = loadTailSetting();
+    tailSelect.value = String(v0);
+    tailSelect.addEventListener("change", () => {
+      const v = Math.trunc(Number(tailSelect.value));
+      const next = [360,720,1440,2160,3650].includes(v) ? v : 360;
+      saveTailSetting(next);
+      showAlert(`已选择显示 ${next} 根K线；点击"重新加载"后生效。`);
+    });
+  }
+  if (btnIndicators) btnIndicators.addEventListener("click", () => setIndicatorsOpen(true));
+  if (btnCloseIndicators) btnCloseIndicators.addEventListener("click", () => setIndicatorsOpen(false));
+  const settings = document.getElementById("indicatorSettings");
+  if (settings) settings.addEventListener("click", (e) => { if (e && e.target === settings) setIndicatorsOpen(false); });
+  if (btnResetView) {
+    btnResetView.addEventListener("click", () => {
+      viewState.viewN = loadTailSetting();
+      viewState.offset = 0;
+      viewState.hoverLocalIdx = null;
+      showTooltip("", 0, 0);
+      scheduleDraw();
+    });
+  }
+  attachInteractions($("candleCanvas"));
+  try {
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(() => { if (viewState.row) scheduleDraw(); });
+      const candlePanel = document.querySelector(".kline-candle-panel");
+      const indPanel = document.getElementById("indicatorPanel");
+      if (candlePanel) ro.observe(candlePanel);
+      if (indPanel) ro.observe(indPanel);
+    }
+  } catch {}
+  window.addEventListener("resize", () => { if (viewState.row) scheduleDraw(); else render(); });
+  window.addEventListener("storage", (e) => {
+    if (e && e.key === themeStorageKey) {
+      applyThemeFromStorage();
+      if (viewState.row) scheduleDraw(); else render();
+    }
+  });
+  applyThemeFromStorage();
+  initToolbar();
+  attachDrawCanvas();
+  requestAnimationFrame(() => render());
+  setTimeout(() => render(), 250);
+}
+
 initKlinePage();
-})();
+})(); 

@@ -34,10 +34,10 @@ def _decode_bytes(raw: bytes) -> str:
 def _default_merge_dirs(repo_root: Path) -> tuple[Path, Path]:
     env_swap = (os.environ.get("QC_MERGE_SWAP_PATH") or os.environ.get("QC_SCREENER_FALLBACK_SWAP_DIR") or "").strip()
     env_spot = (os.environ.get("QC_MERGE_SPOT_PATH") or os.environ.get("QC_SCREENER_FALLBACK_SPOT_DIR") or "").strip()
-    repo_swap = repo_root / "数据获取" / "data" / "swap_lin"
-    repo_spot = repo_root / "数据获取" / "data" / "spot_lin"
-    win_swap = Path(r"D:\量化交易\数据\swap_lin")
-    win_spot = Path(r"D:\量化交易\数据\spot_lin")
+    repo_swap = repo_root / "数据获取" / "data" / "swap_binance_1h"
+    repo_spot = repo_root / "数据获取" / "data" / "spot_binance_1h"
+    win_swap = Path(r"D:\量化交易\数据\swap_binance_1h")
+    win_spot = Path(r"D:\量化交易\数据\spot_binance_1h")
     if env_swap:
         swap0 = Path(env_swap)
     elif repo_swap.exists():
@@ -189,7 +189,17 @@ def _load_pkl_series_cache(root: Path, *, market: str) -> dict[str, Any]:
         if not isinstance(files1, dict):
             files1 = {}
             _pkl_cache["files"] = files1
+        # 释放旧缓存数据，避免内存泄漏
+        old = files1.get(str(market).lower())
+        if old is not None and isinstance(old, dict):
+            old.clear()
         files1[str(market).lower()] = {"mtime_ns": st_mtime_ns, "data": payload}
+        # 主动触发GC释放旧数据
+        try:
+            import gc as _gc
+            _gc.collect()
+        except Exception:
+            pass
         return payload
 
 

@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>K线｜自动化选币器</title>
   <link rel="stylesheet" href="./style.css?v=20260310_1" />
+  <style>
+    .kline-pick-item.home-pick::before { content: "★"; color: #3b82f6; margin-right: 4px; font-size: 12px; font-weight: bold; }
+  </style>
 </head>
 <body data-page="kline">
   <div class="kline-page">
@@ -42,6 +45,77 @@
     <div id="klineTooltip" class="kline-tooltip hidden"></div>
 
     <div class="kline-body">
+      <!-- TradingView 风格左侧工具栏 -->
+      <div class="tv-toolbar" id="tvToolbar" role="toolbar" aria-label="绘图工具">
+        <div class="tv-toolbar-group">
+          <button class="tv-tool-btn active" id="toolCursor" data-tool="cursor" title="光标">
+            <svg viewBox="0 0 24 24"><path d="M4 2l16 10-7 1.5-4 6.5-1-5L4 2z"/></svg>
+          </button>
+        </div>
+        <div class="tv-toolbar-sep"></div>
+        <div class="tv-toolbar-group">
+          <button class="tv-tool-btn" id="toolLine" data-tool="line" title="趋势线">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="20" x2="21" y2="4" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <button class="tv-tool-btn" id="toolRay" data-tool="ray" title="射线">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="18" x2="21" y2="6" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 0"/><circle cx="21" cy="6" r="2" fill="currentColor"/></svg>
+          </button>
+          <button class="tv-tool-btn" id="toolHLine" data-tool="hline" title="水平线">
+            <svg viewBox="0 0 24 24"><line x1="2" y1="12" x2="22" y2="12" stroke-width="2" stroke-linecap="round"/><line x1="2" y1="7" x2="22" y2="7" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3" opacity="0.4"/><line x1="2" y1="17" x2="22" y2="17" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3" opacity="0.4"/></svg>
+          </button>
+          <button class="tv-tool-btn" id="toolChannel" data-tool="channel" title="平行通道">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="18" x2="21" y2="8" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="14" x2="21" y2="4" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 2"/></svg>
+          </button>
+        </div>
+        <div class="tv-toolbar-sep"></div>
+        <div class="tv-toolbar-group">
+          <button class="tv-tool-btn" id="toolWave" data-tool="wave" title="波浪理论标注 (点击逐点添加波浪顶/底)">
+            <svg viewBox="0 0 24 24"><path d="M2 15 c1.5-5 3.5-5 5 0 s3.5 5 5 0 s3.5-5 5 0" stroke-width="2" stroke-linecap="round" fill="none"/><text x="3" y="23" font-size="5.5" fill="currentColor" stroke="none" font-style="italic" font-weight="700">①②③</text></svg>
+            <span class="tv-tool-sub">W</span>
+          </button>
+        </div>
+        <div class="tv-toolbar-sep"></div>
+        <div class="tv-toolbar-group">
+          <button class="tv-tool-btn" id="toolFib" data-tool="fib" title="斐波那契回撤">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="5" x2="21" y2="5" stroke-width="1.5" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke-width="1" stroke-linecap="round" opacity="0.7"/><line x1="3" y1="13" x2="21" y2="13" stroke-width="1.5" stroke-linecap="round"/><line x1="3" y1="16" x2="21" y2="16" stroke-width="1" stroke-linecap="round" opacity="0.7"/><line x1="3" y1="19" x2="21" y2="19" stroke-width="1.5" stroke-linecap="round"/><text x="3" y="9" font-size="4" fill="currentColor" opacity="0.8">0.618</text></svg>
+          </button>
+          <button class="tv-tool-btn" id="toolFibExt" data-tool="fibext" title="斐波那契扩展">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="4" x2="21" y2="4" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/><line x1="3" y1="8" x2="21" y2="8" stroke-width="1" stroke-linecap="round" opacity="0.6"/><line x1="3" y1="12" x2="21" y2="12" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="16" x2="21" y2="16" stroke-width="1" stroke-linecap="round" opacity="0.6"/><line x1="3" y1="20" x2="21" y2="20" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/></svg>
+          </button>
+          <button class="tv-tool-btn" id="toolHighLow" data-tool="highlow" title="最高/最低价斐波那契">
+            <svg viewBox="0 0 24 24"><path d="M4 4h2v16H4z" fill="currentColor" opacity="0.6"/><path d="M18 4h2v16h-2z" fill="currentColor" opacity="0.6"/><line x1="4" y1="4" x2="20" y2="4" stroke-width="1.5" stroke-linecap="round"/><line x1="4" y1="20" x2="20" y2="20" stroke-width="1.5" stroke-linecap="round"/><line x1="4" y1="10" x2="20" y2="10" stroke-width="1" stroke-linecap="round" opacity="0.7" stroke-dasharray="3 2"/><line x1="4" y1="14" x2="20" y2="14" stroke-width="1" stroke-linecap="round" opacity="0.7" stroke-dasharray="3 2"/></svg>
+          </button>
+        </div>
+        <div class="tv-toolbar-sep"></div>
+        <div class="tv-toolbar-group">
+          <button class="tv-tool-btn" id="toolInfo" data-tool="info" title="指标信息框">
+            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" stroke-width="1.5" fill="none" stroke="currentColor"/><line x1="7" y1="10" x2="17" y2="10" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="14" x2="13" y2="14" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <button class="tv-tool-btn" id="toolRect" data-tool="rect" title="矩形框">
+            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" stroke-width="1.8" fill="none" stroke="currentColor"/></svg>
+          </button>
+          <button class="tv-tool-btn" id="toolText" data-tool="text" title="文字标注">
+            <svg viewBox="0 0 24 24"><text x="5" y="17" font-size="14" font-weight="700" fill="currentColor">A</text></svg>
+          </button>
+        </div>
+        <div class="tv-toolbar-sep"></div>
+        <div class="tv-toolbar-group">
+          <button class="tv-tool-btn tv-tool-danger" id="toolErase" data-tool="erase" title="橡皮擦（点击删除单个绘图）">
+            <svg viewBox="0 0 24 24"><path d="M20 20H7L3 16l11-11 7 7-1 8Z" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="currentColor"/><path d="m6.5 17.5 4-4" stroke-width="1.8" stroke-linecap="round" stroke="currentColor"/></svg>
+          </button>
+          <button class="tv-tool-btn tv-tool-danger" id="toolClear" title="清除所有绘图">
+            <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="currentColor"/></svg>
+          </button>
+        </div>
+        <!-- 指标信息浮框 -->
+        <div class="tv-info-panel" id="tvInfoPanel">
+          <div class="tv-info-title" id="tvInfoPanelHead" style="cursor:move;user-select:none;display:flex;align-items:center;justify-content:space-between;">
+            <span>指标信息</span>
+            <svg viewBox="0 0 16 16" width="12" height="12" style="opacity:0.4"><circle cx="5" cy="5" r="1.2" fill="currentColor"/><circle cx="11" cy="5" r="1.2" fill="currentColor"/><circle cx="5" cy="11" r="1.2" fill="currentColor"/><circle cx="11" cy="11" r="1.2" fill="currentColor"/></svg>
+          </div>
+          <div id="tvInfoContent" class="tv-info-content"></div>
+        </div>
+      </div>
       <div class="kline-charts">
         <div class="kline-panels">
           <div class="kline-panel kline-candle-panel">
@@ -49,6 +123,14 @@
             <div class="watermark watermark-kline">
               <img class="watermark-logo" src="./grailweb3.png" alt="Grail区块链" />
               <div class="watermark-text">Grail区块链</div>
+            </div>
+            <!-- 数据统计浮层（仿TradingView数据窗口） -->
+            <div class="tv-stats-panel" id="tvStatsPanel">
+              <div class="tv-stats-head">
+                <div class="tv-stats-symbol" id="tvStatsSymbol">-</div>
+                <div class="tv-stats-tf" id="tvStatsTf">1H</div>
+              </div>
+              <div id="tvStatsBody"></div>
             </div>
             <canvas id="candleCanvas" class="kline-canvas" height="420"></canvas>
           </div>
@@ -65,6 +147,12 @@
         </div>
         <div id="pickList" class="kline-pick-list"></div>
       </aside>
+    </div>
+
+    <!-- 颜色选择器浮层 -->
+    <div class="tv-color-picker" id="tvColorPicker" style="display:none">
+      <div class="tv-cp-title">线条颜色</div>
+      <div class="tv-cp-swatches" id="tvColorSwatches"></div>
     </div>
 
     <div id="indicatorSettings" class="kline-settings hidden" role="dialog" aria-modal="true">

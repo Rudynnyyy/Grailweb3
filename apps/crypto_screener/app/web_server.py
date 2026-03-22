@@ -34,6 +34,34 @@ from apps.crypto_screener.app.expr_lang import parse_expr_tokens, tokenize_expr,
 from apps.crypto_screener.app.series_source import load_symbol_series  # noqa: E402
 from apps.crypto_screener.app.wecom_sender import send_image, send_markdown  # noqa: E402
 from apps.crypto_screener.app.wecom_report import render_selection_png  # noqa: E402
+try:
+    from apps.crypto_screener.backtest import worker as backtest_worker  # noqa: E402
+    from apps.crypto_screener.backtest.charts import render_equity_png, render_topsymbols_png  # noqa: E402
+    _backtest_available = True
+except Exception as _bt_err:
+    backtest_worker = None  # type: ignore
+    render_equity_png = None  # type: ignore
+    render_topsymbols_png = None  # type: ignore
+    _backtest_available = False
+    print(f"[WARN] backtest module unavailable: {_bt_err}", flush=True)
+try:
+    from apps.crypto_screener.app.monitor import (
+        get_metrics, get_cached_metrics, get_online_stats, check_alerts,
+        record_request, start_monitor_thread,
+        get_history, get_new_users, get_user_count_by_hour,
+    )  # noqa: E402
+    start_monitor_thread(interval=60.0)
+    _monitor_available = True
+except Exception as _mon_err:
+    _monitor_available = False
+    def get_metrics(): return {'error': str(_mon_err)}  # type: ignore
+    def get_cached_metrics(): return {'error': str(_mon_err)}  # type: ignore
+    def get_online_stats(): return {}  # type: ignore
+    def get_history(): return []  # type: ignore
+    def get_new_users(*a, **kw): return []  # type: ignore
+    def get_user_count_by_hour(*a, **kw): return []  # type: ignore
+    def record_request(**_kw): pass  # type: ignore
+    print(f"[WARN] monitor module unavailable: {_mon_err}", flush=True)
 from apps.db.auth_sqlite import (  # noqa: E402
     AuthConfig,
     cleanup_email,
@@ -100,6 +128,7 @@ pkl_build_state = {
 AUTH_COOKIE = "qc_sess"
 SERVER_INFO = {"pid": os.getpid(), "boot": datetime.now().isoformat(timespec="seconds")}
 logger = logging.getLogger("qc_screener")
+logger.propagate = False
 if not logger.handlers:
     h = logging.StreamHandler(stream=sys.stdout)
     h.setFormatter(logging.Formatter("%(message)s"))
@@ -945,11 +974,19 @@ def _run_update(fetch: bool) -> None:
 
         def pkl_worker() -> None:
             try:
+                # 降低进程优先级，避免CPU 100%
+                try:
+                    import os as _os
+                    _os.nice(10)
+                except Exception:
+                    pass
                 from 数据获取.factor_cache_update import build_market_cache
 
                 tail = int(os.environ.get("QC_PKL_CACHE_TAIL") or "2160")
-                workers = int(os.environ.get("QC_PKL_CACHE_WORKERS") or "8")
+                workers = int(os.environ.get("QC_PKL_CACHE_WORKERS") or "2")  # 默认2，避免CPU满载
+                workers = max(1, min(4, workers))  # 硬限制最多4个worker
                 res_swap = build_market_cache(market="swap", tail=tail, symbols_limit=0, workers=workers, incremental=True)
+                time.sleep(2)  # 错开swap和spot的构建，避免同时满载
                 res_spot = build_market_cache(market="spot", tail=tail, symbols_limit=0, workers=workers, incremental=True)
                 try:
                     meta_path = repo_root / "apps" / "crypto_screener" / "web" / "data" / "meta.json"
@@ -1164,7 +1201,10 @@ class Handler(BaseHTTPRequestHandler):
             "bytes": size_i,
         }
         try:
-            logger.info(json.dumps(rec, ensure_ascii=False, separators=(",", ":")))
+            msg = json.dumps(rec, ensure_ascii=False, separators=(",", ":"))
+            print(msg, flush=True)
+            if logger.handlers:
+                logger.info(msg)
         except Exception:
             pass
         k = f"{rec['method']} {path0} {code_i}"
@@ -1206,6 +1246,41 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = (parsed.path or "").rstrip("/") or "/"
         path = (parsed.path or "").rstrip("/") or "/"
+        # 记录请求（用于在线用户统计）
+        try:
+            _user = getattr(self, '_authed_user', None)
+            record_request(user=str(_user or ''), path=path, ip=str(self.client_address[0] if self.client_address else ''))
+        except Exception:
+            pass
+        # ── 回测 API (POST) ──
+        if path == "/api/backtest/run":
+            user = self._require_auth()
+            if not user:
+                return
+            payload = self._read_json() or {}
+            if backtest_worker is None:
+                self._send_json(503, {"ok": False, "error": "backtest_unavailable"})
+                return
+            try:
+                task_id = backtest_worker.submit_task(str(user["username"]), payload)
+                self._send_json(200, {"ok": True, "task_id": task_id})
+            except RuntimeError as e:
+                self._send_json(429, {"ok": False, "error": str(e)})
+            except Exception as e:
+                self._send_json(500, {"ok": False, "error": str(e)})
+            return
+        if path == "/api/backtest/cancel":
+            user = self._require_auth()
+            if not user:
+                return
+            if backtest_worker is None:
+                self._send_json(503, {"ok": False, "error": "backtest_unavailable"})
+                return
+            payload = self._read_json() or {}
+            task_id = str(payload.get("task_id") or "")
+            ok = backtest_worker.cancel_task(task_id, str(user["username"]))
+            self._send_json(200, {"ok": ok})
+            return
         if path == "/api/dualrun_config":
             user = self._require_auth()
             if not user:
@@ -1998,19 +2073,160 @@ class Handler(BaseHTTPRequestHandler):
             return
         self._send_json(202, {"ok": True, "started": True, "fetch": fetch})
 
+        # ── 回测 API ──
+        if path == "/api/backtest/run":
+            user = self._require_auth()
+            if not user:
+                return
+            payload = self._read_json() or {}
+            try:
+                task_id = backtest_worker.submit_task(str(user["username"]), payload)
+                self._send_json(200, {"ok": True, "task_id": task_id})
+            except RuntimeError as e:
+                self._send_json(429, {"ok": False, "error": str(e)})
+            except Exception as e:
+                self._send_json(500, {"ok": False, "error": str(e)})
+            return
+
+        if path == "/api/backtest/cancel":
+            user = self._require_auth()
+            if not user:
+                return
+            payload = self._read_json() or {}
+            task_id = str(payload.get("task_id") or "")
+            ok = backtest_worker.cancel_task(task_id, str(user["username"]))
+            self._send_json(200, {"ok": ok})
+            return
+
     def do_GET(self) -> None:
+        self._req_start = time.perf_counter()
         parsed = urlparse(self.path)
         path = parsed.path or ""
         if path != "/":
             path = path.rstrip("/")
         if path == "":
             path = "/"
+        # 记录请求（用于在线用户统计）
+        try:
+            _user = getattr(self, '_authed_user', None)
+            record_request(user=str(_user or ''), path=path, ip=str(self.client_address[0] if self.client_address else ''))
+        except Exception:
+            pass
+        # ── 监控 API ──
+        if path == '/api/monitor':
+            user = self._require_auth()
+            if not user:
+                return
+            metrics = get_cached_metrics()
+            online  = get_online_stats()
+            self._send_json(200, {'ok': True, 'metrics': metrics, 'online': online})
+            return
+        if path == '/api/monitor/history':
+            user = self._require_auth()
+            if not user:
+                return
+            history = get_history()
+            db_path = str(default_db_path(repo_root))
+            print(f'[MON/history] hist_len={len(history)} db_path={db_path}', flush=True)
+            try:
+                new_users = get_new_users(db_path, hours=24)
+            except Exception as e:
+                print(f'[MON/history] get_new_users error: {e}', flush=True)
+                new_users = []
+            try:
+                reg_hourly = get_user_count_by_hour(db_path, hours=24)
+            except Exception as e:
+                print(f'[MON/history] get_user_count_by_hour error: {e}', flush=True)
+                reg_hourly = [0]*24
+            online_stats = get_online_stats()
+            print(f'[MON/history] new_users={len(new_users)} reg_hourly_sum={sum(reg_hourly)} hourly_reqs_sum={sum(online_stats.get("hourly_reqs",[]))}', flush=True)
+            self._send_json(200, {
+                'ok': True,
+                'history': history,
+                'new_users_24h': new_users,
+                'reg_hourly': reg_hourly,
+                'hourly_reqs': online_stats.get('hourly_reqs', []),
+                'requests_24h': online_stats.get('requests_24h', 0),
+            })
+            return
         if path == "/api/public_config":
             prefix = (os.environ.get("QC_ALIYUN_CAPTCHA_PREFIX") or os.environ.get("QC_ALIYUN_SMS_PREFIX") or "").strip()
             scene_id = (os.environ.get("QC_ALIYUN_CAPTCHA_SCENE_ID") or "wfh1k2qh").strip()
             region = (os.environ.get("QC_ALIYUN_CAPTCHA_REGION") or "cn").strip()
             enabled = bool(prefix and scene_id)
             self._send_json(200, {"ok": True, "captcha": {"enabled": enabled, "prefix": prefix, "sceneId": scene_id, "region": region}})
+            return
+            prefix = (os.environ.get("QC_ALIYUN_CAPTCHA_PREFIX") or os.environ.get("QC_ALIYUN_SMS_PREFIX") or "").strip()
+            scene_id = (os.environ.get("QC_ALIYUN_CAPTCHA_SCENE_ID") or "wfh1k2qh").strip()
+            region = (os.environ.get("QC_ALIYUN_CAPTCHA_REGION") or "cn").strip()
+            enabled = bool(prefix and scene_id)
+            self._send_json(200, {"ok": True, "captcha": {"enabled": enabled, "prefix": prefix, "sceneId": scene_id, "region": region}})
+            return
+        # ── 回测 API (GET) ──
+        if path == "/api/backtest/status":
+            user = self._require_auth()
+            if not user:
+                return
+            qs = parse_qs(parsed.query or "")
+            task_id = str((qs.get("task_id") or [""])[0])
+            self._send_json(200, backtest_worker.get_task_status(task_id, str(user["username"])))
+            return
+        if path == "/api/backtest/result":
+            user = self._require_auth()
+            if not user:
+                return
+            qs = parse_qs(parsed.query or "")
+            task_id = str((qs.get("task_id") or [""])[0])
+            result = backtest_worker.get_task_result(task_id, str(user["username"]))
+            if result is None:
+                self._send_json(404, {"ok": False, "error": "not_ready"})
+            else:
+                self._send_json(200, {"ok": True, "result": result})
+            return
+        if path == "/api/backtest/chart/equity":
+            user = self._require_auth()
+            if not user:
+                return
+            qs = parse_qs(parsed.query or "")
+            task_id = str((qs.get("task_id") or [""])[0])
+            result = backtest_worker.get_task_result(task_id, str(user["username"]))
+            if result is None:
+                self._send_json(404, {"ok": False, "error": "not_ready"})
+                return
+            try:
+                png = render_equity_png(
+                    equity_curve=result["equity_curve"],
+                    stats=result["stats"],
+                    title="回测净值曲线",
+                )
+                self._send_bytes(200, png, content_type="image/png")
+            except Exception as e:
+                self._send_json(500, {"ok": False, "error": str(e)})
+            return
+        if path == "/api/backtest/chart/symbols":
+            user = self._require_auth()
+            if not user:
+                return
+            qs = parse_qs(parsed.query or "")
+            task_id = str((qs.get("task_id") or [""])[0])
+            result = backtest_worker.get_task_result(task_id, str(user["username"]))
+            if result is None:
+                self._send_json(404, {"ok": False, "error": "not_ready"})
+                return
+            try:
+                png = render_topsymbols_png(
+                    top_symbols=result["top_symbols"],
+                    title="Top 入选频次",
+                )
+                self._send_bytes(200, png, content_type="image/png")
+            except Exception as e:
+                self._send_json(500, {"ok": False, "error": str(e)})
+            return
+        if path == "/api/backtest/tasks":
+            user = self._require_auth()
+            if not user:
+                return
+            self._send_json(200, {"ok": True, "tasks": backtest_worker.list_user_tasks(str(user["username"]))})
             return
         if path == "/api/dualrun_config":
             if not self._require_auth():
@@ -2527,6 +2743,9 @@ class Handler(BaseHTTPRequestHandler):
 
         if path == "/":
             self._redirect("/index.html")
+            return
+        if path == "/monitor":
+            self._redirect("/monitor.html")
             return
         else:
             rel = path.lstrip("/")
