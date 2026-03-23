@@ -4069,21 +4069,28 @@ function initControls(meta) {
   if ($("stochRsiSmK")) $("stochRsiSmK").value = "3";
   if ($("stochRsiSmD")) $("stochRsiSmD").value = "3";
 
+  // 恢复上次保存的筛选条件（在 initControls 默认值之后覆盖）
+  _restoreConditionsFromStorage();
+
   $('btnRefresh').addEventListener('click', () => {
     const btn = $('btnRefresh');
     btn.disabled = true;
     btn.classList.add('btn-loading');
-    const origText = btn.textContent;
+    btn.classList.remove('btn-pending');
+    const origText = btn.dataset.origText || btn.textContent || '刷新';
+    btn.dataset.origText = origText;
     btn.textContent = '';
+    _conditionsDirty = false;
     _saveConditionsToStorage();
+    _saveFullConditions();
     refresh({ manual: true, fetchMode: false }).finally(() => {
       btn.disabled = false;
       btn.classList.remove('btn-loading');
       btn.textContent = origText;
     });
   });
-  $("sortKey").addEventListener("change", () => rerenderFromLatestDebounced());
-  $("sortOrder").addEventListener("change", () => rerenderFromLatestDebounced());
+  $("sortKey").addEventListener("change", () => { _markConditionsDirty(); rerenderFromLatestDebounced(); });
+  $("sortOrder").addEventListener("change", () => { _markConditionsDirty(); rerenderFromLatestDebounced(); });
 
   const ids = [
     "maPeriodClose", "maFast", "maSlow", "rsiPeriod", "rsiThreshold",
@@ -4096,18 +4103,8 @@ function initControls(meta) {
   for (const id of ids) {
     const el = $(id);
     if (!el) continue;
-    const dyn = new Set(["condEma", "condBollUp", "condBollDown", "condSuper", "condKdj", "condObv", "condStochRsi"]);
-    const filterOnly = new Set(["rsiThreshold"]);
-    if (dyn.has(id)) {
-      el.addEventListener("change", () => (el.checked ? refreshFactorsDebounced() : rerenderFromLatestDebounced()));
-      continue;
-    }
-    if (id.startsWith("cond")) {
-      el.addEventListener("change", () => rerenderFromLatestDebounced());
-      continue;
-    }
-    if (filterOnly.has(id)) el.addEventListener("change", () => rerenderFromLatestDebounced());
-    else el.addEventListener("change", () => refreshFactorsDebounced());
+    // 所有条件变动：只标记 dirty，不自动触发计算
+    el.addEventListener("change", () => _markConditionsDirty());
   }
 
   $("exprAdd").addEventListener("click", () => upsertCustomFactor());
@@ -4672,4 +4669,98 @@ function _saveConditionsToStorage() {
     localStorage.setItem('qc_bt_toggles', JSON.stringify(toggles));
     localStorage.setItem('qc_bt_factors', JSON.stringify(customFactors));
   } catch(e) {}
+}
+
+// ── 条件持久化：完整筛选条件存储键 ──
+const conditionsStorageKey = 'crypto_screener_conditions_v1';
+
+function _saveFullConditions() {
+  try {
+    const params = getParams();
+    const toggles = {
+      condCloseMa:  !!($('condCloseMa')  && $('condCloseMa').checked),
+      condMa:       !!($('condMa')       && $('condMa').checked),
+      condRsi:      !!($('condRsi')      && $('condRsi').checked),
+      condEma:      !!($('condEma')      && $('condEma').checked),
+      condBollUp:   !!($('condBollUp')   && $('condBollUp').checked),
+      condBollDown: !!($('condBollDown') && $('condBollDown').checked),
+      condSuper:    !!($('condSuper')    && $('condSuper').checked),
+      condKdj:      !!($('condKdj')      && $('condKdj').checked),
+      condObv:      !!($('condObv')      && $('condObv').checked),
+      condStochRsi: !!($('condStochRsi') && $('condStochRsi').checked),
+    };
+    const sortKey   = $('sortKey')   ? $('sortKey').value   : 'pct_change';
+    const sortOrder = $('sortOrder') ? $('sortOrder').value : 'desc';
+    localStorage.setItem(conditionsStorageKey, JSON.stringify({ params, toggles, sortKey, sortOrder }));
+  } catch(e) {}
+}
+
+function _restoreConditionsFromStorage(cfg) {
+  // cfg 优先；若无则从 localStorage 读取
+  let saved = cfg || null;
+  if (!saved) {
+    try {
+      const raw = localStorage.getItem(conditionsStorageKey);
+      saved = raw ? JSON.parse(raw) : null;
+    } catch(e) { saved = null; }
+  }
+  if (!saved) return false;
+  try {
+    const params  = saved.params  || {};
+    const toggles = saved.toggles || {};
+    // 恢复数值参数
+    const numericIds = [
+      'maPeriodClose','maFast','maSlow','rsiPeriod','rsiThreshold',
+      'emaPeriod','bollPeriod','bollStd','bollDownPeriod','bollDownStd',
+      'superAtrPeriod','superMult','kdjN','kdjM1','kdjM2','obvMaPeriod',
+      'stochRsiP','stochRsiK','stochRsiSmK','stochRsiSmD',
+    ];
+    for (const id of numericIds) {
+      const el = $(id);
+      if (!el) continue;
+      if (params[id] !== undefined && params[id] !== null && params[id] !== '') {
+        el.value = String(params[id]);
+      }
+    }
+    // 恢复 checkbox
+    const checkIds = [
+      'condCloseMa','condMa','condRsi','condEma',
+      'condBollUp','condBollDown','condSuper','condKdj','condObv','condStochRsi',
+    ];
+    for (const id of checkIds) {
+      const el = $(id);
+      if (el && toggles[id] !== undefined) el.checked = !!toggles[id];
+    }
+    // 恢复排序
+    if (saved.sortKey   && $('sortKey'))   $('sortKey').value   = String(saved.sortKey);
+    if (saved.sortOrder && $('sortOrder')) $('sortOrder').value = String(saved.sortOrder);
+    return true;
+  } catch(e) { return false; }
+}
+
+// ── 「待刷新」标记：条件变动后只标记，不自动触发计算 ──
+let _conditionsDirty = false;
+
+function _markConditionsDirty() {
+  _conditionsDirty = true;
+  _saveFullConditions();
+  _saveConditionsToStorage();
+  const btn = $('btnRefresh');
+  if (!btn) return;
+  if (!btn.classList.contains('btn-pending')) {
+    btn.classList.add('btn-pending');
+    const orig = btn.dataset.origText || btn.textContent || '刷新';
+    btn.dataset.origText = orig;
+    btn.textContent = '应用筛选 ●';
+  }
+}
+
+function _clearConditionsDirty() {
+  _conditionsDirty = false;
+  const btn = $('btnRefresh');
+  if (!btn) return;
+  btn.classList.remove('btn-pending');
+  if (btn.dataset.origText) {
+    btn.textContent = btn.dataset.origText;
+  }
 }
